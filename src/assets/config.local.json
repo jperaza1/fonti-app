@@ -1,0 +1,6 @@
+{
+  "data": "https://localhost:44367/api/v2/",
+  "auth": "https://localhost:44390/api/v2/",
+  "report": "https://report-api.caashondelivery.com/api/v2/",
+  "document": "https://localhost:44387/api/"
+}

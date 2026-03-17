@@ -1,0 +1,35 @@
+<app-modal-with-option-buttons #entityComponent title="Group Role" [optionButtons]="OptionButtons"
+    (onOptionButton)="optionButtonClicked($event)" (onClose)="close()">
+    <div class="row row-space-10">
+        <section class="col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label for="name">Name<i class="text-danger">*</i></label>
+                <input id="name" name="name" [(ngModel)]="Model.name" #name="ngModel" class="form-control"
+                    placeholder="" type="text" required />
+                <app-validator-message [error]="errors" field="name"></app-validator-message>
+            </div>
+        </section>
+        <section class="col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label for="groupHeaderId">Group Header</label>
+                <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+                    [dataSource]="DxDataSourceGroupHeader" [(value)]="Model.groupHeaderId">
+                </dx-select-box>
+                <app-validator-message [error]=" errors" field="groupHeaderId">
+                </app-validator-message>
+            </div>
+        </section>
+    </div>
+    <div class="row row-space-10">
+        <dx-data-grid #groupRoleGrid id="groupRoleGrid" [dataSource]="Permissions" keyExpr="permissionId"
+            [hoverStateEnabled]="true" [showBorders]="true" [selectedRowKeys]="SelectedRowKeys">
+
+            <dxo-paging [pageSize]="20"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]"></dxo-pager>
+            <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+            <dxo-selection selectAllMode="allPages" showCheckBoxesMode="onClick" mode="multiple"></dxo-selection>
+
+            <dxi-column dataField="name" caption="Role"></dxi-column>
+        </dx-data-grid>
+    </div>
+</app-modal-with-option-buttons>

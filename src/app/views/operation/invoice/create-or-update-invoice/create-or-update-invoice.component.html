@@ -1,0 +1,96 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" [size]="'xxxl'">
+
+  <div class="invoice-form">
+    <!-- Información general -->
+    <section class="invoice-form__card invoice-form__card--animate">
+      <h3 class="invoice-form__card-title">Información general</h3>
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12 invoice-form__field">
+          <label class="invoice-form__label">Cafetería <i class="text-danger">*</i></label>
+          <dx-select-box #cafeteria [(value)]="Model.cafeteriaId" [dataSource]="DxDataSourceCafeteria" displayExpr="name" valueExpr="id" [disabled]="currentUser.cafeteriaId"></dx-select-box>
+          <app-validator-message [error]="errors" field="cafeteria"></app-validator-message>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12 invoice-form__field">
+          <label class="invoice-form__label">Proveedor <i class="text-danger">*</i></label>
+          <dx-select-box #vendor [(value)]="Model.vendorId" [dataSource]="DxDataSourceVendor" displayExpr="name" valueExpr="id" (onItemClick)="onVendorItemClick($event.itemData)"></dx-select-box>
+          <app-validator-message [error]="errors" field="vendor"></app-validator-message>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-12 invoice-form__field" *ngIf="Model.hasInvoice">
+          <label class="invoice-form__label">Número de Factura <i class="text-danger">*</i></label>
+          <dx-text-box #invoiceNumber [(value)]="Model.invoiceNumber" mask="000-000-00-00000000"></dx-text-box>
+          <app-validator-message [error]="errors" field="invoiceNumber"></app-validator-message>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-12 invoice-form__field">
+          <label class="invoice-form__label">Fecha de Factura <i class="text-danger">*</i></label>
+          <dx-date-box [(value)]="Model.invoiceDate" [displayFormat]="DisplayFormatDate"></dx-date-box>
+          <app-validator-message [error]="errors" field="invoiceDate"></app-validator-message>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-12 invoice-form__field">
+          <label class="invoice-form__label">Tipo de Pago <i class="text-danger">*</i></label>
+          <dx-select-box #paymentType [(value)]="Model.paymentType" [dataSource]="DxDataSourceInvoiceType" displayExpr="text" valueExpr="value"></dx-select-box>
+          <app-validator-message [error]="errors" field="paymentType"></app-validator-message>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-12 invoice-form__field" *ngIf="Model.paymentType === 1">
+          <label class="invoice-form__label">Método de Pago <i class="text-danger">*</i></label>
+          <dx-select-box #paymentMethod [(value)]="Model.paymentMethod" [dataSource]="DxDataSourcePaymentMethod" displayExpr="text" valueExpr="value"></dx-select-box>
+          <app-validator-message [error]="errors" field="paymentMethod"></app-validator-message>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-12 invoice-form__field" *ngIf="Model.paymentType === 2">
+          <label class="invoice-form__label">Categoría <i class="text-danger">*</i></label>
+          <dx-select-box #category [(value)]="Model.categoryId" [dataSource]="DxDataSourceCategoryType" displayExpr="name" valueExpr="id"></dx-select-box>
+          <app-validator-message [error]="errors" field="category"></app-validator-message>
+        </div>
+        <div class="col-12 invoice-form__field">
+          <label class="invoice-form__label">Descripción</label>
+          <dx-text-area [height]="120" #description [(value)]="Model.description"></dx-text-area>
+        </div>
+      </div>
+    </section>
+
+    <!-- Montos (cuando tiene factura) -->
+    <section class="invoice-form__card invoice-form__card--totals invoice-form__card--animate" *ngIf="Model.hasInvoice">
+      <h3 class="invoice-form__card-title">Montos</h3>
+      <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-6 col-12 invoice-form__field">
+          <label class="invoice-form__label">Monto Gravado <i class="text-danger">*</i></label>
+          <dx-number-box #taxableAmount [(value)]="Model.taxableAmount" [format]="CurrencyDxNumber" (onValueChanged)="onAmountChanged($event)"></dx-number-box>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-12 invoice-form__field">
+          <label class="invoice-form__label">Monto Exento <i class="text-danger">*</i></label>
+          <dx-number-box #exemptAmount [(value)]="Model.exemptAmount" [format]="CurrencyDxNumber" (onValueChanged)="onAmountChanged($event)"></dx-number-box>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-12 invoice-form__field">
+          <label class="invoice-form__label">Descuento</label>
+          <dx-number-box #discount [(value)]="Model.discount" [format]="CurrencyDxNumber" (onValueChanged)="onAmountChanged($event)"></dx-number-box>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-12 invoice-form__field">
+          <label class="invoice-form__label">Subtotal <i class="text-danger">*</i></label>
+          <dx-number-box #subTotal [(value)]="Model.subTotal" [format]="CurrencyDxNumber" [disabled]="true"></dx-number-box>
+          <app-validator-message [error]="errors" field="subTotal"></app-validator-message>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-12 invoice-form__field">
+          <label class="invoice-form__label">ISV 15%</label>
+          <dx-number-box #taxAmount [(value)]="Model.taxAmount" [format]="CurrencyDxNumber" (onValueChanged)="onTaxAmountChanged($event)"></dx-number-box>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-12 invoice-form__field invoice-form__field--highlight">
+          <label class="invoice-form__label">Total <i class="text-danger">*</i></label>
+          <dx-number-box #total [(value)]="Model.total" [format]="CurrencyDxNumber" [disabled]="Model.hasInvoice"></dx-number-box>
+          <app-validator-message [error]="errors" field="total"></app-validator-message>
+        </div>
+      </div>
+    </section>
+
+    <!-- Total único (cuando no tiene factura) -->
+    <section class="invoice-form__card invoice-form__card--totals invoice-form__card--animate" *ngIf="!Model.hasInvoice">
+      <h3 class="invoice-form__card-title">Monto</h3>
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 col-12 invoice-form__field invoice-form__field--highlight">
+          <label class="invoice-form__label">Total <i class="text-danger">*</i></label>
+          <dx-number-box #total [(value)]="Model.total" [format]="CurrencyDxNumber" [disabled]="Model.hasInvoice"></dx-number-box>
+          <app-validator-message [error]="errors" field="total"></app-validator-message>
+        </div>
+      </div>
+    </section>
+  </div>
+</app-modal-with-option-buttons>

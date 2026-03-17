@@ -1,0 +1,38 @@
+<div class="home-dashboard">
+
+  <!-- Sección de Alertas -->
+  <div class="alerts-section" *ngIf="UserAlerts.length > 0">
+    <div class="section-header">
+      <div class="section-title-area">
+        <div class="section-icon alerts-icon">
+          <i class="fa fa-bell"></i>
+        </div>
+        <div>
+          <h3 class="section-title">Alertas Activas</h3>
+          <p class="section-subtitle">{{ UserAlerts.length }} alerta{{ UserAlerts.length !== 1 ? 's' : '' }} pendiente{{ UserAlerts.length !== 1 ? 's' : '' }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="alerts-grid">
+      <app-alert *ngFor="let alert of UserAlerts; let i = index"
+        [color]="alert.color"
+        [textColor]="alert.textColor"
+        [icon]="alert.icon"
+        [label]="alert.label"
+        [(count)]="alert.count"
+        (onClicked)="onClickAlert($event)"
+        [userAlert]="alert.userAlert"
+        [attr.style]="'--alert-delay: ' + (i * 60) + 'ms'"
+        class="alert-item">
+      </app-alert>
+    </div>
+  </div>
+
+  <!-- Sección de Gráficos -->
+  <div class="charts-section" [appCanAccess]="['OPERATION.CHART.PREVIEW']">
+    <app-graphic-preview></app-graphic-preview>
+  </div>
+
+</div>
+
+<app-alert-preview #alertPreview (onModalSave)="onPreviewEmitter($event)"></app-alert-preview>

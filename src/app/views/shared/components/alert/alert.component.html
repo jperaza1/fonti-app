@@ -1,0 +1,12 @@
+<div class="alert-card" (click)="onClik()" [ngStyle]="{'--alert-color': color, '--alert-text': textColor}">
+  <div class="alert-accent" [ngStyle]="{'background': color}"></div>
+  <div class="alert-body">
+    <div class="alert-icon-wrap" [ngStyle]="{'background-color': color, 'color': textColor}">
+      <i class="{{icon}}"></i>
+    </div>
+    <div class="alert-content">
+      <span class="alert-label" [title]="label">{{label}}</span>
+      <span class="alert-count" [ngStyle]="{'color': color}">{{count != null ? count : '--'}}</span>
+    </div>
+  </div>
+</div>

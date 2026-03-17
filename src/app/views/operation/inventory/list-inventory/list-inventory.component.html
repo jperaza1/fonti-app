@@ -1,0 +1,110 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="row row-space-10">
+    <section class="col-md-4 col-xs-12">
+      <div class="form-group">
+        <label for="name">Cafeteria</label>
+        <dx-select-box #cafeteriaId [(value)]="filterInventoryDto.cafeteriaId" [dataSource]="DxDatasourceCafeteria" displayExpr="name" valueExpr="id" [disabled]="currentUser.cafeteriaId" [searchEnabled]="true"></dx-select-box>
+      </div>
+    </section>
+    <section class="col-md-4 col-xs-12">
+      <div class="form-group">
+        <label for="name">Inicio</label>
+        <dx-date-box [(max)]="filterInventoryDto.endDate" [(value)]="filterInventoryDto.startDate" [displayFormat]="DisplayFormatDate"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-4 col-xs-12">
+      <div class="form-group">
+        <label for="name">Fin</label>
+        <dx-date-box [(value)]="filterInventoryDto.endDate" [displayFormat]="DisplayFormatDate" [(min)]="filterInventoryDto.startDate"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-4 col-xs-12" style="margin-top: 25px;">
+      <button class="btn btn-primary" (click)="getAll()"><i class="fa fa-search"></i> Buscar</button>
+      <button
+        class="btn btn-primary"
+        type="button"
+        (click)="onClickNew()"
+        [appCanAccess]="['OPERATION.INVENTORY.CREATE']"
+      >
+        <i class="fa fa-plus"></i>
+        Nueva
+      </button>
+    </section>
+    <section class="col-md-12 col-xs-12">
+      
+      <button
+        class="btn btn-warning pull-right"
+        type="button"
+        (click)="onClickRefresh()"
+      >
+        <i class="fas fa-sync-alt"></i>
+      </button>
+    </section>
+  </div>
+  <div class="row row-space-10" style="margin-top: 20px;">
+    <dx-data-grid
+      id="dataGrid"
+      [dataSource]="DataSource"
+      [columns]="columns"
+      [remoteOperations]="false"
+      [allowColumnReordering]="true"
+      [rowAlternationEnabled]="true"
+      [showBorders]="true"
+      [columnAutoWidth]="true">
+      <dxo-paging [pageSize]="10"></dxo-paging>
+        <dxo-pager
+          [showPageSizeSelector]="true"
+          [allowedPageSizes]="[10, 25, 50, 100]"
+        ></dxo-pager>
+        <dxo-search-panel
+          [visible]="true"
+          [highlightCaseSensitive]="true"
+        >
+        </dxo-search-panel>
+        <dxo-export [enabled]="true" fileName="Inventario" [allowExportSelectedData]="false">
+        </dxo-export>
+        <div *dxTemplate="let data of 'actionTemplate'">
+          <button
+            type="button"
+            class="btn btn-primary pull-left btn-sm"
+            (click)="update(data.data)"
+            title="Editar"
+            [appCanAccess]="['OPERATION.INVENTORY.UPDATE']"
+          >
+            <i class="fa fa-edit"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary pull-left btn-sm"
+            (click)="showResume(data.data)"
+            title="Resumen"
+          >
+            <i class="fa fa-eye"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary pull-left btn-sm"
+            (click)="showDetails(data.data)"
+            title="Detalles"
+          >
+            <i class="fa fa-list"></i>
+          </button>
+        </div>
+        <div *dxTemplate="let data of 'dateTemplate'">
+          {{ data.data.date | date: DisplayFormatDate }}
+        </div>
+        <div *dxTemplate="let data of 'amountTemplate'">
+          {{ data.value | currency : Currency }}
+        </div>
+        <dxo-summary>
+          <dxi-total-item 
+          column="total" 
+          summaryType="sum"
+          [customizeText]="dxCustomizeCurrency"
+          displayFormat="{0}"></dxi-total-item>
+        </dxo-summary>
+    </dx-data-grid>
+  </div>
+</panel>
+
+<app-resume-inventory #resumeInventory></app-resume-inventory>

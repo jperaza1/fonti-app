@@ -1,0 +1,85 @@
+<div class="graphics-dashboard">
+  <div class="section-header">
+    <div class="section-title-area">
+      <div class="section-icon">
+        <i class="fa fa-line-chart"></i>
+      </div>
+      <div>
+        <h3 class="section-title">Panel de Ventas</h3>
+        <p class="section-subtitle">Resumen de rendimiento por período</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="charts-row">
+    <!-- Gráfico Ventas por Mes -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-card-title">
+          <span class="chart-dot dot-blue"></span>
+          <h4>Ventas por Mes</h4>
+        </div>
+        <div class="chart-type-selector">
+          <button class="chart-type-btn" [class.active]="monthChartType === 'bar'"
+            (click)="changeMonthChartType('bar')" title="Barras">
+            <i class="fa fa-bar-chart"></i>
+          </button>
+          <button class="chart-type-btn" [class.active]="monthChartType === 'line'"
+            (click)="changeMonthChartType('line')" title="Línea">
+            <i class="fa fa-line-chart"></i>
+          </button>
+          <button class="chart-type-btn" [class.active]="monthChartType === 'pie'"
+            (click)="changeMonthChartType('pie')" title="Pastel">
+            <i class="fa fa-pie-chart"></i>
+          </button>
+          <button class="chart-type-btn" [class.active]="monthChartType === 'area'"
+            (click)="changeMonthChartType('area')" title="Área">
+            <i class="fa fa-area-chart"></i>
+          </button>
+          <button class="chart-type-btn" [class.active]="monthChartType === 'radar'"
+            (click)="changeMonthChartType('radar')" title="Radar">
+            <i class="fa fa-bullseye"></i>
+          </button>
+        </div>
+      </div>
+      <div class="chart-canvas-wrap">
+        <div #chartDiv class="chart-canvas"></div>
+      </div>
+    </div>
+
+    <!-- Gráfico Ventas por Semana -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-card-title">
+          <span class="chart-dot dot-purple"></span>
+          <h4>Ventas por Semana</h4>
+        </div>
+        <div class="chart-type-selector">
+          <button class="chart-type-btn" [class.active]="weekChartType === 'line'"
+            (click)="changeWeekChartType('line')" title="Línea">
+            <i class="fa fa-line-chart"></i>
+          </button>
+          <button class="chart-type-btn" [class.active]="weekChartType === 'bar'"
+            (click)="changeWeekChartType('bar')" title="Barras">
+            <i class="fa fa-bar-chart"></i>
+          </button>
+          <button class="chart-type-btn" [class.active]="weekChartType === 'pie'"
+            (click)="changeWeekChartType('pie')" title="Pastel">
+            <i class="fa fa-pie-chart"></i>
+          </button>
+          <button class="chart-type-btn" [class.active]="weekChartType === 'area'"
+            (click)="changeWeekChartType('area')" title="Área">
+            <i class="fa fa-area-chart"></i>
+          </button>
+          <button class="chart-type-btn" [class.active]="weekChartType === 'radar'"
+            (click)="changeWeekChartType('radar')" title="Radar">
+            <i class="fa fa-bullseye"></i>
+          </button>
+        </div>
+      </div>
+      <div class="chart-canvas-wrap">
+        <div #chartDiv2 class="chart-canvas"></div>
+      </div>
+    </div>
+  </div>
+</div>

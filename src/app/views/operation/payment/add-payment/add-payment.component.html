@@ -1,0 +1,24 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" size="xxxl">
+  <div class="row row-space-10">
+    <section class="col-md-4 col-xs-12">
+      <div class="form-group">
+        <label for="name">Fecha de Pago<i class="text-danger">*</i></label>
+        <dx-date-box [(value)]="Model.paymentDate" [displayFormat]="DisplayFormatDate"></dx-date-box>
+        <app-validator-message [error]="errors" field="paymentDate"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-4 col-xs-12">
+      <div class="form-group">
+        <label for="name">Metodo de Pago<i class="text-danger">*</i></label>
+        <dx-select-box #paymentMethod [(value)]="Model.paymentMethod" [dataSource]="DxDataSourcePaymentMethod" displayExpr="text" valueExpr="value"></dx-select-box>
+      </div>
+    </section>
+    <section class="col-md-4 col-xs-12">
+      <div class="form-group">
+        <label for="name">Monto<i class="text-danger">*</i></label>
+        <dx-number-box #amount [(value)]="Model.amount" [format]="CurrencyDxNumber"></dx-number-box>
+      </div>
+    </section>
+  </div>
+</app-modal-with-option-buttons>

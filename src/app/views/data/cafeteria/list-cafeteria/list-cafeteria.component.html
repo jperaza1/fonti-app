@@ -1,0 +1,8 @@
+<app-basic-table-list [title]="title" [columns]="columns" [dataSource]="DataSource" [appCanAccess]="[]"
+    [permissionAllowCreate]="['DATA.CAFETERIA.CREATE']" [permissionAllowUpdate]="['DATA.CAFETERIA.UPDATE']"
+    [permissionAllowDisable]="['DATA.CAFETERIA.DISABLE']" [permissionAllowEnable]="['DATA.CAFETERIA.ENABLE']"
+    (onRefresh)="getAll()" (onNew)="create()" (onEdit)="update($event)" (onDisable)="disable($event)"
+    (onEnable)="enable($event)">
+</app-basic-table-list>
+
+<app-create-or-update-cafeteria #createOrUpdateModal (modalSave)="getAll()"></app-create-or-update-cafeteria>

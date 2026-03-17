@@ -1,0 +1,7 @@
+<app-basic-table-list [title]="title" [columns]="columns" [dataSource]="DataSource" [appCanAccess]="[]"
+    [permissionAllowCreate]="[]" [permissionAllowUpdate]="[]" [permissionAllowDisable]="[]" [permissionAllowEnable]="[]"
+    (onRefresh)="getAll()" (onNew)="create()" (onEdit)="update($event)" (onDisable)="disable($event)"
+    (onEnable)="enable($event)">
+</app-basic-table-list>
+
+<app-create-or-update-type #createOrUpdateModal (modalSave)="getAll()"></app-create-or-update-type>

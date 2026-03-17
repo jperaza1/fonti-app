@@ -1,0 +1,21 @@
+<app-modal-with-option-buttons #entityComponent title="TypeGroup" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()">
+  <form [formGroup]="form">
+    <div class="row row-space-10">
+      <section class="col-md-12">
+        <div class="form-group">
+          <label for="name">Name<i class="text-danger">*</i></label>
+          <input class="form-control" formControlName="name" placeholder="" type="text" required />
+          <app-validator-message [error]="errors" field="name"></app-validator-message>
+        </div>
+      </section>
+      <section class="col-md-12">
+        <div class="form-group">
+          <label for="code">Code<i class="text-danger">*</i></label>
+          <input class="form-control" formControlName="code" placeholder="" type="text" required />
+          <app-validator-message [error]="errors" field="code"></app-validator-message>
+        </div>
+      </section>
+    </div>
+  </form>
+</app-modal-with-option-buttons>

@@ -1,0 +1,379 @@
+/* ============================================
+   View Invoice - Editorial Finance Aesthetic
+   Refined, professional, distinctive
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap');
+
+:host ::ng-deep .invoice-view-panel .panel-body {
+  padding: 0;
+  background: linear-gradient(180deg, #f8f9fa 0%, #f0f2f5 100%);
+}
+
+.invoice-view {
+  --inv-accent: #008c8c;
+  --inv-accent-soft: rgba(0, 140, 140, 0.12);
+  --inv-dark: #1e2d2a;
+  --inv-muted: #5c6b68;
+  --inv-border: rgba(30, 45, 42, 0.08);
+  --inv-card-bg: #ffffff;
+  --inv-shadow: 0 2px 12px rgba(30, 45, 42, 0.06);
+  --inv-shadow-hover: 0 8px 32px rgba(30, 45, 42, 0.1);
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Hero - Factura preview */
+.invoice-view__hero {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--inv-card-bg) 0%, #fafbfc 100%);
+  border-radius: 12px;
+  box-shadow: var(--inv-shadow);
+  border: 1px solid var(--inv-border);
+  animation: inv-fade-in 0.5s ease-out;
+}
+
+.invoice-view__hero-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--inv-muted);
+  margin-bottom: 0.75rem;
+}
+
+/* Cards */
+.invoice-view__card {
+  background: var(--inv-card-bg);
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--inv-shadow);
+  border: 1px solid var(--inv-border);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.invoice-view__card:hover {
+  box-shadow: var(--inv-shadow-hover);
+}
+
+.invoice-view__card--animate {
+  animation: inv-fade-in 0.5s ease-out;
+}
+
+@keyframes inv-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.invoice-view__card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--inv-dark);
+  margin: 0 0 1.25rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--inv-accent-soft);
+}
+
+.invoice-view__card--totals .invoice-view__card-title {
+  border-bottom-color: var(--inv-accent-soft);
+}
+
+.invoice-view__card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.invoice-view__card-header .invoice-view__card-title {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+/* Grid layout */
+.invoice-view__grid {
+  display: grid;
+  gap: 1rem 1.5rem;
+}
+
+.invoice-view__grid--3 {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.invoice-view__grid--4 {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.invoice-view__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.invoice-view__field--full {
+  grid-column: 1 / -1;
+}
+
+:host ::ng-deep .invoice-view__field--highlight .dx-numberbox input,
+:host ::ng-deep .invoice-view__field--highlight .dx-texteditor-input {
+  font-weight: 600;
+  color: var(--inv-accent) !important;
+}
+
+.invoice-view__label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--inv-muted);
+  margin: 0;
+}
+
+/* DevExtreme overrides - subtle refinement */
+:host ::ng-deep .invoice-view .dx-textbox,
+:host ::ng-deep .invoice-view .dx-numberbox,
+:host ::ng-deep .invoice-view .dx-datebox {
+  border-radius: 6px;
+  border-color: var(--inv-border);
+}
+
+:host ::ng-deep .invoice-view .dx-textbox.dx-state-disabled,
+:host ::ng-deep .invoice-view .dx-numberbox.dx-state-disabled,
+:host ::ng-deep .invoice-view .dx-datebox.dx-state-disabled {
+  background: #f8f9fa;
+}
+
+/* Buttons */
+.invoice-view__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.invoice-view__btn--primary {
+  background: linear-gradient(135deg, var(--inv-accent) 0%, #006b6b 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 140, 140, 0.3);
+}
+
+.invoice-view__btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 140, 140, 0.4);
+}
+
+.invoice-view__btn--secondary {
+  background: #fff;
+  color: var(--inv-dark);
+  border: 1.5px solid var(--inv-border);
+}
+
+.invoice-view__btn--secondary:hover {
+  background: #f8f9fa;
+  border-color: var(--inv-muted);
+}
+
+.invoice-view__actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Data grid wrapper */
+.invoice-view__grid-wrapper {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--inv-border);
+}
+
+:host ::ng-deep .invoice-view__grid-wrapper .dx-datagrid {
+  border: none;
+}
+
+:host ::ng-deep .invoice-view__grid-wrapper .dx-datagrid-headers {
+  background: #f8f9fa;
+  border-bottom: 2px solid var(--inv-accent-soft);
+}
+
+:host ::ng-deep .invoice-view__grid-wrapper .dx-row-alt {
+  background: #fafbfc;
+}
+
+/* ============================================
+   Document Preview
+   ============================================ */
+
+.invoice-doc-preview {
+  display: inline-block;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.invoice-doc-preview:hover {
+  transform: scale(1.03);
+}
+
+.invoice-doc-preview:focus {
+  outline: 2px solid var(--inv-accent);
+  outline-offset: 3px;
+}
+
+.invoice-doc-preview__frame {
+  position: relative;
+  width: 200px;
+  height: 260px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow:
+    0 4px 16px rgba(30, 45, 42, 0.12),
+    0 1px 4px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--inv-border);
+  background: linear-gradient(145deg, #fafbfc 0%, #f2f4f6 100%);
+}
+
+.invoice-doc-preview__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+.invoice-doc-preview:hover .invoice-doc-preview__img {
+  opacity: 0.9;
+}
+
+.invoice-doc-preview__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 140, 140, 0) 0%,
+    rgba(0, 140, 140, 0.08) 50%,
+    rgba(0, 140, 140, 0.5) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.invoice-doc-preview:hover .invoice-doc-preview__overlay {
+  opacity: 1;
+}
+
+.invoice-doc-preview__icon {
+  font-size: 1.75rem;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.invoice-doc-preview__hint {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   Lightbox
+   ============================================ */
+
+.invoice-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(30, 45, 42, 0.92);
+  backdrop-filter: blur(12px);
+  animation: inv-lightbox-fade 0.35s ease-out;
+}
+
+@keyframes inv-lightbox-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.invoice-lightbox__close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.invoice-lightbox__close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.invoice-lightbox__content {
+  max-width: 95vw;
+  max-height: 90vh;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+  animation: inv-lightbox-scale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes inv-lightbox-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.invoice-lightbox__img {
+  display: block;
+  max-width: 100%;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  background: #1a2422;
+}

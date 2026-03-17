@@ -1,0 +1,6 @@
+{
+  "data": "https://api-data.buffeteleden.com/api/v2/",
+  "auth": "https://api-auth.buffeteleden.com/api/v2/",
+  "report": "https://report-api.caashondelivery.com/api/v2/",
+  "document": "https://api-doc.buffeteleden.com/api/"
+}

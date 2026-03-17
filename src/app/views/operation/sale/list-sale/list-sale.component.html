@@ -1,0 +1,57 @@
+<app-basic-table-list [title]="title" [columns]="columns" [dataSource]="DataSource" [appCanAccess]="[]"
+    [permissionAllowCreate]="['OPERATION.SALE.CREATE']" [permissionAllowUpdate]="['OPERATION.SALE.UPDATE']"
+    [permissionAllowDisable]="['OPERATION.SALE.DISABLE']" [permissionAllowEnable]="['OPERATION.SALE.ENABLE']"
+    (onRefresh)="getAll()" (onNew)="create()" (onEdit)="update($event)" (onDisable)="disable($event)"
+    (onEnable)="enable($event)" (onSearch)="getAll()" showSearchButton="true">
+
+    <div filterBody>
+      <div class="row row-space-10">
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label for="name">Cafeteria</label>
+            <dx-tag-box [dataSource]="DxDataSourceCafeteria" [(value)]="filterModel.cafeterias" displayExpr="name"
+              valueExpr="id" [showSelectionControls]="true" [searchEnabled]="true" [disabled]="currentUser.cafeteriaId">
+            </dx-tag-box>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label for="name">Tipo de Venta</label>
+            <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
+              [dataSource]="DxDataSourceSaleType" [(value)]="filterModel.saleType">
+            </dx-select-box>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label for="name">Categoría</label> 
+            <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+              [dataSource]="DxDataSourceCategory" [(value)]="filterModel.categoryId">
+            </dx-select-box>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label for="name">Producto</label>
+            <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+              [dataSource]="DxDataSourceProductType" [(value)]="filterModel.productTypeId">
+            </dx-select-box>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label for="name">Inicio</label>
+            <dx-date-box [(max)]="filterModel.dateTo" [(value)]="filterModel.dateFrom" [displayFormat]="DisplayFormatDate"></dx-date-box>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label for="name">Fin</label>
+            <dx-date-box [(value)]="filterModel.dateTo" [displayFormat]="DisplayFormatDate" [(min)]="filterModel.dateFrom"></dx-date-box>
+          </div>
+        </section>
+      </div>
+    </div>
+</app-basic-table-list>
+
+<app-create-or-update-sale #createOrUpdateModal (modalSave)="getAll()"></app-create-or-update-sale>

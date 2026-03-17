@@ -1,0 +1,41 @@
+<app-modal-with-option-buttons #entityComponent title="Role" [optionButtons]="OptionButtons"
+    (onOptionButton)="optionButtonClicked($event)" (onClose)="close()">
+    <div class="row row-space-10">
+        <section class="col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label for="name">Name<i class="text-danger">*</i></label>
+                <input id="name" name="name" [(ngModel)]="Model.name" #name="ngModel" class="form-control"
+                    placeholder="" type="text" required />
+                <app-validator-message [error]="errors" field="name"></app-validator-message>
+            </div>
+        </section>
+        <section class="col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label for="description">Description<i class="text-danger">*</i></label>
+                <input id="description" name="description" [(ngModel)]="Model.description" #description="ngModel"
+                    class="form-control" placeholder="" type="text" required />
+                <app-validator-message [error]="errors" field="description"></app-validator-message>
+            </div>
+        </section>
+    </div>
+    <div class="row row-space-10">
+        <app-validator-message [error]="errors" field="permissions">
+        </app-validator-message>
+
+        <dx-tree-list #treeListPermission id="roles" [dataSource]="Permissions" dataStructure="tree"
+            (onCellPrepared)="onCellPrepared($event)" (onSelectionChanged)="onSelectionChanged($event)"
+            [(selectedRowKeys)]="selectedRowKeys" itemsExpr="children" [showRowLines]="true" [showBorders]="true"
+            [columnAutoWidth]="true" [(selectedRowKeys)]="selectedRowKeys">
+            <dxo-scrolling mode="standard"></dxo-scrolling>
+            <dxo-paging [enabled]="false">
+            </dxo-paging>
+            
+            <dxo-selection mode="multiple" [recursive]="recursiveSelectionEnabled">
+            </dxo-selection>
+
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxi-column dataField="displayName" caption="Permissions"></dxi-column>
+
+        </dx-tree-list>
+    </div>
+</app-modal-with-option-buttons>

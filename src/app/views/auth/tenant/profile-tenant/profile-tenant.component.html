@@ -1,0 +1,97 @@
+<panel title="Company">
+
+    <ngb-tabset type="pills">
+        <ngb-tab>
+            <ng-template ngbTabTitle>
+                <span class="d-sm-none">General</span>
+                <span class="d-sm-block d-none">General</span>
+            </ng-template>
+            <ng-template ngbTabContent>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="row row-space-10">
+                            <section class="col-md-12">
+                                <legend> <i class="fas fa-info-circle"></i> General</legend>
+                            </section>
+                            <section class="col-md-12">
+                                <div class="form-group">
+                                    <label for="name">Name<i class="text-danger">*</i></label>
+                                    <input id="name" name="name" [(ngModel)]="Model.name" #name="ngModel"
+                                        class="form-control" placeholder="" type="text" required />
+                                    <app-validator-message [error]="errors" field="name"></app-validator-message>
+                                </div>
+                            </section>
+                            <section class="col-md-12">
+                                <div class="form-group">
+                                    <label for="email">Email<i class="text-danger">*</i></label>
+                                    <input id="email" name="email" [(ngModel)]="Model.email" #email="ngModel"
+                                        class="form-control" placeholder="" type="email" required />
+                                    <app-validator-message [error]="errors" field="email"></app-validator-message>
+                                </div>
+                            </section>
+                            <section class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email">Phone #</label>
+                                    <dx-text-box [mask]="PhoneFormat" #phoneNumber [(value)]="Model.phoneNumber">
+                                    </dx-text-box>
+                                    <app-validator-message [error]="errors" field="phoneNumber">
+                                    </app-validator-message>
+                                </div>
+                            </section>
+                            <section class="col-md-12">
+                                <div class="form-group">
+                                    <label for="email">WebSite</label>
+                                    <input id="webSite" name="webSite" [(ngModel)]="Model.webSite" #webSite="ngModel"
+                                        class="form-control" placeholder="" type="text" />
+                                    <app-validator-message [error]="errors" field="webSite"></app-validator-message>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row row-space-10">
+                            <section class="col-md-12">
+                                <legend> <i class="fas fa-map-marker-alt"></i> Location</legend>
+                            </section>
+                            <section class="col-md-8">
+                                <div class="form-group">
+                                    <label for="email">Address</label>
+                                    <input id="address" name="address" [(ngModel)]="Model.address" #address="ngModel"
+                                        class="form-control" placeholder="" type="text" />
+                                    <app-validator-message [error]="errors" field="address">
+                                    </app-validator-message>
+                                </div>
+                            </section>
+                            <section class="col-md-12">
+                                <section class="col-xs-12">
+                                    <img [src]="Model.logo || '../../../../assets/img/user/video-not-working.png'"
+                                        class="img-responsive thumbnail center-image" style="height: 200px;" />
+                                </section>
+                                <section class="col-xs-12">
+                                    <input type='file' (change)="readPicture($event);" />
+                                </section>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <br />
+                        <br />
+                        <button class="btn btn-primary pull-right" (click)="save()">Save</button>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab *ngIf="Model.id >= 0">
+            <ng-template ngbTabTitle>
+                <span class="d-sm-none">Documents</span>
+                <span class="d-sm-block d-none">Documents</span>
+            </ng-template>
+            <ng-template ngbTabContent>
+                <app-documentation-control Entity="COMPANY" [EntityId]="Model.id"></app-documentation-control>
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
+
+
+</panel>

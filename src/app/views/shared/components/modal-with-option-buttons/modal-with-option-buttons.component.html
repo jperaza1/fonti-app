@@ -1,0 +1,19 @@
+<ng-template #modalDialog let-modal let-c="close" let-d="dismiss">
+  <panel *ngIf="!isEmptyOrNullString(title)" [title]="title" footerClass="p-b-0 p-t-20 b-t-0" class="m-b-10">
+
+    <div header class="panel-heading-btn">
+      <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" (click)="close()"
+        data-click="panel-remove"><i class="fa fa-times"></i></a>
+    </div>
+
+    <ng-content></ng-content>
+
+    <br />
+    <hr *ngIf="optionButtons != null && optionButtons.length > 0" class="cod-modal-separator" />
+    <button *ngFor="let option of optionButtons" [className]="'option-button ' + option.btnClass"
+      (click)="onOptionButtonClicked(option)" [appCanAccess]="option.permission">
+      <i *ngIf="!isEmptyOrNullString(option.btnIcon)" [className]="option.btnIcon"></i>
+      {{option.btnText}}
+    </button>
+  </panel>
+</ng-template>

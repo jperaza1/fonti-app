@@ -1,0 +1,116 @@
+/* ============================================
+   Create/Update Invoice - Editorial Finance Aesthetic
+   Coherente con view-invoice
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap');
+
+.invoice-form {
+  --inv-accent: #008c8c;
+  --inv-accent-soft: rgba(0, 140, 140, 0.12);
+  --inv-dark: #1e2d2a;
+  --inv-muted: #5c6b68;
+  --inv-border: rgba(30, 45, 42, 0.08);
+  --inv-card-bg: #ffffff;
+  --inv-shadow: 0 2px 12px rgba(30, 45, 42, 0.06);
+  --inv-shadow-hover: 0 8px 32px rgba(30, 45, 42, 0.1);
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 0.5rem 0;
+}
+
+/* Cards */
+.invoice-form__card {
+  background: var(--inv-card-bg);
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--inv-shadow);
+  border: 1px solid var(--inv-border);
+  transition: box-shadow 0.3s ease;
+}
+
+.invoice-form__card:hover {
+  box-shadow: var(--inv-shadow-hover);
+}
+
+.invoice-form__card--animate {
+  animation: inv-form-fade-in 0.45s ease-out;
+}
+
+@keyframes inv-form-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.invoice-form__card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--inv-dark);
+  margin: 0 0 1.25rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--inv-accent-soft);
+}
+
+/* Bootstrap row spacing */
+.invoice-form__card .row {
+  margin-bottom: -1rem;
+}
+
+.invoice-form__card .row > [class*="col-"] {
+  margin-bottom: 1rem;
+}
+
+.invoice-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.invoice-form__label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--inv-muted);
+  margin: 0;
+}
+
+/* DevExtreme overrides - se ajustan al contenedor */
+:host ::ng-deep .invoice-form .dx-textbox,
+:host ::ng-deep .invoice-form .dx-numberbox,
+:host ::ng-deep .invoice-form .dx-datebox,
+:host ::ng-deep .invoice-form .dx-selectbox,
+:host ::ng-deep .invoice-form .dx-textarea {
+  border-radius: 6px;
+  border-color: var(--inv-border);
+  max-width: 100%;
+}
+
+:host ::ng-deep .invoice-form .dx-textbox:focus-within,
+:host ::ng-deep .invoice-form .dx-numberbox:focus-within,
+:host ::ng-deep .invoice-form .dx-datebox:focus-within,
+:host ::ng-deep .invoice-form .dx-selectbox:focus-within {
+  border-color: var(--inv-accent);
+  box-shadow: 0 0 0 2px var(--inv-accent-soft);
+}
+
+/* Total destacado */
+:host ::ng-deep .invoice-form__field--highlight .dx-numberbox input,
+:host ::ng-deep .invoice-form__field--highlight .dx-texteditor-input {
+  font-weight: 600;
+  color: var(--inv-accent) !important;
+}
+
+/* Validator message */
+:host ::ng-deep .invoice-form app-validator-message {
+  font-size: 0.75rem;
+  color: #c53030;
+  margin-top: 0.25rem;
+}

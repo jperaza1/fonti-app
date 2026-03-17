@@ -1,0 +1,15 @@
+<panel title="Default User Task" footerClass="p-b-0 p-t-20 b-t-0">
+  <div>
+    <div class="row-space-10">
+      <section class="col-md-12 col-xs-12">
+        <label for="alertBy">Member</label>
+        <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true" [dataSource]="DxDataSourceUser" [(value)]="Model.value">
+        </dx-select-box>
+      </section>
+      <br />
+      <section class="col-md-12 col-xs-12">
+        <button class="btn btn-primary" (click)="save()"> Save </button>
+      </section>
+    </div>
+  </div>
+</panel>

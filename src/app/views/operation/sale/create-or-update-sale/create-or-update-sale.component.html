@@ -1,0 +1,82 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()">
+  <div class="row row-space-10">
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Cafetería<i class="text-danger">*</i></label>
+        <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+          [dataSource]="DxDataSourceCafeteria" [(value)]="Model.cafeteriaId" [disabled]="currentUser.cafeteriaId" (onItemClick)="onCafeteriaItemClick($event.itemData)">
+        </dx-select-box>
+        <app-validator-message [error]="errors" field="cafeteria"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Caja<i class="text-danger">*</i></label>
+        <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+          [dataSource]="DxDataSourceRegister" [(value)]="Model.registerId">
+        </dx-select-box>
+        <app-validator-message [error]="errors" field="register"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Cliente<i class="text-danger">*</i></label>
+        <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+          [dataSource]="DxDataSourceCustomer" [(value)]="Model.customerId">
+        </dx-select-box>
+        <app-validator-message [error]="errors" field="customer"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Tipo de Venta<i class="text-danger">*</i></label>
+        <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
+          [dataSource]="DxDataSourceSaleType" [(value)]="Model.saleType">
+        </dx-select-box>
+        <app-validator-message [error]="errors" field="saleType"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Categoría<i class="text-danger">*</i></label> 
+        <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+          [dataSource]="DxDataSourceCategory" [(value)]="Model.categoryId">
+        </dx-select-box>
+        <app-validator-message [error]="errors" field="category"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Producto<i class="text-danger">*</i></label>
+        <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+          [dataSource]="DxDataSourceProductType" [(value)]="Model.productTypeId">
+        </dx-select-box>
+        <app-validator-message [error]="errors" field="product"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Periodo de Servicio<i class="text-danger">*</i></label>
+        <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+          [dataSource]="DxDataSourceServicePeriod" [(value)]="Model.servicePeriodId">
+        </dx-select-box>
+        <app-validator-message [error]="errors" field="servicePeriod"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Fecha de Venta<i class="text-danger">*</i></label>
+        <dx-date-box [(value)]="Model.saleDate" [displayFormat]="DisplayFormatDate"></dx-date-box>
+        <app-validator-message [error]="errors" field="saleDate"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Monto<i class="text-danger">*</i></label>
+        <dx-number-box #amount [(value)]="Model.amount" [format]="CurrencyDxNumber"></dx-number-box>
+        <app-validator-message [error]="errors" field="amount"></app-validator-message>
+      </div>
+    </section>
+  </div>
+</app-modal-with-option-buttons>

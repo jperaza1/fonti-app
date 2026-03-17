@@ -1,0 +1,61 @@
+<div class="login-container" [ngClass]="isDarkMode ? 'dark-theme' : 'light-theme'">
+	<div class="theme-switch">
+		<label class="switch">
+			<input type="checkbox" [(ngModel)]="isDarkMode" name="themeSwitch" (change)="onThemeChange()">
+			<span class="slider round">
+				<i class="fas fa-sun light-icon"></i>
+				<i class="fas fa-moon dark-icon"></i>
+			</span>
+		</label>
+	</div>
+	
+	<div class="login-box">
+		<!-- Logo section -->
+		<div class="login-header">
+			<div class="logo">
+				<img src="../../../../assets/img/logo.png" alt="Logo" class="logo-img">
+				<h1 class="company-name">Back Office</h1>
+				<p class="company-slogan"></p>
+			</div>
+		</div>
+
+		<!-- Login form -->
+		<div class="login-content">
+			<form class="login-form">
+				<div class="form-group">
+					<div class="input-group">
+						<i class="fas fa-user input-icon"></i>
+						<input type="text" 
+							   #username 
+							   id="username" 
+							   name="username" 
+							   [(ngModel)]="UserAuth.username"
+							   class="form-control" 
+							   placeholder="Usuario" 
+							   required />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="input-group">
+						<i class="fas fa-lock input-icon"></i>
+						<input type="password" 
+							   #password 
+							   id="password" 
+							   name="password" 
+							   [(ngModel)]="UserAuth.password"
+							   class="form-control" 
+							   placeholder="Contraseña" 
+							   required />
+					</div>
+				</div>
+
+				<button type="button" 
+						(click)="formSubmit()"
+						class="login-button">
+					Iniciar Sesión
+				</button>
+			</form>
+		</div>
+	</div>
+</div>

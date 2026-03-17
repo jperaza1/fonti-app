@@ -1,0 +1,176 @@
+<app-modal-with-option-buttons #entityComponent title="User" [size]="'xl'" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()">
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="row row-space-10">
+        <section class="col-md-12">
+          <legend> <i class="fas fa-info-circle"></i> General</legend>
+        </section>
+        <section class="col-sm-6 col-xs-12">
+          <div class="form-group">
+            <label for="firstName">Firstname<i class="text-danger">*</i></label>
+            <input id="firstName" name="firstName" [(ngModel)]="Model.firstName" #firstName="ngModel"
+              class="form-control" placeholder="" type="text" required />
+            <app-validator-message [error]="errors" field="firstName"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-sm-6 col-xs-12">
+          <div class="form-group">
+            <label for="lastName">LastName<i class="text-danger">*</i></label>
+            <input id="lastName" name="lastName" [(ngModel)]="Model.lastName" #lastName="ngModel" class="form-control"
+              placeholder="" type="text" required />
+            <app-validator-message [error]="errors" field="lastName"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-12">
+          <div class="form-group">
+            <label for="email">Email<i class="text-danger">*</i></label>
+            <input id="email" name="email" [(ngModel)]="Model.email" #email="ngModel" class="form-control"
+              placeholder="" type="email" required />
+            <app-validator-message [error]="errors" field="email"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-sm-3 col-xs-12">
+          <div class="form-group">
+            <label for="phone">Phone #</label>
+            <dx-text-box [mask]="PhoneFormat" #phone [(value)]="Model.phone">
+            </dx-text-box>
+            <app-validator-message [error]="errors" field="phone">
+            </app-validator-message>
+          </div>
+        </section>
+        <section class="col-sm-6 col-xs-12">
+          <div class="form-group">
+            <label for="userType">User Type</label>
+            <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
+              [dataSource]="DxDataSourceUserType" [(value)]="Model.userType"
+              (onItemClick)="onItemClickUserType($event.itemData)">
+            </dx-select-box>
+            <app-validator-message [error]="errors" field="userType"></app-validator-message>
+          </div>
+        </section>
+
+        <section class="col-sm-12 col-xs-12" *ngIf="ShowCustomer">
+          <div class="form-group">
+            <label for="cafeteriaId">Cafeteria</label>
+            <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true" [dataSource]="DxDataSourceCafeteria"
+              [(value)]="Model.cafeteriaId">
+            </dx-select-box>
+            <app-validator-message [error]="errors" field="cafeteria"></app-validator-message>
+          </div>
+        </section>
+
+      </div>
+      <div class="row row-space-10" *ngIf="!EditModel">
+        <section class="col-md-12">
+          <legend> <i class="fas fa-lock"></i> Auth</legend>
+        </section>
+        <section class="col-sm-6 col-xs-12">
+          <div class="form-group">
+            <label for="username">Username<i class="text-danger">*</i></label>
+            <input id="username" name="username" [(ngModel)]="Model.username" #username="ngModel" class="form-control"
+              placeholder="" type="text" required />
+            <app-validator-message [error]="errors" field="username"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-sm-6 col-xs-12">
+          <div class="form-group">
+            <label for="password">Password<i class="text-danger">*</i></label>
+            <input id="password" name="password" [(ngModel)]="Model.password" #password="ngModel" class="form-control"
+              placeholder="" type="text" required />
+            <app-validator-message [error]="errors" field="password"></app-validator-message>
+          </div>
+        </section>
+      </div>
+      <div class="row row-space-10" *ngIf="EditModel">
+        <section class="col-md-12">
+          <legend> <i class="fas fa-lock"></i> Auth</legend>
+        </section>
+        <section class="col-md-6 col-xs-12">
+          <br />
+          <div class="custom-control custom-switch">
+            <input type="checkbox" [(ngModel)]="Model.changeUsername" #changeUsername="ngModel"
+              class="custom-control-input" id="changeUsername">
+            <label class="custom-control-label" for="changeUsername">Change Username</label>
+          </div>
+        </section>
+        <section class="col-sm-6 col-xs-12" *ngIf="Model.changeUsername">
+          <div class="form-group">
+            <label for="newUserName">New Username<i class="text-danger">*</i></label>
+            <input id="newUserName" name="newUserName" [(ngModel)]="Model.newUserName" #newUserName="ngModel"
+              class="form-control" placeholder="" type="text" required />
+            <app-validator-message [error]="errors" field="newUserName"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-6 col-xs-12">
+          <br />
+          <div class="custom-control custom-switch">
+            <input type="checkbox" [(ngModel)]="Model.changePassword" #changePassword="ngModel"
+              class="custom-control-input" id="changePassword">
+            <label class="custom-control-label" for="changePassword">Change Password</label>
+          </div>
+        </section>
+        <section class="col-sm-6 col-xs-12" *ngIf="Model.changePassword">
+          <div class="form-group">
+            <label for="newPassword">New Password<i class="text-danger">*</i></label>
+            <input id="newPassword" name="newPassword" [(ngModel)]="Model.newPassword" #newPassword="ngModel"
+              class="form-control" placeholder="" type="text" required />
+            <app-validator-message [error]="errors" field="newPassword"></app-validator-message>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <ngb-tabset type="pills">
+        <ngb-tab>
+          <ng-template ngbTabTitle>
+            <span class="d-sm-none">ROLES</span>
+            <span class="d-sm-block d-none">Roles</span>
+          </ng-template>
+          <ng-template ngbTabContent>
+            <div class="row row-space-10">
+              <app-validator-message [error]="errors" field="roleIds"></app-validator-message>
+
+              <dx-data-grid #RoleGrid id="RoleGrid" [dataSource]="Roles" keyExpr="id" [hoverStateEnabled]="true"
+                [showBorders]="true" [(selectedRowKeys)]="SelectedRowKeys">
+
+                <dxo-paging [pageSize]="10"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 15, 50, 100]"></dxo-pager>
+                <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+                <dxo-selection selectAllMode="allPages" showCheckBoxesMode="onClick" mode="multiple">
+                </dxo-selection>
+
+                <dxi-column dataField="name" caption="Role"></dxi-column>
+              </dx-data-grid>
+            </div>
+          </ng-template>
+        </ngb-tab>
+
+        <ngb-tab>
+          <ng-template ngbTabTitle>
+            <span class="d-sm-none">ALERTS</span>
+            <span class="d-sm-block d-none">Alerts</span>
+          </ng-template>
+          <ng-template ngbTabContent>
+            <div class="row row-space-10">
+              <app-validator-message [error]="errors" field="alertIds"></app-validator-message>
+
+              <dx-data-grid #AlertGrid id="AlertGrid" [dataSource]="Alerts" keyExpr="value" [hoverStateEnabled]="true"
+                [showBorders]="true" [(selectedRowKeys)]="SelectedAlertKeys">
+
+                <dxo-paging [pageSize]="10"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 15, 50, 100, 300]"></dxo-pager>
+                <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+                <dxo-selection selectAllMode="allPages" showCheckBoxesMode="onClick" mode="multiple">
+                </dxo-selection>
+
+                <dxi-column dataField="text" caption="Alert"></dxi-column>
+              </dx-data-grid>
+            </div>
+          </ng-template>
+        </ngb-tab>
+
+      </ngb-tabset>
+    </div>
+  </div>
+</app-modal-with-option-buttons>

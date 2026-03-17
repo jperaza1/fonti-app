@@ -1,0 +1,103 @@
+<!-- begin #header -->
+<div id="header" class="header navbar-default cod-header">
+	<!-- begin navbar-header -->
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle pull-left" *ngIf="this.pageSidebarTwo"
+			(click)="mobileRightSidebarToggle()">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+
+		<div class="cod-brand">
+			<img class="cod-brand-logo" *ngIf="Tenant" [src]="Tenant.logo" />
+			<a href="/" class="cod-brand-name">
+				<span *ngIf="Tenant">{{ Tenant.name }}</span>
+			</a>
+		</div>
+
+		<button type="button" class="navbar-toggle pt-0 pb-0 mr-0" (click)="mobileTopMenuToggle()"
+			*ngIf="this.pageSettings.pageTopMenu && !this.pageSettings.pageWithoutSidebar">
+			<span class="fa-stack fa-lg text-inverse">
+				<i class="far fa-square fa-stack-2x"></i>
+				<i class="fa fa-cog fa-stack-1x"></i>
+			</span>
+		</button>
+		<button type="button" class="navbar-toggle pt-0 pb-0 mr-0" (click)="mobileMegaMenuToggle()"
+			*ngIf="this.pageSettings.pageMegaMenu">
+			<span class="fa-stack fa-lg text-inverse">
+				<i class="far fa-square fa-stack-2x"></i>
+				<i class="fa fa-cog fa-stack-1x"></i>
+			</span>
+		</button>
+		<button type="button" class="navbar-toggle" (click)="mobileSidebarToggle()"
+			*ngIf="!this.pageSettings.pageWithoutSidebar">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<button type="button" class="navbar-toggle" (click)="mobileTopMenuToggle()"
+			*ngIf="this.pageSettings.pageTopMenu && this.pageSettings.pageWithoutSidebar">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+	</div>
+	<!-- end navbar-header -->
+
+	<!-- begin header-nav -->
+	<ul class="navbar-nav navbar-right cod-nav-right">
+
+		<!-- Notificaciones -->
+		<li class="dropdown cod-nav-item cod-nav-notifications" ngbDropdown>
+			<a href="javascript:;" class="dropdown-toggle cod-nav-link" ngbDropdownToggle>
+				<div class="cod-bell-wrap">
+					<i class="fa fa-bell"></i>
+					<span class="cod-badge-count" *ngIf="Notification && Notification.length > 0">{{ total }}</span>
+				</div>
+			</a>
+			<div class="dropdown-menu dropdown-menu-right cod-dropdown" ngbDropdownMenu>
+				<div class="cod-dropdown-header">
+					<span>Notificaciones</span>
+					<span class="cod-dropdown-count" *ngIf="Notification">{{ Notification.length }}</span>
+				</div>
+				<div class="cod-dropdown-body">
+					<a *ngFor="let item of Notification" href="javascript:;" class="dropdown-item cod-dropdown-item" (click)="onClickAlert(item)">
+						<span class="cod-notif-badge">{{ item.count }}</span>
+						<span class="cod-notif-text">{{ item.userAlertName }}</span>
+					</a>
+					<div class="cod-dropdown-empty" *ngIf="!Notification || Notification.length === 0">
+						Sin notificaciones
+					</div>
+				</div>
+			</div>
+		</li>
+
+		<!-- Usuario -->
+		<li class="dropdown navbar-user cod-nav-item cod-nav-user" ngbDropdown>
+			<a href="javascript:;" class="dropdown-toggle cod-nav-link" ngbDropdownToggle>
+				<div class="cod-user-avatar">
+					<i class="fa fa-user"></i>
+				</div>
+				<span class="cod-user-name d-none d-md-inline" *ngIf="currentUser">{{ currentUser.fullName }}</span>
+				<i class="fa fa-chevron-down cod-caret"></i>
+			</a>
+			<div class="dropdown-menu dropdown-menu-right cod-dropdown" ngbDropdownMenu>
+				<a href="javascript:;" (click)="logout()" class="dropdown-item cod-dropdown-item cod-logout-item">
+					<i class="fa fa-sign-out-alt"></i>
+					<span>Salir</span>
+				</a>
+			</div>
+		</li>
+
+		<li class="divider d-none d-md-block" *ngIf="this.pageSidebarTwo"></li>
+		<li class="d-none d-md-block" *ngIf="this.pageSidebarTwo">
+			<a href="javascript:;" (click)="toggleSidebarRight()" class="f-s-14">
+				<i class="fa fa-th"></i>
+			</a>
+		</li>
+	</ul>
+	<!-- end header navigation right -->
+</div>
+<!-- end #header -->
+<app-alert-preview #alertPreview></app-alert-preview>

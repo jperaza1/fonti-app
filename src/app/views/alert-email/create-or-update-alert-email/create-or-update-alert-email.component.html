@@ -1,0 +1,142 @@
+<app-modal-with-option-buttons #entityComponent title="Alert Emails" [optionButtons]="OptionButtons"
+    (onOptionButton)="optionButtonClicked($event)" (onClose)="close()">
+    <div>
+        <div class="row row-space-10">
+
+            <section class="col-md-6 col-xs-12">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <dx-text-box #name [(value)]="Model.name">
+                    </dx-text-box>
+                    <app-validator-message [error]="errors" field="name"></app-validator-message>
+                </div>
+            </section>
+
+            <section class="col-md-6 col-xs-12">
+                <div class="form-group">
+                    <label for="alertBy">Alert By</label>
+                    <dx-select-box [searchEnabled]="true" [items]="AlertByOptions"
+                        (onItemClick)="onItemClickAlertBy($event.itemData)" [(value)]="Model.alertBy">
+                    </dx-select-box>
+                    <app-validator-message [error]="errors" field="alertBy"></app-validator-message>
+                </div>
+            </section>
+
+            <section class="col-md-6 col-xs-12" *ngIf="Model.alertBy === 'Holiday'">
+              <div class="form-group">
+                  <label for="alertBy">Holiday Date</label>
+                  <dx-date-box  [(value)]="Model.holidayDate" displayFormat="MM/dd"></dx-date-box>
+                  <app-validator-message [error]="errors" field="holidayDate"></app-validator-message>
+              </div>
+          </section>
+
+            <section class="col-md-6 col-xs-12" *ngIf="Model.alertBy !== 'Holiday'">
+                <div class="form-group">
+                    <label for="alertTypes">Alert Types</label>
+                    <dx-tag-box [dataSource]="AlertsByType" [(value)]="Model.alertTypes" displayExpr="text"
+                        valueExpr="value" [showSelectionControls]="true" [searchEnabled]="true">
+                    </dx-tag-box>
+                    <app-validator-message [error]="errors" field="alertTypes"></app-validator-message>
+                </div>
+            </section>
+
+            <section class="col-md-6 col-xs-12">
+              <div class="form-group">
+                  <label for="customerTypes">Customer Types</label>
+                  <dx-tag-box [dataSource]="CustomerType" [(value)]="Model.customerTypes" displayExpr="text"
+                      valueExpr="value" [showSelectionControls]="true" [searchEnabled]="true">
+                  </dx-tag-box>
+                  <app-validator-message [error]="errors" field="customerTypes"></app-validator-message>
+              </div>
+            </section>
+
+            <section class="col-md-4 col-xs-12" >
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" [(ngModel)]="Model.notifyBefore" #notifyBefore="ngModel"
+                        class="custom-control-input" id="notifyBefore">
+                    <label class="custom-control-label" for="notifyBefore">Notify Before</label>
+                </div>
+            </section>
+            <section class="col-md-8 col-xs-12" >
+                <div class="form-group">
+                    <label for="frequencyDaysBefore">Days Before</label>
+                    <dx-tag-box [disabled]="!Model.notifyBefore" [dataSource]="NotifyDaysOptions"
+                        [(value)]="Model.frequencyDaysBefore" displayExpr="text" valueExpr="value"
+                        [showSelectionControls]="true" [searchEnabled]="true">
+                    </dx-tag-box>
+                    <app-validator-message [error]="errors" field="frequencyDaysBefore"></app-validator-message>
+                </div>
+            </section>
+
+
+            <section class="col-md-4 col-xs-12" >
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" [(ngModel)]="Model.notifyAfter" #notifyAfter="ngModel"
+                        class="custom-control-input" id="notifyAfter">
+                    <label class="custom-control-label" for="notifyAfter">Notify After</label>
+                </div>
+            </section>
+
+            <section class="col-md-8 col-xs-12">
+                <div class="form-group">
+                    <label for="frequencyDaysAfter">Days After</label>
+                    <dx-tag-box [disabled]="!Model.notifyAfter" [dataSource]="NotifyDaysOptions"
+                        [(value)]="Model.frequencyDaysAfter" displayExpr="text" valueExpr="value"
+                        [showSelectionControls]="true" [searchEnabled]="true">
+                    </dx-tag-box>
+                    <app-validator-message [error]="errors" field="frequencyDaysAfter"></app-validator-message>
+                </div>
+            </section>
+
+
+        </div>
+
+
+        <ng-template ngFor let-lang [ngForOf]="Model.languages">
+
+            <div class="row row-space-10">
+
+                <section class="col-md-12 col-xs-12">
+                    <h5>
+                        {{ lang.languageType }}
+                    </h5>
+                </section>
+
+                <section class="col-md-8 col-xs-12">
+                    <div class="form-group">
+                        <label for="bodyTemplate">Body Message</label>
+                        <dx-text-area [height]="150" #bodyTemplate [(value)]="lang.bodyTemplate"></dx-text-area>
+                        <app-validator-message [error]="errors" field="bodyTemplate"></app-validator-message>
+                    </div>
+                </section>
+                <section class="col-md-4 col-xs-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Available Fields</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-template ngFor let-field [ngForOf]="Fields">
+                                <tr>
+                                    <td>{{field}}</td>
+                                    <td>
+                                        <a (click)="copy(field)">
+                                            <i class="fas fa-copy"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+        </ng-template>
+
+
+
+    </div>
+</app-modal-with-option-buttons>

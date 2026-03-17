@@ -1,0 +1,29 @@
+<app-modal-with-option-buttons #entityComponent title="List Documents" (onClose)="close()" [optionButtons]="OptionButtons"
+(onOptionButton)="optionButtonClicked($event)">
+    <div>
+        <div class="row row-space-10">
+            <dx-data-grid id="documentationGrid" [dataSource]="DataSource" [showRowLines]="true"
+                [rowAlternationEnabled]="true">
+
+                <dxi-column dataField="name" caption="Name" cellTemplate="nameTemplate">
+                </dxi-column>
+
+                <div *dxTemplate="let document of 'nameTemplate'">
+                    <a type="button" href="javascript:;" (click)="onShowDocument(document.data.idAttachment)">
+                        {{document.data.name}}
+                    </a>
+                </div>
+
+                <dxi-column dataField="attachmentType" caption="Document Type">
+                </dxi-column>
+                <dxi-column dataField="uploadDateTime" caption="Date/Time & User" cellTemplate="uploadTemplate">
+                </dxi-column>
+
+                <div *dxTemplate="let document of 'uploadTemplate'">
+                    <strong>{{ document.data.uploadDateTime | date: DisplayFormatDateTime }} </strong>
+                </div>
+
+        </dx-data-grid>
+        </div>
+    </div>
+</app-modal-with-option-buttons>

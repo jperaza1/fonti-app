@@ -1,0 +1,60 @@
+<div *ngIf="EntityId" class="row row-space-10">
+    <section class="col-md-12 col-xs-12">
+        <br />
+    </section>
+    <section class="col-md-12 col-xs-12" [appCanAccess]="['DATA.DOCUMENTATION']">
+        <div class="row row-space-10">
+            <section class="col-md-4 col-xs-10">
+                <label> Document Type </label>
+                <dx-select-box #documentType [dataSource]="DxDataSourceTypes" [acceptCustomValue]="true"
+                    (onItemClick)="onItemClickType($event.itemData)" displayExpr="name" valueExpr="id"
+                    [searchEnabled]="true">
+                </dx-select-box>
+            </section>
+            <section class="col-md-2 col-xs-2">
+              <button class="btn btn-primary" style="margin-top: 23px;" (click)="addNewDocument()"><i class="fas fa-plus"></i></button>
+            </section>
+        </div>
+    </section>
+    <section *ngIf="DocumentType" class="col-md-12 col-xs-12">
+        <dx-file-uploader #fileUploader (onValueChanged)="onChangeFile($event)" (onUploaded)="onUploaded($event)"
+            uploadUrl="" [multiple]="true" accept="*" [(value)]="Files" uploadMode="useButtons"></dx-file-uploader>
+    </section>
+    <section class="col-md-12 col-xs-12">
+        <dx-data-grid id="documentationGrid" [dataSource]="DataSource" [showRowLines]="true"
+            [rowAlternationEnabled]="true">
+
+            <dxi-column dataField="name" caption="Name" cellTemplate="nameTemplate">
+            </dxi-column>
+
+            <div *dxTemplate="let document of 'nameTemplate'">
+                <a type="button" href="javascript:;" (click)="onShowDocument(document.data.idAttachment, document.data)">
+                    {{document.data.name}}
+                </a>
+            </div>
+
+            <dxi-column dataField="attachmentType" caption="Document Type">
+            </dxi-column>
+            <dxi-column dataField="uploadDateTime" caption="Date/Time & User" cellTemplate="uploadTemplate" allowSorting="true" sortOrder="desc">
+            </dxi-column>
+
+            <div *dxTemplate="let document of 'uploadTemplate'">
+                <strong>{{ document.data.uploadDateTime | date: DisplayFormatDateTime }} /
+                    {{ document.data.uploadUser }}</strong>
+            </div>
+
+            <dxi-column dataField="idAttachment" caption="" width="100" cellTemplate="actionTemplate">
+            </dxi-column>
+
+            <div *dxTemplate="let document of 'actionTemplate'">
+                <button [appCanAccess]="['DATA.DOCUMENTATION']" class="btn btn-danger pull-left btn-sm" title="Delete"
+                    type="button" (click)="delete(document.data)">
+                    <i class="fas fa-trash"> </i>
+                </button>
+            </div>
+
+        </dx-data-grid>
+    </section>
+</div>
+
+<app-create-document-type #createDocumentType (modalSave)="getTypes()"></app-create-document-type> 

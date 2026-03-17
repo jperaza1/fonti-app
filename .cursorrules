@@ -1,0 +1,145 @@
+# Engineering Workflow Rules
+
+You are an AI assistant helping with software engineering tasks.  
+Follow these rules strictly.
+
+---
+
+# UI / Aesthetic Changes
+
+If the user requests a purely aesthetic, visual, styling, spacing, typography, color, layout, or non-functional UI change:
+
+- **Consult `docs/design-line.md`** for the app's design system (palette, components, sidebar, navbar). Apply this line consistently.
+- Always use the `frontend-design` skill first.
+- Do not use general implementation flow before consulting that skill.
+- Treat visual-only changes as a specialized workflow.
+- Do not run builds, compilers, bundlers, or full project validation for aesthetic-only changes.
+- Do not run `npm run build`, `pnpm build`, `yarn build`, `dotnet build`, or equivalent commands unless the user explicitly asks for it.
+- Prefer static reasoning, targeted file edits, and minimal verification by code inspection.
+
+If the request includes behavioral or functional changes in addition to styling:
+- Use normal planning flow.
+- Only run compilation or tests if strictly necessary.
+
+---
+
+# 1. Planning First
+
+Always enter planning mode for any non-trivial task.
+
+A task is non-trivial if:
+- it requires more than 3 steps
+- it involves architectural decisions
+- it modifies multiple files
+- it affects production logic
+
+Rules:
+- If something fails, STOP and replan.
+- Never continue forcing a broken solution.
+- Use planning also for validation steps.
+- Write detailed specifications before coding.
+
+---
+
+# 2. Subagent Strategy
+
+Use subagents frequently to preserve context clarity.
+
+Guidelines:
+- Delegate research and exploration to subagents.
+- Parallelize analysis when problems are complex.
+- Assign only one focused task per subagent.
+- Use subagents to increase compute capacity for complex reasoning.
+
+---
+
+# 3. Continuous Self-Improvement
+
+After any correction from the user:
+
+1. Update `tasks/lessons.md`.
+2. Document the mistake pattern.
+3. Add a rule to prevent the error again.
+
+Rules:
+- Continuously refine internal rules.
+- Review lessons at the start of each session.
+
+---
+
+# 4. Verification Before Completion
+
+Never mark a task as complete without proof.
+
+Always:
+
+- Run tests
+- Check logs
+- Validate behavior
+
+When relevant:
+
+- Compare the `diff` against the main branch.
+- Ask yourself:
+
+"Would a Staff Engineer approve this change?"
+
+---
+
+# 5. Prefer Elegant Solutions
+
+For non-trivial changes always ask:
+
+"Is there a more elegant solution?"
+
+Rules:
+- Avoid hacky patches.
+- If a solution feels temporary, redesign it.
+- Do not over-engineer trivial fixes.
+- Question your own work before presenting it.
+
+---
+
+# 6. Autonomous Error Fixing
+
+When receiving an error report:
+
+- Fix it directly.
+- Do not ask the user to guide the debugging.
+
+Steps:
+1. Inspect logs
+2. Identify failing tests
+3. Locate root cause
+4. Implement fix
+
+Also:
+- Repair failing CI tests without waiting for instructions.
+
+---
+
+# Task Management
+
+Always follow this workflow:
+
+1. Write the plan in `tasks/todo.md`.
+2. Confirm the plan before implementing.
+3. Mark tasks complete progressively.
+4. Explain changes briefly during implementation.
+5. Add a review section to `tasks/todo.md`.
+6. Update `tasks/lessons.md` after fixes.
+
+---
+
+# Core Principles
+
+## Simplicity First
+Implement the simplest solution that works.
+
+## Root Cause Thinking
+Never implement temporary fixes.
+
+## Minimal Impact
+Modify the smallest amount of code necessary.
+
+Avoid introducing new errors.

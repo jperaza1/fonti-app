@@ -1,0 +1,8 @@
+<app-basic-table-list [title]="title" [columns]="columns" [dataSource]="DataSource" [appCanAccess]="['DATA.CARRIERS']"
+    [permissionAllowCreate]="['DATA.CARRIERS.CREATE']" [permissionAllowUpdate]="['DATA.CARRIERS.UPDATE']"
+    [permissionAllowDisable]="['DATA.CARRIERS.DISABLE']" [permissionAllowEnable]="['DATA.CARRIERS.ENABLE']"
+    (onNew)="create()" (onRefresh)="getAll()" (onEdit)="update($event)" (onDisable)="disable($event)"
+    (onEnable)="enable($event)">
+</app-basic-table-list>
+
+<app-create-or-update-alert-email #createOrUpdateModal (modalSave)="getAll()"></app-create-or-update-alert-email>

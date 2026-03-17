@@ -1,0 +1,77 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()">
+  <div class="row row-space-10">
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Proveedor<i class="text-danger">*</i></label>
+        <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+          [dataSource]="DxDataSourceVendor" [(value)]="Model.vendorId" [disabled]="Model.id > 0">
+        </dx-select-box>
+        <app-validator-message [error]="errors" field="vendor"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Nombre<i class="text-danger">*</i></label>
+        <dx-text-box #name [(value)]="Model.name">
+        </dx-text-box>
+        <app-validator-message [error]="errors" field="name"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Medida<i class="text-danger">*</i></label>
+        <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+          [dataSource]="DxDataSourceMeasure" [(value)]="Model.measureId">
+        </dx-select-box>
+        <app-validator-message [error]="errors" field="measure"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Unidades por medida<i class="text-danger">*</i></label>
+        <dx-number-box [(value)]="Model.unit" format="##0">
+        </dx-number-box>
+        <app-validator-message [error]="errors" field="unit"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Costo<i class="text-danger">*</i></label>
+        <dx-number-box #cost [showSpinButtons]="false" [format]="CurrencyDxNumber"
+          [(value)]="Model.cost"></dx-number-box>
+        <app-validator-message [error]="errors" field="cost"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Costo Unitario<i class="text-danger">*</i></label>
+        <dx-number-box #unitCost [showSpinButtons]="false" [format]="CurrencyDxNumber"
+          [(value)]="Model.unitCost"></dx-number-box>
+        <app-validator-message [error]="errors" field="unitCost"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Impuesto</label>
+        <dx-number-box #tax [showSpinButtons]="false" [format]="PercentageDxNumber"
+          [(value)]="Model.tax"></dx-number-box>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Descuento</label>
+        <dx-number-box #discount [showSpinButtons]="false" [format]="CurrencyDxNumberWithThrees"
+          [(value)]="Model.discount"></dx-number-box>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <br />
+      <div class="custom-control custom-switch">
+        <input type="checkbox" [(ngModel)]="Model.specialServiceUse" #SpecialServiceUse="ngModel"
+          class="custom-control-input" id="specialServiceUse">
+        <label class="custom-control-label" for="specialServiceUse">Usar en servicios especiales</label>
+      </div>
+    </section>
+  </div>
+</app-modal-with-option-buttons>

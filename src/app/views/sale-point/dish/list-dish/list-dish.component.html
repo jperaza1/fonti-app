@@ -1,0 +1,83 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="row row-space-10">
+    <section class="col-md-4 col-xs-12" style="margin-top: 25px;">
+      <button
+        class="btn btn-primary"
+        type="button"
+        (click)="onClickNew()"
+        [appCanAccess]="[]"
+      >
+        <i class="fa fa-plus"></i>
+        Crear Plato
+      </button>
+    </section>
+    <section class="col-md-12 col-xs-12">
+      <button
+        class="btn btn-warning pull-right"
+        type="button"
+        (click)="onClickRefresh()"
+      >
+        <i class="fas fa-sync-alt"></i>
+      </button>
+    </section>
+  </div>
+  <div class="row row-space-10" style="margin-top: 20px;">
+    <dx-data-grid
+      id="dataGrid"
+      [dataSource]="DataSource"
+      [columns]="columns"
+      [remoteOperations]="false"
+      [allowColumnReordering]="true"
+      [rowAlternationEnabled]="true"
+      [showBorders]="true"
+      [columnAutoWidth]="true">
+      <dxo-paging [pageSize]="10"></dxo-paging>
+        <dxo-pager
+          [showPageSizeSelector]="true"
+          [allowedPageSizes]="[10, 25, 50, 100]"
+        ></dxo-pager>
+        <dxo-search-panel
+          [visible]="true"
+          [highlightCaseSensitive]="true"
+        >
+        </dxo-search-panel>
+        <dxo-export [enabled]="true" fileName="Platos" [allowExportSelectedData]="false">
+        </dxo-export>
+        <div *dxTemplate="let data of 'actionTemplate'">
+          <button
+            type="button"
+            *ngIf="data.data.isActive"
+            class="btn btn-primary pull-left btn-sm"
+            (click)="update(data.data)"
+            title="Edit"
+            [appCanAccess]="[]"
+          >
+            <i class="fa fa-edit"></i>
+          </button>
+          <button
+            type="button"
+            *ngIf="data.data.isActive"
+            (click)="onClickDisable(data.data)"
+            class="btn btn-danger pull-left btn-sm"
+            title="Disable"
+          >
+            <i class="fas fa-trash-alt"></i>
+          </button>
+          <button
+            type="button"
+            *ngIf="!data.data.isActive"
+            (click)="onClickEnable(data.data)"
+            class="btn btn-success pull-left btn-sm"
+            title="Enable"
+          >
+            <i class="fas fa-check-circle"></i>
+          </button>
+        </div>
+        <div *dxTemplate="let data of 'amountTemplate'">
+          {{ data.value | currency : Currency }}
+        </div>
+    </dx-data-grid>
+  </div>
+</panel>
+
+<app-create-or-update-dish #createOrUpdateDish (modalSave)="getAll()"></app-create-or-update-dish>

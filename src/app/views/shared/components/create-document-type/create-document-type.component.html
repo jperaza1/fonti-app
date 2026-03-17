@@ -1,0 +1,35 @@
+<app-modal-with-option-buttons #entityComponent title="Type" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()">
+  <div>
+    <div class="row row-space-10">
+      <section class="col-md-6 col-xs-12">
+        <div class="form-group">
+          <label for="name">Name<i class="text-danger">*</i></label>
+          <input id="name" name="name" [(ngModel)]="Model.name" #name="ngModel" class="form-control" placeholder=""
+            type="text" />
+          <app-validator-message [error]="errors" field="name"></app-validator-message>
+        </div>
+      </section>
+
+      <section class="col-md-6 col-xs-12">
+        <div class="form-group">
+          <label for="code">Code<i class="text-danger">*</i></label>
+          <input id="code" name="code" [(ngModel)]="Model.code" #code="ngModel" class="form-control" placeholder=""
+            type="text" />
+          <app-validator-message [error]="errors" field="name"></app-validator-message>
+        </div>
+      </section>
+
+      <section class="col-md-4 col-xs-12" *ngIf="!QuickCreate">
+        <div class="form-group">
+          <label for="typeGroupId">Type Group<i class="text-danger">*</i></label>
+          <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true" [dataSource]="DxDataSourceTypeGroups"
+            [(value)]="Model.typeGroupId" (onItemClick)="onItemClickTypeGroup($event.itemData)">
+          </dx-select-box>
+          <app-validator-message [error]="errors" field="typeGroupId"></app-validator-message>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</app-modal-with-option-buttons>

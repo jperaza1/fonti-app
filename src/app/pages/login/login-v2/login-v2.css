@@ -1,0 +1,249 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+/* Tema claro */
+.light-theme {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.light-theme .login-box {
+  background: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.light-theme .company-name {
+  color: #333;
+}
+
+.light-theme .company-slogan {
+  color: #666;
+}
+
+.light-theme .form-control {
+  background: white;
+  border: 1px solid #ddd;
+  color: #333;
+}
+
+.light-theme .form-control::placeholder {
+  color: #666;
+}
+
+.light-theme .input-icon {
+  color: #666;
+}
+
+/* Tema oscuro */
+.dark-theme {
+  background: linear-gradient(135deg, #1a1c2e 0%, #2d1b3d 100%);
+}
+
+.dark-theme .login-box {
+  background: #1e1e2d;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid #2d2d3f;
+}
+
+.dark-theme .company-name {
+  color: #ffffff;
+}
+
+.dark-theme .company-slogan {
+  color: #8e8ea0;
+}
+
+.dark-theme .form-control {
+  background: #2a2a3a;
+  border: 1px solid #2d2d3f;
+  color: #ffffff;
+}
+
+.dark-theme .form-control::placeholder {
+  color: #8e8ea0;
+}
+
+.dark-theme .input-icon {
+  color: #8e8ea0;
+}
+
+/* Estilos del switch */
+.theme-switch {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2196F3;
+  transition: .4s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+}
+
+.switch input:checked + .slider {
+  background-color: #2d1b3d;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.light-icon, .dark-icon {
+  color: white;
+  font-size: 14px;
+}
+
+.dark-icon {
+  margin-right: 5px;
+}
+
+.light-icon {
+  margin-left: 5px;
+}
+
+.login-box {
+  background: #1e1e2d;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #2d2d3f;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo-img {
+  max-width: 250px;
+  height: auto;
+  margin-bottom: 15px;
+}
+
+.company-name {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 10px 0 5px;
+}
+
+.company-slogan {
+  color: #8e8ea0;
+  font-size: 14px;
+  margin: 0;
+}
+
+.login-form .form-group {
+  margin-bottom: 20px;
+}
+
+.input-group {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8e8ea0;
+}
+
+.form-control {
+  padding: 12px 15px 12px 45px;
+  border: 1px solid #2d2d3f;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 100%;
+  transition: all 0.3s ease;
+  background: #2a2a3a;
+  color: #ffffff;
+}
+
+.form-control:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: #8e8ea0;
+}
+
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Opción 1: Usando filtros CSS para invertir los colores en modo oscuro */
+.dark-theme .logo-img {
+  filter: brightness(0) invert(1); /* Convierte a blanco */
+  opacity: 0.9; /* Opcional: suaviza un poco el blanco */
+}
+
+/* Opción 2: Más control sobre los colores usando múltiples filtros */
+.dark-theme .logo-img {
+  filter: brightness(0) saturate(100%) invert(0.85) sepia(0.1) saturate(2) brightness(1.1);
+}

@@ -1,0 +1,377 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="row row-space-10">
+    <ngb-tabset type="pills">
+      <ngb-tab>
+        <ng-template ngbTabTitle>
+          <span class="d-sm-none">General</span>
+          <span class="d-sm-block d-none">General</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div class="row row-space-10">
+            <section class="col-md-12 col-xs-12">
+              <div class="employee-ficha">
+                <!-- Cabecera de la ficha: foto + datos principales -->
+                <div class="ficha-header">
+                  <div class="ficha-photo-wrap">
+                    <div class="ficha-photo">
+                      <i class="fas fa-user fa-4x text-muted"></i>
+                      <span class="ficha-photo-label">Foto</span>
+                    </div>
+                  </div>
+                  <div class="ficha-main-info">
+                    <h3 class="ficha-name">
+                      <ng-container *ngIf="Model.firstName || Model.lastName">{{ Model.firstName }} {{ Model.lastName }}</ng-container>
+                      <ng-container *ngIf="!Model.firstName && !Model.lastName">Nombre del empleado</ng-container>
+                    </h3>
+                    <div class="ficha-meta">
+                      <span class="ficha-meta-item" *ngIf="Model.identification">
+                        <i class="fas fa-id-card text-muted"></i> {{ Model.identification }}
+                      </span>
+                      <span class="ficha-meta-item" *ngIf="Model.profession">
+                        <i class="fas fa-briefcase text-muted"></i> {{ Model.profession }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="col-md-8 col-xs-12">
+              <div class="employee-ficha">
+                <!-- Cabecera de la ficha: foto + datos principales -->
+            
+                <!-- Sección: Datos personales -->
+                <div class="ficha-section">
+                  <h5 class="ficha-section-title">
+                    <i class="fas fa-user-circle"></i> Datos personales
+                  </h5>
+                  <div class="row row-space-10">
+                    <section class="col-md-4 col-xs-12">
+                      <div class="form-group">
+                        <label for="firstName">Nombres<i class="text-danger">*</i></label>
+                        <input id="firstName" name="firstName" [(ngModel)]="Model.firstName" #firstName="ngModel" class="form-control"
+                          type="text" placeholder="Nombres" />
+                        <app-validator-message [error]="errors" field="firstName"></app-validator-message>
+                      </div>
+                    </section>
+                    <section class="col-md-4 col-xs-12">
+                      <div class="form-group">
+                        <label for="lastName">Apellido(s)<i class="text-danger">*</i></label>
+                        <input id="lastName" name="lastName" [(ngModel)]="Model.lastName" #lastName="ngModel" class="form-control"
+                          type="text" placeholder="Apellido(s)" />
+                        <app-validator-message [error]="errors" field="lastName"></app-validator-message>
+                      </div>
+                    </section>
+                    <section class="col-md-4 col-xs-12">
+                      <div class="form-group">
+                        <label for="identification">Identificación<i class="text-danger">*</i></label>
+                        <input id="identification" name="identification" [(ngModel)]="Model.identification" #identification="ngModel"
+                          class="form-control" type="text" placeholder="Número de identificación" />
+                        <app-validator-message [error]="errors" field="identification"></app-validator-message>
+                      </div>
+                    </section>
+                    <section class="col-md-4 col-xs-12">
+                      <div class="form-group">
+                        <label for="gender">Género<i class="text-danger">*</i></label>
+                        <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
+                          [dataSource]="DxDataSourceGenderType" [(value)]="Model.gender" [disabled]="Model.id > 0"></dx-select-box>
+                        <app-validator-message [error]="errors" field="gender"></app-validator-message>
+                      </div>
+                    </section>
+                    <section class="col-md-4 col-xs-12">
+                      <div class="form-group">
+                        <label for="birthDay">Fecha de nacimiento<i class="text-danger">*</i></label>
+                        <dx-date-box [(value)]="Model.birthDay" [displayFormat]="DisplayFormatDate"></dx-date-box>
+                        <app-validator-message [error]="errors" field="birthDay"></app-validator-message>
+                      </div>
+                    </section>
+                    <section class="col-md-4 col-xs-12">
+                      <div class="form-group">
+                        <label for="birthPlace">Lugar de nacimiento<i class="text-danger">*</i></label>
+                        <input id="birthPlace" name="birthPlace" [(ngModel)]="Model.birthPlace" #birthPlace="ngModel"
+                          class="form-control" type="text" placeholder="Ciudad o país" />
+                        <app-validator-message [error]="errors" field="birthPlace"></app-validator-message>
+                      </div>
+                    </section>
+                    <section class="col-md-6 col-xs-12">
+                      <div class="form-group">
+                        <label for="profession">Profesión<i class="text-danger">*</i></label>
+                        <input id="profession" name="profession" [(ngModel)]="Model.profession" #profession="ngModel"
+                          class="form-control" type="text" placeholder="Profesión u oficio" />
+                        <app-validator-message [error]="errors" field="profession"></app-validator-message>
+                      </div>
+                    </section>
+                    <section class="col-md-4 col-xs-12">
+                      <div class="form-group">
+                        <label for="phoneNumber">Teléfono<i class="text-danger">*</i></label>
+                        <dx-text-box #phoneNumber [(value)]="Model.phoneNumber" [mask]="PhoneFormat"></dx-text-box>
+                        <app-validator-message [error]="errors" field="phoneNumber"></app-validator-message>
+                      </div>
+                    </section>
+                    <section class="col-md-12 col-xs-12">
+                      <div class="form-group">
+                        <label for="address">Dirección<i class="text-danger">*</i></label>
+                        <dx-text-area [(value)]="Model.address" [height]="80" placeholder="Dirección completa"></dx-text-area>
+                        <app-validator-message [error]="errors" field="address"></app-validator-message>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+            
+                <!-- Sección: Contacto -->
+                <div class="ficha-section">
+                  <h5 class="ficha-section-title">
+                    <i class="fas fa-address-book"></i> Contacto de emergencia
+                  </h5>
+                  <div class="row row-space-10">
+                    <section class="col-md-3 col-xs-12">
+                      <div class="form-group">
+                        <label for="emergencyContactName">Nombre<i class="text-danger">*</i></label>
+                        <input id="emergencyContactName" name="emergencyContactName" [(ngModel)]="Model.emergencyContactName" #firstName="ngModel" class="form-control"
+                          type="text" placeholder="Nombre" />
+                        <app-validator-message [error]="errors" field="emergencyContactName"></app-validator-message>
+                      </div>
+                    </section>
+                    <section class="col-md-3 col-xs-12">
+                      <div class="form-group">
+                        <label for="emergencyContactPhone">Teléfono<i class="text-danger">*</i></label>
+                        <dx-text-box #emergencyContactPhone [(value)]="Model.emergencyContactPhone" [mask]="PhoneFormat"></dx-text-box>
+                        <app-validator-message [error]="errors" field="emergencyContactPhone"></app-validator-message>
+                      </div>
+                    </section>
+                    <section class="col-md-3 col-xs-12">
+                      <div class="form-group">
+                        <label for="emergencyContactAddress">Dirección<i class="text-danger">*</i></label>
+                        <dx-text-box #emergencyContactAddress [(value)]="Model.emergencyContactAddress"></dx-text-box>
+                        <app-validator-message [error]="errors" field="emergencyContactAddress"></app-validator-message>
+                      </div>
+                    </section>
+                    <section class="col-md-3 col-xs-12">
+                      <div class="form-group">
+                        <label for="emergencyContactRelationship">Parentesco<i class="text-danger">*</i></label>
+                        <input id="emergencyContactRelationship" name="emergencyContactRelationship" [(ngModel)]="Model.emergencyContactRelationship" #firstName="ngModel" class="form-control"
+                          type="text" placeholder="Parentesco" />
+                        <app-validator-message [error]="errors" field="emergencyContactRelationship"></app-validator-message>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="col-md-4 col-xs-12">
+              <div class="ficha-section">
+                <h5 class="ficha-section-title">
+                  <i class="fas fa-briefcase"></i> Informacion Laboral
+                </h5>
+                <div class="row row-space-10">
+                  <section class="col-md-6 col-xs-12">
+                    <div class="form-group">
+                      <label for="phoneNumber">Estado<i class="text-danger">*</i></label>
+                      <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
+                          [dataSource]="DxDataSourceEmploymentStatus" [(value)]="Model.employmentStatus"></dx-select-box>
+                      <app-validator-message [error]="errors" field="employmentStatus"></app-validator-message>
+                    </div>
+                  </section>
+                  <section class="col-md-6 col-xs-12">
+                    <div class="form-group">
+                      <label for="phoneNumber">Tipo de Contrato<i class="text-danger">*</i></label>
+                      <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
+                          [dataSource]="DxDataSourceEmploymentType" [(value)]="Model.employmentType"></dx-select-box>
+                      <app-validator-message [error]="errors" field="employmentType"></app-validator-message>
+                    </div>
+                  </section>
+                  <section class="col-md-6 col-xs-12">
+                    <div class="form-group">
+                      <label for="phoneNumber">Posición<i class="text-danger">*</i></label>
+                      <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+                          [dataSource]="DxDataSourcePositions" [(value)]="Model.positionId" [disabled]="Model.id > 0"></dx-select-box>
+                      <app-validator-message [error]="errors" field="positionId"></app-validator-message>
+                    </div>
+                  </section>
+                  <section class="col-md-6 col-xs-12">
+                    <div class="form-group">
+                      <label for="phoneNumber">Talla de uniforme<i class="text-danger">*</i></label>
+                      <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+                          [dataSource]="DxDataSourceUniformSize" [(value)]="Model.uniformSizeId" [disabled]="Model.id > 0"></dx-select-box>
+                      <app-validator-message [error]="errors" field="uniformSizeId"></app-validator-message>
+                    </div>
+                  </section>
+                  
+                  <section class="col-md-6 col-xs-12">
+                    <div class="form-group">
+                      <label for="phoneNumber">Planta<i class="text-danger">*</i></label>
+                      <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+                          [dataSource]="DxDataSourceCafeteria" [(value)]="Model.cafeteriaId" [disabled]="Model.id > 0"></dx-select-box>
+                      <app-validator-message [error]="errors" field="cafeteriaId"></app-validator-message>
+                    </div>
+                  </section>
+                  <section class="col-md-6 col-xs-12">
+                    <div class="form-group">
+                      <label for="shift">Turno<i class="text-danger">*</i></label>
+                      <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
+                          [dataSource]="DxDataSourceShift" [(value)]="Model.shift" [disabled]="Model.id > 0"></dx-select-box>
+                      <app-validator-message [error]="errors" field="shift"></app-validator-message>
+                    </div>
+                  </section>
+                  <section class="col-md-6 col-xs-12">
+                    <div class="form-group">
+                      <label for="name">Salario<i class="text-danger">*</i></label>
+                      <dx-number-box #salary [showSpinButtons]="false" [format]="CurrencyDxNumber"
+                        [(value)]="Model.salary"></dx-number-box>
+                      <app-validator-message [error]="errors" field="salary"></app-validator-message>
+                    </div>
+                  </section>
+                  <section class="col-md-6 col-xs-12">
+                    <div class="form-group">
+                      <label for="shift">Tipo de pago<i class="text-danger">*</i></label>
+                      <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
+                          [dataSource]="DxDataSourcePayFrequency" [(value)]="Model.payFrequency" [disabled]="Model.id > 0"></dx-select-box>
+                      <app-validator-message [error]="errors" field="payFrequency"></app-validator-message>
+                    </div>
+                  </section>
+                  <section class="col-md-6 col-xs-12">
+                    <div class="form-group">
+                      <label for="startDate">Fecha de inicio<i class="text-danger">*</i></label>
+                      <dx-date-box [(value)]="Model.startDate" [displayFormat]="DisplayFormatDate" [disabled]="Model.id > 0"></dx-date-box>
+                      <app-validator-message [error]="errors" field="startDate"></app-validator-message>
+                    </div>
+                  </section>
+                  <section class="col-md-6 col-xs-12" *ngIf="Model.id > 0 && Model.employmentType > 1">
+                    <div class="form-group">
+                      <label for="endDate">Fecha de finalización<i class="text-danger">*</i></label>
+                      <dx-date-box [(value)]="Model.endDate" [displayFormat]="DisplayFormatDate" [disabled]="Model.id > 0"></dx-date-box>
+                      <app-validator-message [error]="errors" field="endDate"></app-validator-message>
+                    </div>
+                  </section>
+                  <section class="col-md-6 col-xs-12" *ngIf="Model.id > 0 && Model.employmentType === 1">
+                    <div class="form-group">
+                      <label for="permanentStartDate">Fecha de inicio permanente<i class="text-danger">*</i></label>
+                      <dx-date-box [(value)]="Model.permanentStartDate" [displayFormat]="DisplayFormatDate" [disabled]="Model.id > 0"></dx-date-box>
+                      <app-validator-message [error]="errors" field="permanentStartDate"></app-validator-message>
+                    </div>
+                  </section>
+                  <section class="col-md-6 col-xs-12" *ngIf="Model.employmentStatus > 1">
+                    <div class="form-group">
+                      <label for="terminationDate">Fecha de renuncia / despido<i class="text-danger">*</i></label>
+                      <dx-date-box [(value)]="Model.terminationDate" [displayFormat]="DisplayFormatDate" [disabled]="Model.id > 0"></dx-date-box>
+                      <app-validator-message [error]="errors" field="terminationDate"></app-validator-message>
+                    </div>
+                  </section>
+                  <section class="col-md-6 col-xs-12" *ngIf="Model.id > 0">
+                    <div class="form-group">
+                      <label for="terminationDate">Dias de vacaciones<i class="text-danger">*</i></label>
+                      <dx-number-box #vacationsDays [showSpinButtons]="false" [(value)]="Model.totalVacation" [disabled]="Model.id > 0"></dx-number-box>
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </section>
+            <section class="col-md-12 col-xs-12" style="margin-top: 20px;">
+              <div class="pull-right">
+                <button class="option-button btn btn-danger" (click)="closeTab()">
+                  <i class="fa fa-times"></i>
+                  Cerrar
+                </button>
+                <button class="option-button btn btn-primary" (click)="save()" [appCanAccess]="['RRHH.EMPLOYEE.SAVE']">
+                  <i class="fa fa-save"></i>
+                  Guardar
+                </button>
+              </div>
+            </section>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab>
+        <ng-template ngbTabTitle>
+          <span class="d-sm-none">Vacaciones</span>
+          <span class="d-sm-block d-none">Vacaciones</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div class="row row-space-10">
+            <section class="col-md-12 col-xs-12" style="margin-top: 20px;">
+
+            </section>
+            <section class="col-md-12 col-xs-12">
+              <div class="employee-ficha">
+                <div class="ficha-section">
+                  <h5 class="ficha-section-title">
+                    <i class="fas fa-umbrella-beach"></i> Historial de Vacaciones Adquiridas
+                  </h5>
+                  <div class="row row-space-10">
+                    <section class="col-md-12 col-xs-12">
+                      <div class="ficha-grid-wrap table-responsive">
+                        <dx-data-grid #VacationGrid id="VacationGrid" [dataSource]="Model.vacationPeriod"
+                          [hoverStateEnabled]="true" [showBorders]="true" [rowAlternationEnabled]="true"
+                          [columnAutoWidth]="true">
+                          <dxo-paging [pageSize]="10"></dxo-paging>
+                          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 15, 50, 100]"></dxo-pager>
+                          <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+                          <dxi-column dataField="serviceYear" caption="Año" [width]="100"></dxi-column>
+                          <dxi-column dataField="entitledDays" caption="Días" [width]="100"></dxi-column>
+                          <dxi-column dataField="periodStart" caption="Fecha de inicio" cellTemplate="periodTemplate"></dxi-column>
+                          <dxi-column dataField="periodEnd" caption="Fecha de fin" cellTemplate="periodTemplate"></dxi-column>
+
+                          <div *dxTemplate="let data of 'periodTemplate'">
+                            {{ data.value | date: DisplayFormatDate }}
+                          </div>
+                        </dx-data-grid>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="col-md-12 col-xs-12" style="margin-top: 20px;">
+
+            </section>
+            <section class="col-md-12 col-xs-12">
+              <div class="employee-ficha">
+                <div class="ficha-section">
+                  <h5 class="ficha-section-title">
+                    <i class="fas fa-umbrella-beach"></i> Solicitudes de Vacaciones
+                  </h5>
+                  <div class="row row-space-10">
+                    <section class="col-md-12 col-xs-12">
+                      <button class="btn btn-primary" (click)="showAddRequestVacation()">
+                        <i class="fa fa-plus"></i>
+                        Nueva solicitud
+                      </button>
+                    </section>
+                    <section class="col-md-12 col-xs-12">
+                      <div class="ficha-grid-wrap table-responsive">
+                        <dx-data-grid #VacationRequestedGrid id="VacationRequestedGrid" [dataSource]="Model.vacationRequested"
+                          [hoverStateEnabled]="true" [showBorders]="true" [rowAlternationEnabled]="true"
+                          [columnAutoWidth]="true">
+                          <dxo-paging [pageSize]="10"></dxo-paging>
+                          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 15, 50, 100]"></dxo-pager>
+                          <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+                          <dxi-column dataField="id" caption="Acciones" cellTemplate="actionTemplate"></dxi-column>
+                          <dxi-column dataField="requestTypeName" caption="Tipo de solicitud"></dxi-column>
+                          <dxi-column dataField="totalDays" caption="Días" [width]="100"></dxi-column>
+                          <dxi-column dataField="startDate" caption="Fecha de inicio" cellTemplate="periodTemplate"></dxi-column>
+                          <dxi-column dataField="endDate" caption="Fecha de fin" cellTemplate="periodTemplate"></dxi-column>
+
+                          <div *dxTemplate="let data of 'periodTemplate'">
+                            {{ data.value | date: DisplayFormatDate }}
+                          </div>
+                          <div *dxTemplate="let data of 'actionTemplate'">
+                            <button class="btn btn-primary" (click)="onClickView(data.data)">
+                              <i class="fa fa-file-pdf"></i>
+                            </button>
+                          </div>
+                        </dx-data-grid>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+
+  </div>
+  
+</panel>
+
+<app-request-vacation #RequestVacationModal (modalSave)="loadEmployeeInfo()"></app-request-vacation>

@@ -1,0 +1,8 @@
+<app-basic-table-list [title]="title" [columns]="columns" [dataSource]="DataSource" [appCanAccess]="[]"
+    [permissionAllowCreate]="['DATA.VENDORS.CREATE']" [permissionAllowUpdate]="['DATA.VENDORS.UPDATE']"
+    [permissionAllowDisable]="['DATA.VENDORS.DISABLE']" [permissionAllowEnable]="['DATA.VENDORS.ENABLE']"
+    (onRefresh)="getAll()" (onNew)="create()" (onEdit)="update($event)" (onDisable)="disable($event)"
+    (onEnable)="enable($event)">
+</app-basic-table-list>
+
+<app-create-or-update-vendor #createOrUpdateModal (modalSave)="getAll()"></app-create-or-update-vendor>

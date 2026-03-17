@@ -1,0 +1,12 @@
+<div *ngIf="this.field && this.error">
+    <div *ngIf="this.error[this.field]">
+        <span class=" text-danger" *ngFor="let message of error[field];">{{ message }}</span>
+    </div>
+</div>
+<div *ngIf="this.modelError">
+    <div *ngIf="this.modelError.invalid && (this.modelError.dirty || this.modelError.touched)" class="text-danger">
+        <div *ngIf="this.modelError.errors.required" style="padding-right: 5px;">
+            {{this.modelError.name}} is required.     
+        </div>
+    </div>
+</div>

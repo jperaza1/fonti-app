@@ -1,0 +1,55 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" [size]="'xxxl'">
+
+  <div class="row row-space-10">
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Nombre<i class="text-danger">*</i></label>
+        <dx-text-box #name [(value)]="Model.name" ></dx-text-box>
+        <app-validator-message [error]="errors" field="name"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Tipo de Plato<i class="text-danger">*</i></label>
+        <dx-select-box #dishType [(value)]="Model.dishType" [dataSource]="DxDataSourceDishType" displayExpr="text" valueExpr="value"></dx-select-box>
+        <app-validator-message [error]="errors" field="vendor"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="name">Tipo de Venta<i class="text-danger">*</i></label>
+        <dx-select-box #saleTypeDish [(value)]="Model.saleTypeDish" [dataSource]="DxDataSourceSaleTypeDish" displayExpr="text" valueExpr="value"></dx-select-box>
+        <app-validator-message [error]="errors" field="vendor"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12" >
+      <div class="custom-control custom-switch">
+          <input type="checkbox" [(ngModel)]="Model.noAddOns" #noAddOns="ngModel"
+              class="custom-control-input" id="noAddOns">
+          <label class="custom-control-label" for="noAddOns">No Añadir Complementos</label>
+      </div>
+  </section>
+    <section class="col-md-3 col-xs-12" *ngIf="Model.saleTypeDish === 1 || Model.saleTypeDish === 2">
+      <div class="form-group">
+        <label for="name">Precio con Carnet<i class="text-danger">*</i></label>
+        <dx-number-box #priceWithCarnet [(value)]="Model.priceWithCarnet" [format]="CurrencyDxNumber"></dx-number-box>
+        <app-validator-message [error]="errors" field="priceWithCarnet"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12" *ngIf="Model.saleTypeDish === 1 || Model.saleTypeDish === 3">
+      <div class="form-group">
+        <label for="name">Precio sin Carnet<i class="text-danger">*</i></label>
+        <dx-number-box #priceWithOutCarnet [(value)]="Model.priceWithOutCarnet" [format]="CurrencyDxNumber"></dx-number-box>
+        <app-validator-message [error]="errors" field="priceWithOutCarnet"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12" *ngIf="!Model.noAddOns">
+      <div class="form-group">
+        <label for="name">Max. Cantidad de Complementos Gratis<i class="text-danger">*</i></label>
+        <dx-number-box #freeAddOnsQuantity [(value)]="Model.freeAddOnsQuantity"></dx-number-box>
+        <app-validator-message [error]="errors" field="freeAddOnsQuantity"></app-validator-message>
+      </div>
+    </section>
+  </div>
+</app-modal-with-option-buttons>

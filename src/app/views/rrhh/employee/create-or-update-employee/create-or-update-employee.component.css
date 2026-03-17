@@ -1,0 +1,111 @@
+/* Ficha de empleado */
+.employee-ficha {
+  max-width: 100%;
+}
+
+/* Cabecera: foto + datos principales */
+.ficha-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.25rem 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.ficha-photo-wrap {
+  flex-shrink: 0;
+}
+
+.ficha-photo {
+  width: 120px;
+  height: 120px;
+  border: 2px dashed rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.ficha-photo-label {
+  font-size: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+.ficha-main-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ficha-name {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: inherit;
+}
+
+.ficha-name:empty::before,
+.ficha-name:only-child:not([class]) {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.ficha-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.ficha-meta-item {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.ficha-meta-item i {
+  margin-right: 0.35rem;
+}
+
+/* Secciones de la ficha */
+.ficha-section {
+  margin-bottom: 1.75rem;
+}
+
+.ficha-section:last-child {
+  margin-bottom: 0;
+}
+
+.ficha-section-title {
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.75);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.ficha-section-title i {
+  margin-right: 0.5rem;
+  opacity: 0.8;
+}
+
+/* Contenedor de grillas dentro de la ficha (p. ej. historial de vacaciones) */
+.ficha-grid-wrap {
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Responsive: cabecera en columna en pantallas pequeñas */
+@media (max-width: 576px) {
+  .ficha-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .ficha-meta {
+    justify-content: center;
+  }
+}

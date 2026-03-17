@@ -1,0 +1,41 @@
+export class TypeGroups {
+    public static CHART_OF_ACCOUNT_TYPE: string = "CHART_OF_ACCOUNT_TYPE";
+    public static JOURNAL_ENTRY_TYPE: string = "JOURNAL_ENTRY_TYPE";
+    
+    public static PAYMENT_CONCEPT: string = "PAYMENT_CONCEPT_TYPE";
+    public static VENDOR_TYPE: string = "VENDOR_TYPE";
+    public static CUSTOMER_RATING: string = "CUSTOMER_RATING";
+    public static PAYMENT_TYPES: string = "PAYMENT_TYPES";
+    public static CUSTOMER_ATTRIBUTES: string = "CUSTOMER_ATTRIBUTES";
+    public static CONTAINER_TYPES: string = "CONTAINER_TYPES";
+    public static CHASSIS_TYPES: string = "CHASSIS_TYPES";
+    public static DRIVER_SUB_CONTRACTOR_TYPE: string = "DRIVER_SUB_CONTRACTOR_TYPE";
+    public static DRIVER_PAYMENT_SOURCE: string = "DRIVER_PAYMENT_SOURCE";
+    public static DRIVER_ATTRIBUTES: string = "DRIVER_ATTRIBUTES";
+    public static EMAIL_PROVIDERS: string = "EMAIL_PROVIDERS";
+    public static LICENSE_CLASS_TYPES: string = "LICENSE_CLASS_TYPES";
+    public static ACCOUNT_TYPES: string = "ACCOUNT_TYPES";
+    public static OWNER_COMPANY_TYPES: string = "OWNER_COMPANY_TYPES";
+    public static TRUCK_OWNER_ATTRIBUTES: string = "TRUCK_OWNER_ATTRIBUTES";
+    public static TRAILER_TYPE: string = "TRAILER_TYPE";
+    public static ROOF_TYPE: string = "ROOF_TYPE";
+    public static TRAILER_ATTRIBUTES: string = "TRAILER_ATTRIBUTES";
+    public static DISCHARGE_NAMES: string = "DISCHARGE_NAMES";
+    public static VESSEL_NAMES: string = "VESSEL_NAMES";
+    public static VOYAGE_NAMES: string = "VOYAGE_NAMES";
+    public static LEG_ATTRIBUTES: string = "LEG_ATTRIBUTES";
+    public static SUBJECT_TYPES: string = "SUBJECT_TYPES";
+    public static SUGGESTION_LEVEL_TYPES: string = "SUGGESTION_LEVEL_TYPES";
+    public static SUGGESTION_CATEGORY_TYPES: string = "SUGGESTION_CATEGORY_TYPES";
+    public static INVOICE_LOG_STATUS: string = "INVOICE_LOG_STATUS";
+    public static COUNTING_TYPE: string = "COUNTING_TYPE";
+    public static INCIDENT_GROUP_CATEGORY: string = "INCIDENT_GROUP_CATEGORY";
+    public static SAFETY_VIOLATION_GROUP_CATEGORY: string = "SAFETY_VIOLATION_GROUP_CATEGORY";
+    public static INCIDENT_GROUP_RESPONSIBLE_PARTY: string = "INCIDENT_GROUP_RESPONSIBLE_PARTY";
+    public static INCIDENT_GROUP_PAYMENT_STATUS: string = "INCIDENT_GROUP_PAYMENT_STATUS";
+    public static SAFETY_VIOLATION_GROUP_CLASIFICATION: string = "SAFETY_VIOLATION_GROUP_CLASIFICATION";
+    public static SAFETY_VIOLATION_GROUP_LEVEL: string = "SAFETY_VIOLATION_GROUP_LEVEL";
+    public static DRIVER_ACCIDENT_TYPE: string = "DRIVER_ACCIDENT_TYPE";
+    public static CLASS_EQUIPMENT_TYPE: string = "CLASS_EQUIPMENT_TYPE";
+    public static TYPE_EQUIPMENT_TYPE: string = "TYPE_EQUIPMENT_TYPE";
+}

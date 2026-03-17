@@ -1,0 +1,4 @@
+<app-modal-with-option-buttons #pdfComponent [title]="title" [size]="'xl'" [optionButtons]="OptionButtons"
+    (onOptionButton)="optionButtonClicked($event)" (onClose)="close()">
+    <iframe height="550px" width="100%" [src]="UrlIframe" name="iframe_a"></iframe>
+</app-modal-with-option-buttons>

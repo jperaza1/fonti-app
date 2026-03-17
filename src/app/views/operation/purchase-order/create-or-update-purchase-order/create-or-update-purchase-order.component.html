@@ -1,0 +1,273 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div>
+    <div class="row-space-10">
+      <section class="col-md-12 col-xs-12">
+
+        <ngb-tabset type="pills">
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              <span class="d-sm-none">Orden de Compra</span>
+              <span class="d-sm-block d-none">Orden de Compra</span>
+            </ng-template>
+            <ng-template ngbTabContent >
+              <div class="row-space-10" style="padding-top: 10px;">
+                <section class="col-md-12 col-xs-12">
+                  <div class="row row-space-10">
+                    <section class="col-md-3 col-xs-12">
+                      <div class="form-group">
+                        <label for="name">Cafeteria<i class="text-danger">*</i></label>
+                        <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+                          [dataSource]="DxDataSourceCafeteria" [(value)]="Model.cafeteriaId" [disabled]="Model.id > 0 || currentUser.cafeteriaId !== null">
+                        </dx-select-box>
+                        <app-validator-message [error]="errors" field="cafeteria"></app-validator-message>
+                      </div>
+                    </section>
+                    <section class="col-md-3 col-xs-12">
+                      <div class="form-group">
+                        <label for="name">Proveedor<i class="text-danger">*</i></label>
+                        <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+                          [dataSource]="DxDataSourceVendor" [(value)]="Model.vendorId" [disabled]="Model.id > 0" (onItemClick)="loadProducts($event.itemData)">
+                        </dx-select-box>
+                        <app-validator-message [error]="errors" field="vendor"></app-validator-message>
+                      </div>
+                    </section>
+                    <section class="col-md-3 col-xs-12">
+                      <div class="form-group">
+                        <label for="name">Tipo de Factura<i class="text-danger">*</i></label>
+                        <dx-select-box displayExpr="name" valueExpr="name" [searchEnabled]="true"
+                          [dataSource]="DxDataSourceInvoiceType" [(value)]="Model.typeInoice" [disabled]="Model.id > 0 && Model.typeInoice !== null && !_authenticationService.IsInRole('OPERATION.PURCHASE_ORDER.UPDATE_INVOICE_TYPE')">
+                        </dx-select-box>
+                        <app-validator-message [error]="errors" field="typeInoice"></app-validator-message>
+                      </div>
+                    </section>
+                    <section class="col-md-3 col-xs-12">
+                      <div class="form-group">
+                        <label for="name">Fecha<i class="text-danger">*</i></label>
+                        <dx-date-box [(value)]="Model.date" [displayFormat]="DisplayFormatDate" [disabled]="Model.id > 0"></dx-date-box>
+                      </div>
+                    </section>
+                    <section class="col-md-12 col-xs-12" *ngIf="Model.orderStatus === 6">
+                      <div class="form-group">
+                        <label for="name">Motivo de Rechazo</label>
+                        <textarea class="form-control" [(ngModel)]="Model.reason" [disabled]="Model.id > 0"></textarea>
+                      </div>
+                    </section>
+                    <section class="col-md-12 col-xs-12" *ngIf="Model.orderStatus === 7">
+                      <div class="form-group">
+                        <label for="name">Motivo de Cancelación</label>
+                        <textarea class="form-control" [(ngModel)]="Model.reasonCanceled" [disabled]="Model.id > 0"></textarea>
+                        <br>
+                        <p><strong>Usuario que canceló</strong></p>
+                        <p>{{ Model.canceledUser }}</p>
+                        <p><strong>Fecha de cancelación</strong></p>
+                        <p>{{ Model.canceledAt | date: DisplayFormatDate }}</p>
+                      </div>
+                    </section>
+                  </div>
+                </section>
+                <section class="col-md-12 col-xs-12" *ngIf="Model.orderStatus < 2">
+                  <div class="row row-space-10">
+                    <section class="col-md-9 col-xs-12">
+                      <div class="form-group">
+                        <label for="name">Productos<i class="text-danger">*</i></label>
+                        <dx-tag-box [dataSource]="DxDataSourceProduct" [(value)]="ModelProducts" displayExpr="name"
+                          valueExpr="id" [showSelectionControls]="true" [searchEnabled]="true">
+                        </dx-tag-box>
+                      </div>
+                    </section>
+                    <section class="col-md-3 col-xs-12" style="margin-top: 25px;">
+                      <div class="form-group">
+                          <button class="btn btn-primary btn-block" (click)="addProducts()"> ADD
+                          </button>
+                      </div>
+                    </section>
+                  </div>
+                </section>
+                <section class="col-md-12 col-xs-12" *ngIf="Model.orderStatus == 3" [appCanAccess]="['OPERATION.PURCHASE_ORDER.ADD_PRODUCT']">
+                  <div class="row row-space-10">
+                    <section class="col-md-9 col-xs-12">
+                      <div class="form-group">
+                        <label for="name">Productos<i class="text-danger">*</i></label>
+                        <dx-tag-box [dataSource]="DxDataSourceProduct" [(value)]="ModelProducts" displayExpr="name"
+                          valueExpr="id" [showSelectionControls]="true" [searchEnabled]="true">
+                        </dx-tag-box>
+                      </div>
+                    </section>
+                    <section class="col-md-3 col-xs-12" style="margin-top: 25px;">
+                      <div class="form-group">
+                          <button class="btn btn-primary btn-block" (click)="addProducts()"> ADD
+                          </button>
+                      </div>
+                    </section>
+                  </div>
+                </section>
+                <section class="col-md-12 col-xs-12">
+                  <dx-data-grid
+                    #dataGrid
+                    [dataSource]="Model.details"
+                    [remoteOperations]="false"
+                    [allowColumnReordering]="true"
+                    [rowAlternationEnabled]="true"
+                    [showBorders]="true"
+                    [columnAutoWidth]="true">
+                      <dxo-search-panel
+                        [visible]="true"
+                        [highlightCaseSensitive]="true">
+                      </dxo-search-panel>
+                      <dxi-column dataField="id" caption="" cellTemplate="actionTemplate" ></dxi-column>
+                      <dxi-column dataField="product" caption="Producto" ></dxi-column>
+                      <dxi-column dataField="cost" caption="Costo" cellTemplate="amountTemplate"></dxi-column>
+                      <dxi-column dataField="quantity" caption="Cantidad" cellTemplate="quantityTemplate"></dxi-column>
+                      <dxi-column dataField="subTotal" caption="Subtotal" cellTemplate="amountTemplate"></dxi-column>
+                      <dxi-column dataField="discount" caption="Descuento" cellTemplate="amountTemplate" ></dxi-column>
+                      <dxi-column dataField="tax" caption="Impuesto" cellTemplate="amountTemplate" ></dxi-column>
+                      <dxi-column dataField="total" caption="Total" cellTemplate="amountTemplate"></dxi-column>
+                      <dxi-column dataField="detailStatus" caption="Estado" cellTemplate="detailStatusTemplate" *ngIf="Model.orderStatus >= 3" minWidth="250"></dxi-column>
+                      <dxi-column dataField="quantityRecived" caption="Cantidad Recibida" cellTemplate="quantityReceivedTemplate" *ngIf="Model.orderStatus >= 3"></dxi-column>
+                      <dxi-column dataField="costRecived" caption="Costo Recibido" cellTemplate="amountReceivedTemplate" *ngIf="Model.orderStatus >= 3"></dxi-column>
+                      <dxi-column dataField="subTotalRecived" caption="Subtotal Recibido" cellTemplate="amountTemplate" *ngIf="Model.orderStatus >= 3"></dxi-column>
+                      <dxi-column dataField="discountRecived" caption="Descuento Recibido" cellTemplate="amountTemplate" *ngIf="Model.orderStatus >= 3"></dxi-column>
+                      <dxi-column dataField="taxRecived" caption="Impuesto Recibido" cellTemplate="amountTemplate" *ngIf="Model.orderStatus >= 3"></dxi-column>
+                      <dxi-column dataField="totalRecived" caption="Total Recibido" cellTemplate="amountTemplate" *ngIf="Model.orderStatus >= 3"></dxi-column>
+          
+                      <div *dxTemplate="let data of 'amountTemplate'">
+                        {{ data.value | currency : Currency }}
+                      </div>
+                      <div *dxTemplate="let data of 'quantityTemplate'">
+                        <dx-number-box [(value)]="data.data.quantity" format="##0.00" (onValueChanged)="onQuantityChange(data.data)" [disabled]="(Model.id > 0 && Model.orderStatus > 1 && data.data.id > 0)" *ngIf="Model.orderStatus < 3 || (Model.orderStatus === 3 && data.data.id <= 0)">
+                        </dx-number-box>
+                        <span *ngIf="Model.orderStatus >= 3 && data.data.id > 0">{{ data.value }}</span>
+                      </div>
+          
+                      <div *dxTemplate="let data of 'quantityReceivedTemplate'">
+                        <dx-number-box [(value)]="data.data.quantityRecived" format="##0.00"  *ngIf="(data.data.detailStatus === 3 || data.data.detailStatus === 4 || data.data.detailStatus === 7) && Model.orderStatus === 3" (onValueChanged)="onReceivedChange(data.data)">
+                        </dx-number-box>
+                        <span *ngIf="(data.data.detailStatus !== 3 && data.data.detailStatus !== 4 && data.data.detailStatus !== 7) || Model.orderStatus > 3">{{ data.value }}</span>
+                      </div>
+          
+                      <div *dxTemplate="let data of 'amountReceivedTemplate'">
+                        <dx-number-box [(value)]="data.data.costRecived"  *ngIf="(data.data.detailStatus === 6 || data.data.detailStatus === 7) && Model.orderStatus === 3" [format]="CurrencyDxNumberWithThrees" (onValueChanged)="onReceivedChange(data.data)">
+                        </dx-number-box>
+                        <span *ngIf="Model.orderStatus >= 3 && (data.data.detailStatus !== 6 && data.data.detailStatus !== 7)">{{ data.value | currency : Currency }}</span>
+                      </div>
+                      
+                      <div *dxTemplate="let data of 'detailStatusTemplate'">
+                        <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
+                          [dataSource]="DxDataSourceDetailStatus" [(value)]="data.data.detailStatus" [disabled]="Model.id > 0 && Model.orderStatus > 3" (onItemClick)="onDetailStatusChange(data.data)">
+                        </dx-select-box>
+                      </div>
+                      <div *dxTemplate="let data of 'actionTemplate'">
+                        <button
+                          type="button"
+                          (click)="removeProduct(data.data)"
+                          class="btn btn-danger pull-left btn-sm"
+                          title="Disable"
+                          *ngIf="Model.orderStatus < 2"
+                          >
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </div>
+                      <dxo-summary>
+                        <dxi-total-item 
+                        column="total" 
+                        summaryType="sum"
+                        [customizeText]="dxCustomizeCurrency"
+                        displayFormat="{0}"></dxi-total-item>
+                      <dxi-total-item 
+                        column="totalRecived" 
+                        summaryType="sum"
+                        [customizeText]="dxCustomizeCurrency"
+                        displayFormat="{0}"></dxi-total-item>
+                      </dxo-summary>
+                  </dx-data-grid>
+                  <app-validator-message [error]="errors" field="details"></app-validator-message>
+                  
+                </section>
+                <section class="col-md-12 col-xs-12" style="margin-top: 20px;">
+                  <div class="pull-right">
+                    <button class="option-button btn btn-danger" (click)="closeTab()">
+                      <i class="fa fa-times"></i>
+                      Cerrar
+                    </button>
+                    <button class="option-button btn btn-primary" (click)="save()" [disabled]="Model.details.length === 0 || Model.vendorId === 0 || Model.cafeteriaId === 0 || Model.date === null" *ngIf="Model.orderStatus < 2 || Model.orderStatus === 3">
+                      <i class="fa fa-save"></i>
+                      Guardar
+                    </button>
+
+                    <button class="option-button btn btn-success" (click)="approve()" *ngIf="Model.id > 0 && Model.orderStatus === 1" [appCanAccess]="['OPERATION.PURCHASE_ORDER.APPROVE']">
+                      <i class="fa fa-check"></i>
+                      Aprobar
+                    </button>
+                    <button class="option-button btn btn-success" (click)="onClickView()" *ngIf="Model.id > 0">
+                      <i class="fa fa-file-pdf"></i>
+                      Ver Orden
+                    </button>
+                    <button class="option-button btn btn-success" (click)="viewOrderVendor()" *ngIf="Model.id > 0 && Model.orderStatus === 2" >
+                      <i class="fa fa-file-pdf"></i>
+                      Ver Orden Proveedor
+                    </button>
+                    <button class="option-button btn btn-success" (click)="approve()" *ngIf="Model.id > 0 && Model.orderStatus === 2" [appCanAccess]="['OPERATION.PURCHASE_ORDER.PROCESS']">
+                      <i class="fa fa-check"></i>
+                      Procesar Orden
+                    </button>
+                    <button class="option-button btn btn-success" (click)="approve()" *ngIf="Model.id > 0 && Model.orderStatus === 3" [appCanAccess]="['OPERATION.PURCHASE_ORDER.REVIEW']">
+                      <i class="fa fa-check"></i>
+                      Enviar a Revisión
+                    </button>
+                    <button class="option-button btn btn-warning" (click)="cancel()" *ngIf="Model.id > 0 && Model.orderStatus === 3" [appCanAccess]="['OPERATION.PURCHASE_ORDER.CANCEL']">
+                      <i class="fa fa-times"></i>
+                      Cancelar Orden
+                    </button>
+                    <button class="option-button btn btn-success" (click)="approve()" *ngIf="Model.id > 0 && Model.orderStatus === 4" [appCanAccess]="['OPERATION.PURCHASE_ORDER.CLOSE']">
+                      <i class="fa fa-check"></i>
+                      Cerrar Orden
+                    </button>
+                    <button class="option-button btn btn-danger" (click)="rejectPurchaseOrder()" *ngIf="Model.id > 0 && (Model.orderStatus === 1 || Model.orderStatus === 2)"
+                      [appCanAccess]="['OPERATION.PURCHASE_ORDER.REJECT']">
+                      <i class="fa fa-times"></i>
+                      Rechazar Orden
+                    </button>
+                    <button class="option-button btn btn-success" (click)="recalculateDataGrid()" [appCanAccess]="['OPERATION.PURCHASE_ORDER.RECALCULATE']">
+                      <i class="fa fa-check"></i>
+                      Recalcular
+                    </button>
+                  </div>
+                </section>
+              </div>
+            </ng-template>
+            
+          </ngb-tab>
+          <ngb-tab *ngIf="Model.id > 0">
+            <ng-template ngbTabTitle >
+              <span class="d-sm-none">Logs</span>
+              <span class="d-sm-block d-none">Logs</span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <div class="row-space-10" style="padding-top: 10px;">
+                <section class="col-md-12 col-xs-12">
+                  <app-list-logs [Entity]="'PURCHASE_ORDER'" [EntityId]="Model.id"></app-list-logs>
+                </section>
+              </div>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab *ngIf="Model.id > 0 && (Model.orderStatus >= 3 && Model.orderStatus < 6)">
+            <ng-template ngbTabTitle >
+              <span class="d-sm-none">Facturas</span>
+              <span class="d-sm-block d-none">Facturas</span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <div class="row-space-10" style="padding-top: 10px;">
+                <section class="col-md-12 col-xs-12">
+                  <app-list-purchase-order-invoices [purchaseOrderId]="Model.id" [orderStatus]="Model.orderStatus" [vendorId]="Model.vendorId"></app-list-purchase-order-invoices>
+                </section>
+              </div>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+
+        
+      </section>
+      
+    </div>
+  </div>
+</panel>

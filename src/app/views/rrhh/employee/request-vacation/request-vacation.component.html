@@ -1,0 +1,68 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" [size]="'xxxl'">
+
+  <div class="row row-space-10">
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label>Empleado</label>
+        <input class="form-control" type="text" [value]="Model.employeeName" disabled />
+      </div>
+    </section>
+
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label>Tipo de solicitud<i class="text-danger">*</i></label>
+        <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
+          [dataSource]="DxDataSourceRequestType" [(value)]="Model.requestType"
+          (onValueChanged)="onRequestTypeChanged()">
+        </dx-select-box>
+        <app-validator-message [error]="errors" field="requestType"></app-validator-message>
+      </div>
+    </section>
+
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Fecha de inicio<i class="text-danger">*</i></label>
+        <dx-date-box [(value)]="Model.startDate" [displayFormat]="DisplayFormatDate"
+          (onValueChanged)="onDateChanged()">
+        </dx-date-box>
+        <app-validator-message [error]="errors" field="startDate"></app-validator-message>
+      </div>
+    </section>
+
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Fecha de fin<i class="text-danger">*</i></label>
+        <dx-date-box [(value)]="Model.endDate" [displayFormat]="DisplayFormatDate"
+          (onValueChanged)="onDateChanged()">
+        </dx-date-box>
+        <app-validator-message [error]="errors" field="endDate"></app-validator-message>
+      </div>
+    </section>
+
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Total de días</label>
+        <dx-number-box [(value)]="Model.totalDays" [readOnly]="true" [showSpinButtons]="false">
+        </dx-number-box>
+      </div>
+    </section>
+
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Días restantes de vacaciones</label>
+        <dx-number-box [(value)]="remainingVacationDays" [readOnly]="true" [showSpinButtons]="false"
+          [ngClass]="{'text-danger': remainingVacationDays < 0}">
+        </dx-number-box>
+      </div>
+    </section>
+
+    <section class="col-md-12 col-xs-12" *ngIf="Model.requestType == 2">
+      <div class="form-group">
+        <label>Notas</label>
+        <dx-text-area [(value)]="Model.notes" [height]="90" placeholder="Observaciones o comentarios"></dx-text-area>
+        <app-validator-message [error]="errors" field="notes"></app-validator-message>
+      </div>
+    </section>
+  </div>
+</app-modal-with-option-buttons>

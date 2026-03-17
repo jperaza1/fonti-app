@@ -1,0 +1,89 @@
+<app-modal-with-option-buttons #entityComponent size="xxxl" [title]="Title" [optionButtons]="OptionButtons"
+    (onOptionButton)="optionButtonClicked($event)" (onClose)="close()">
+
+    <span class="badge bg-teal" style="font-size: 14px;
+    padding: 10px;
+    border-radius: 0px">
+        TOTAL {{Count}}
+    </span>
+
+    <dx-data-grid *ngIf="UsertAlertPreview" #dynamicGrid [wordWrapEnabled]="true"
+        [dataSource]="UsertAlertPreview.dataList" [columns]="UsertAlertPreview.columns" [(summary)]="summary"
+        [remoteOperations]="false" [allowColumnReordering]="true" [rowAlternationEnabled]="true" [showBorders]="true">
+
+        <dxo-paging [pageSize]="10"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100, 300]"></dxo-pager>
+        <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true">
+        </dxo-search-panel>
+        <dxo-export [enabled]="true" [fileName]="title" [allowExportSelectedData]="false">
+        </dxo-export>
+
+        <div *dxTemplate="let column of 'actionTemplate'">
+
+            <a href="javascript:;" (click)="onView(column.data)">{{column.value}}</a>
+
+        </div>
+
+        <div *dxTemplate="let column of 'printTemplate'">
+            <button type="button" class="btn btn-black" (click)="onPrint(column.data)">
+                <i class="fa fa-print"></i>
+            </button>
+        </div>
+
+        <div *dxTemplate="let data of 'invoiceNumberTemplate'" >
+          <a href="javascript:void(0)" (click)="viewInvoice(data.data)">{{ formatInvoiceNumber(data.value) }}</a>
+          
+        </div>
+
+        <div *dxTemplate="let data of 'nameTemplate'" >
+          <a href="javascript:void(0)" (click)="viewEmployee(data.data)">{{ data.value }}</a>
+          
+        </div>
+
+        <div *dxTemplate="let data of 'currencyTemplate'">
+            {{data.value | currency : Currency}}
+        </div>
+
+        <div *dxTemplate="let data of 'dateTemplate'">
+            {{data.value | date : DisplayFormatDate}}
+        </div>
+
+        <div *dxTemplate="let data of 'dateTimeTemplate'">
+            {{data.value | date : DisplayFormatDateTime}}
+        </div>
+        <div *dxTemplate="let data of 'amountTemplate'">
+          {{data.value | currency : Currency}}
+        </div>
+        <div *dxTemplate="let data of 'purchaseOrderTemplate'">
+          <a href="javascript:void(0)" (click)="viewPurchaseOrder(data.data)">{{data.value}}</a>
+        </div>
+        <div *dxTemplate="let data of 'hasInvoiceTemplate'">
+          <span *ngIf="data.data.hasInvoice" class="label label-success">Si</span>
+          <span *ngIf="!data.data.hasInvoice" class="label label-danger">No</span>
+        </div>
+        <div *dxTemplate="let data of 'actionDraftTemplate'">
+          <button
+            type="button"
+            class="btn btn-warning pull-left btn-sm"
+            (click)="createCarrierForDraft(data.data)"
+            title="Edit"
+          >
+            <i class="fas fa-user-plus"></i>
+          </button>
+        </div>
+        <div *dxTemplate="let data of 'memoTemplate'">
+          <dx-text-area [height]="100" #notes [(value)]="data.value" [readOnly]="true"></dx-text-area>
+        </div>
+        <div *dxTemplate="let data of 'actionLeadTemplate'">
+          <button
+            type="button"
+            class="btn btn-warning pull-left btn-sm"
+            (click)="createCarrierForLead(data.data)"
+            title="Edit"
+          >
+            <i class="fas fa-user-plus"></i>
+          </button>
+        </div>
+    </dx-data-grid>
+
+</app-modal-with-option-buttons>

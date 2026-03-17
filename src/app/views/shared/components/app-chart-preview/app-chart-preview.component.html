@@ -1,0 +1,42 @@
+<app-modal-with-option-buttons #entityComponent [title]="Title" size="xxl" [optionButtons]="OptionButtons"
+    (onOptionButton)="optionButtonClicked($event)" (onClose)="close()">
+    <div class="row row-space-12">
+        <section class="col-12">
+            <div class="form-group">
+                <div class="table-responsive">
+                    <dx-data-grid #infoGrid [columns]="columns" [dataSource]="DataSource" [columnAutoWidth]="true" [showBorders]="true">
+                      <dxo-paging [pageSize]="10"></dxo-paging>
+                      <dxo-pager [showPageSizeSelector]="true"
+                          [allowedPageSizes]="[10, 25, 50, 100, 300]"></dxo-pager>
+
+                      <dxo-export [enabled]="true" [fileName]="Title" [allowExportSelectedData]="false">
+                      </dxo-export>
+                      
+                      <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+                      <div *dxTemplate="let data of 'amountTemplate'">
+                          {{ data.value | currency : Currency }}
+                      </div>
+                      <div *dxTemplate="let data of 'memoTemplate'">
+                        <dx-text-area [height]="100" #notes [(value)]="data.value" [readOnly]="true"></dx-text-area>
+                      </div>
+                      <div *dxTemplate="let data of 'dateTimeTemplate'">
+                        {{   data.value | date : DisplayFormatDateTime }}
+                      </div>
+                      <div *dxTemplate="let data of 'dateTemplate'">
+                        {{   data.value | date : DisplayFormatDate }}
+                      </div>
+                      <div *dxTemplate="let data of 'actionTemplate'">
+                        <a href="javascript:;" (click)="onView(data.data)">{{data.value}}</a>
+                      </div>
+                        
+                        <!-- <dxo-summary>
+                            <dxi-total-item *ngFor="let columnSummary of columnsSummary"
+                                [column]="columnSummary.dataField" [customizeText]="dxCustomizeCurrency"
+                                summaryType="sum" displayFormat="{0}"></dxi-total-item>
+                        </dxo-summary> -->
+                    </dx-data-grid>
+                </div>
+            </div>
+        </section>
+    </div>
+</app-modal-with-option-buttons>

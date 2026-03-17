@@ -1,0 +1,129 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <!-- Filtros -->
+  <div class="expense-filters">
+    <div class="row row-space-10">
+      <section class="col-md-3 col-xs-12">
+        <div class="form-group">
+          <label for="cafeteriaId">Cafeteria</label>
+          <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true" [dataSource]="DxDatasourceCafeteria"
+            [(value)]="filterExpenseReportDto.cafeteriaId">
+          </dx-select-box>
+        </div>
+      </section>
+      <section class="col-md-3 col-xs-12">
+        <div class="form-group">
+          <label for="cafeteriaId">Tipo de Agrupación</label>
+          <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true" [dataSource]="DxDatasourceFilterType"
+            [(value)]="filterExpenseReportDto.filterType">
+          </dx-select-box>
+        </div>
+      </section>
+      <section class="col-md-3 col-xs-12">
+        <div class="form-group">
+          <label for="name">Inicio</label>
+          <dx-date-box [(max)]="filterExpenseReportDto.endDate" [(value)]="filterExpenseReportDto.startDate" [displayFormat]="DisplayFormatDate"></dx-date-box>
+        </div>
+      </section>
+      <section class="col-md-3 col-xs-12">
+        <div class="form-group">
+          <label for="name">Fin</label>
+          <dx-date-box [(value)]="filterExpenseReportDto.endDate" [displayFormat]="DisplayFormatDate" [(min)]="filterExpenseReportDto.startDate"></dx-date-box>
+        </div>
+      </section>
+      <section class="col-md-12 col-xs-12" style="margin-top: 25px;">
+        <button class="btn btn-primary" (click)="getReport()"><i class="fa fa-search"></i> Buscar</button>
+      </section>
+    </div>
+  </div>
+
+  <!-- Tabla de datos -->
+  <div class="row row-space-10">
+    <div class="table-responsive">
+      <dx-data-grid [wordWrapEnabled]="true" [dataSource]="DataSource" [columns]="columns" [showRowLines]="true"
+        [rowAlternationEnabled]="true" [columnAutoWidth]="true" [showBorders]="true" [(summary)]="summaryCols"
+        [selection]="{ mode: 'single' }" (onSelectionChanged)="onRowSelected($event)">
+        <dxo-paging [pageSize]="10"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100, 300]"></dxo-pager>
+        <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+        <div *dxTemplate="let column of 'dateValueTemplate'">
+          {{ column.value }}
+        </div>
+        <div *dxTemplate="let data of 'amountTemplate'">
+          {{ data.value | currency : Currency }}
+        </div>
+      </dx-data-grid>
+    </div>
+  </div>
+
+  <!-- Sección de gráficos -->
+  <div class="chart-section" *ngIf="selectedRow" [@fadeSlideIn]>
+    <div class="chart-card">
+      <!-- Header del gráfico -->
+      <div class="chart-header">
+        <div class="chart-title-area">
+          <div class="chart-icon">
+            <i class="fa fa-line-chart"></i>
+          </div>
+          <div>
+            <h4 class="chart-title">Análisis de Gastos</h4>
+            <p class="chart-subtitle">{{ selectedRow.vendor }}</p>
+          </div>
+        </div>
+
+        <!-- Selector de tipo de gráfico -->
+        <div class="chart-type-selector">
+          <button class="chart-type-btn" [class.active]="selectedChartType === 'bar'"
+            (click)="changeChartType('bar')" title="Barras">
+            <i class="fa fa-bar-chart"></i>
+            <span>Barras</span>
+          </button>
+          <button class="chart-type-btn" [class.active]="selectedChartType === 'pie'"
+            (click)="changeChartType('pie')" title="Pastel">
+            <i class="fa fa-pie-chart"></i>
+            <span>Pastel</span>
+          </button>
+          <button class="chart-type-btn" [class.active]="selectedChartType === 'line'"
+            (click)="changeChartType('line')" title="Línea">
+            <i class="fa fa-line-chart"></i>
+            <span>Línea</span>
+          </button>
+          <button class="chart-type-btn" [class.active]="selectedChartType === 'area'"
+            (click)="changeChartType('area')" title="Área">
+            <i class="fa fa-area-chart"></i>
+            <span>Área</span>
+          </button>
+          <button class="chart-type-btn" [class.active]="selectedChartType === 'radar'"
+            (click)="changeChartType('radar')" title="Radar">
+            <i class="fa fa-bullseye"></i>
+            <span>Radar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Estadísticas rápidas -->
+      <div class="chart-stats">
+        <div class="stat-item">
+          <span class="stat-value">{{ chartData.length }}</span>
+          <span class="stat-label">Períodos</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ getTotalMonto() | currency : Currency }}</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ getPromedioMonto() | currency : Currency }}</span>
+          <span class="stat-label">Promedio</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ getMaxMonto() | currency : Currency }}</span>
+          <span class="stat-label">Máximo</span>
+        </div>
+      </div>
+
+      <!-- Contenedor del gráfico -->
+      <div class="chart-container">
+        <div #chartDiv class="chart-canvas"></div>
+      </div>
+    </div>
+  </div>
+</panel>
