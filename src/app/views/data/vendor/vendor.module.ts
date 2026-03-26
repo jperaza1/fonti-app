@@ -13,6 +13,7 @@ import { VendorRoutingModule } from './vendor-routing.module';
     CommonModule,
     SharedModule,
     VendorRoutingModule
-  ]
+  ],
+  exports: [CreateOrUpdateVendorComponent]
 })
 export class VendorModule { }

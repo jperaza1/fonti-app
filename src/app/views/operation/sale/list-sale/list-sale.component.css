@@ -1,0 +1,144 @@
+/* Lista de ventas — misma línea que list-expense / design-line */
+.sale-list {
+  --accent: #0d9488;
+  --accent-dark: #0f766e;
+  --text-muted: #64748b;
+  --card-border: rgba(13, 148, 136, 0.3);
+  --bg-light: #e2e8f0;
+}
+
+.sale-list__filters {
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  background: rgba(13, 148, 136, 0.04);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+}
+
+.sale-list__legend {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.sale-list__legend i {
+  margin-right: 0.5rem;
+  opacity: 0.9;
+}
+
+.sale-list__label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.sale-list__actions {
+  margin-top: 0.35rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.sale-list__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sale-list__btn--primary {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+}
+
+.sale-list__btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.35);
+}
+
+.sale-list__btn--secondary {
+  color: var(--accent-dark);
+  background: #fff;
+  border: 1px solid var(--card-border);
+}
+
+.sale-list__btn--secondary:hover {
+  background: rgba(13, 148, 136, 0.06);
+}
+
+:host ::ng-deep .sale-list__filters .dx-selectbox,
+:host ::ng-deep .sale-list__filters .dx-datebox {
+  border-radius: 8px;
+}
+
+:host-context(.dark-theme) .sale-list {
+  --text-muted: #94a3b8;
+  --card-border: rgba(45, 212, 191, 0.25);
+}
+
+:host-context(.dark-theme) .sale-list__filters {
+  background: rgba(13, 148, 136, 0.08);
+}
+
+:host-context(.dark-theme) .sale-list__btn--secondary {
+  background: #1e293b;
+  color: #5eead4;
+  border-color: var(--card-border);
+}
+
+.sale-list__grid-wrap {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+}
+
+.sale-list__grid-wrap ::ng-deep .dx-datagrid {
+  border: none;
+}
+
+.sale-list__grid-wrap ::ng-deep .dx-datagrid-headers {
+  background: var(--bg-light);
+}
+
+.sale-list__grid-wrap ::ng-deep .dx-header-row td {
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.sale-list__grid-wrap ::ng-deep .dx-row-alt {
+  background: rgba(226, 232, 240, 0.6);
+}
+
+.sale-list__grid-wrap ::ng-deep .dx-data-row:hover {
+  background: rgba(13, 148, 136, 0.06);
+}
+
+:host-context(.dark-theme):host(.basic-table-list--design-line) {
+  --text-muted: #94a3b8;
+  --card-border: rgba(45, 212, 191, 0.25);
+}
+
+:host-context(.dark-theme):host(.basic-table-list--design-line) .basic-table-list__btn--secondary {
+  background: #1e293b;
+  color: #5eead4;
+  border-color: var(--card-border);
+}
+
+:host-context(.dark-theme):host(.basic-table-list--design-line) .sale-list__grid-wrap ::ng-deep .dx-datagrid-headers {
+  background: #334155;
+}
+

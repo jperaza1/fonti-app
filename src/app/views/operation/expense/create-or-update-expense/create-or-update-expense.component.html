@@ -1,0 +1,226 @@
+<app-modal-with-option-buttons
+  #entityComponent
+  [title]="title"
+  [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)"
+  (onClose)="close()"
+  [size]="'xxxl'"
+>
+  <div class="expense-form">
+    <div class="expense-form__section">
+      <div class="expense-form__legend">
+        <i class="fas fa-wallet"></i> Información general
+      </div>
+      <div class="row row-space-10">
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label>Ruta<i class="text-danger">*</i></label>
+            <dx-select-box
+              [(value)]="Model.routeId"
+              [dataSource]="DxDataSourceRoute"
+              displayExpr="name"
+              valueExpr="id"
+              placeholder="Seleccione ruta..."
+            ></dx-select-box>
+            <app-validator-message [error]="errors" field="categoryId"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label>Categoría<i class="text-danger">*</i></label>
+            <dx-select-box
+              [(value)]="Model.categoryId"
+              [dataSource]="DxDataSourceCategory"
+              displayExpr="name"
+              valueExpr="id"
+              (onItemClick)="onCategoryItemClick($event.itemData)"
+              placeholder="Seleccione categoría..."
+            ></dx-select-box>
+            <app-validator-message [error]="errors" field="categoryId"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label>Subcategoría<i class="text-danger">*</i></label>
+            <dx-select-box
+              [(value)]="Model.subCategoryId"
+              [dataSource]="DxDataSourceSubCategory"
+              displayExpr="name"
+              valueExpr="id"
+              [disabled]="!Model.categoryId"
+              (onItemClick)="onSubCategoryItemClick($event.itemData)"
+              placeholder="Seleccione subcategoría..."
+            ></dx-select-box>
+            <app-validator-message [error]="errors" field="subCategoryId"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label style="width: 100%;">
+              Proveedor
+              <i class="text-danger">*</i>
+              <a class="pull-right" type="button" (click)="showNewVendorModal()">
+              <u>Nuevo proveedor</u> </a>
+            </label>
+            <dx-select-box
+              [(value)]="Model.vendorId"
+              [dataSource]="DxDataSourceVendor"
+              displayExpr="name"
+              valueExpr="id"
+              [disabled]="Model.id > 0"
+              placeholder="Seleccione proveedor..."
+            ></dx-select-box>
+            <app-validator-message [error]="errors" field="vendorId"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label>Fecha del gasto<i class="text-danger">*</i></label>
+            <dx-date-box
+              [(value)]="Model.date"
+              [displayFormat]="DisplayFormatDate"
+            ></dx-date-box>
+            <app-validator-message [error]="errors" field="date"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12" *ngIf="!Model.isInvoice">
+          <div class="form-group">
+            <label>Total<i class="text-danger">*</i></label>
+            <dx-number-box
+              [(value)]="Model.total"
+              [format]="CurrencyDxNumber"
+              [showSpinButtons]="false"
+              placeholder="0.00"
+            ></dx-number-box>
+            <app-validator-message [error]="errors" field="total"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="expense-form__label">Registro fiscal</label>
+            <dx-check-box
+              [(value)]="Model.isInvoice"
+              text="Registrado con factura"
+              (onValueChanged)="onIsInvoiceChanged()"
+            ></dx-check-box>
+          </div>
+        </section>
+        <section class="col-md-12 col-xs-12">
+          <div class="form-group">
+            <label>Notas</label>
+            <dx-text-area [height]="90" [(value)]="Model.notes" placeholder="Observaciones opcionales..."></dx-text-area>
+            <app-validator-message [error]="errors" field="notes"></app-validator-message>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="expense-form__section expense-form__section--detail" *ngIf="Model.isInvoice">
+      <div class="expense-form__legend">
+        <i class="fas fa-file-invoice"></i> Datos de la factura
+      </div>
+      <p class="expense-form__hint">Número y fecha según el comprobante fiscal.</p>
+      <div class="row row-space-10">
+        <section class="col-md-6 col-xs-12">
+          <div class="form-group">
+            <label class="expense-form__label">Número de factura<i class="text-danger">*</i></label>
+            <dx-text-box
+              [(value)]="Model.expenseInvoice.invoiceNumber"
+              mask="000-000-00-00000000"
+            ></dx-text-box>
+            <app-validator-message [error]="errors" field="invoiceNumber"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-6 col-xs-12">
+          <div class="form-group">
+            <label class="expense-form__label">Fecha de factura<i class="text-danger">*</i></label>
+            <dx-date-box
+              [(value)]="Model.expenseInvoice.invoiceDate"
+              [displayFormat]="DisplayFormatDate"
+            ></dx-date-box>
+            <app-validator-message [error]="errors" field="invoiceDate"></app-validator-message>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="expense-form__section expense-form__section--detail" *ngIf="Model.isInvoice">
+      <div class="expense-form__legend">
+        <i class="fas fa-calculator"></i> Montos
+      </div>
+      <p class="expense-form__hint">
+        El ISV se calcula al 15% sobre el monto gravado; puede ajustar el ISV manualmente si aplica.
+      </p>
+      <div class="row row-space-10">
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="expense-form__label">Monto gravado<i class="text-danger">*</i></label>
+            <dx-number-box
+              [(value)]="Model.expenseInvoice.taxableAmount"
+              [format]="CurrencyDxNumber"
+              [showSpinButtons]="false"
+              (onValueChanged)="onInvoiceAmountChanged($event)"
+            ></dx-number-box>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="expense-form__label">Monto exento<i class="text-danger">*</i></label>
+            <dx-number-box
+              [(value)]="Model.expenseInvoice.exemptAmount"
+              [format]="CurrencyDxNumber"
+              [showSpinButtons]="false"
+              (onValueChanged)="onInvoiceAmountChanged($event)"
+            ></dx-number-box>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="expense-form__label">Descuento</label>
+            <dx-number-box
+              [(value)]="Model.expenseInvoice.discount"
+              [format]="CurrencyDxNumber"
+              [showSpinButtons]="false"
+              (onValueChanged)="onInvoiceAmountChanged($event)"
+            ></dx-number-box>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="expense-form__label">Subtotal<i class="text-danger">*</i></label>
+            <dx-number-box
+              [(value)]="Model.expenseInvoice.subTotal"
+              [format]="CurrencyDxNumber"
+              [disabled]="true"
+            ></dx-number-box>
+            <app-validator-message [error]="errors" field="subTotal"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="expense-form__label">ISV 15%</label>
+            <dx-number-box
+              [(value)]="Model.expenseInvoice.taxAmount"
+              [format]="CurrencyDxNumber"
+              [showSpinButtons]="false"
+              (onValueChanged)="onInvoiceTaxAmountChanged($event)"
+            ></dx-number-box>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group expense-form__total-wrap">
+            <label class="expense-form__label expense-form__label--total">Total<i class="text-danger">*</i></label>
+            <dx-number-box
+              [(value)]="Model.expenseInvoice.total"
+              [format]="CurrencyDxNumber"
+              [disabled]="true"
+            ></dx-number-box>
+            <app-validator-message [error]="errors" field="total"></app-validator-message>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</app-modal-with-option-buttons>
+
+<app-create-or-update-vendor #vendorModal (modalSave)="loadVendors()"></app-create-or-update-vendor>

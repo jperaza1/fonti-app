@@ -1,0 +1,116 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" [size]="'xxl'">
+  <div class="correlative-form">
+    <!-- Identificación -->
+    <div class="correlative-form__section">
+      <div class="correlative-form__legend">
+        <i class="fas fa-file-invoice" aria-hidden="true"></i> Identificación SAR
+      </div>
+      <p class="correlative-form__hint">Datos del CAI y del comprobante según SAR (Honduras).</p>
+      <div class="row row-space-10">
+        <section class="col-md-6 col-xs-12">
+          <div class="form-group">
+            <label class="correlative-form__label" for="cai-correlative">CAI<i class="text-danger">*</i></label>
+            <dx-text-box #cai id="cai-correlative" [(value)]="Model.cai" [maxLength]="14"
+              placeholder="Código según SAR">
+            </dx-text-box>
+            <app-validator-message [error]="errors" field="cai"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-6 col-xs-12">
+          <div class="form-group">
+            <label class="correlative-form__label" for="emissionPoint-correlative">Punto de emisión<i class="text-danger">*</i></label>
+            <dx-text-box #emissionPoint id="emissionPoint-correlative" [(value)]="Model.emissionPoint"
+              placeholder="Punto de venta / emisión">
+            </dx-text-box>
+            <app-validator-message [error]="errors" field="emissionPoint"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-6 col-xs-12">
+          <div class="form-group">
+            <label class="correlative-form__label" for="establishment-correlative">Establecimiento<i class="text-danger">*</i></label>
+            <dx-text-box #establishment id="establishment-correlative" [(value)]="Model.establishment"
+              placeholder="Código de establecimiento">
+            </dx-text-box>
+            <app-validator-message [error]="errors" field="establishment"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-6 col-xs-12">
+          <div class="form-group">
+            <label class="correlative-form__label" for="documentType-correlative">Tipo de documento<i class="text-danger">*</i></label>
+            <dx-text-box #documentType id="documentType-correlative" [(value)]="Model.documentType"
+              placeholder="Ej: Factura, Nota de crédito…">
+            </dx-text-box>
+            <app-validator-message [error]="errors" field="documentType"></app-validator-message>
+          </div>
+        </section>
+        
+        
+      </div>
+    </div>
+
+    <!-- Rango numérico -->
+    <div class="correlative-form__section correlative-form__section--range">
+      <div class="correlative-form__legend">
+        <i class="fas fa-sort-numeric-up" aria-hidden="true"></i> Rango de numeración
+      </div>
+      <p class="correlative-form__hint">El número actual es el último emitido; al crear un correlativo suele coincidir con «desde» o ir uno antes.</p>
+      <div class="row row-space-10">
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="correlative-form__label" for="start-correlative">Número desde<i class="text-danger">*</i></label>
+            <dx-number-box #start id="start-correlative" [showSpinButtons]="true" [min]="0" [step]="1"
+              [(value)]="Model.start" (onValueChanged)="onStartNumberChanged()">
+            </dx-number-box>
+            <app-validator-message [error]="errors" field="start"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="correlative-form__label" for="end-correlative">Número hasta<i class="text-danger">*</i></label>
+            <dx-number-box #end id="end-correlative" [showSpinButtons]="true" [min]="minEndNumber" [step]="1"
+              [(value)]="Model.end">
+            </dx-number-box>
+            <app-validator-message [error]="errors" field="end"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="correlative-form__label" for="current-correlative">Número actual</label>
+            <dx-number-box #current id="current-correlative" [showSpinButtons]="true" [min]="0" [step]="1"
+              [(value)]="Model.current">
+            </dx-number-box>
+            <app-validator-message [error]="errors" field="current"></app-validator-message>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Fechas SAR -->
+    <div class="correlative-form__section">
+      <div class="correlative-form__legend">
+        <i class="fas fa-calendar-alt" aria-hidden="true"></i> Fechas SAR
+      </div>
+      <div class="row row-space-10">
+        <section class="col-md-6 col-xs-12">
+          <div class="form-group">
+            <label class="correlative-form__label" for="startDate-correlative">Fecha Solicitud<i class="text-danger">*</i></label>
+            <dx-date-box #startDate id="startDate-correlative" [(value)]="Model.startDate"
+              [displayFormat]="DisplayFormatDate" (onValueChanged)="onStartDateChanged($event)">
+            </dx-date-box>
+            <app-validator-message [error]="errors" field="startDate"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-6 col-xs-12">
+          <div class="form-group">
+            <label class="correlative-form__label" for="endDate-correlative">Fecha Limite de Emision<i class="text-danger">*</i></label>
+            <dx-date-box #endDate id="endDate-correlative" [(value)]="Model.endDate" [(min)]="Model.startDate"
+              [displayFormat]="DisplayFormatDate">
+            </dx-date-box>
+            <app-validator-message [error]="errors" field="endDate"></app-validator-message>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</app-modal-with-option-buttons>

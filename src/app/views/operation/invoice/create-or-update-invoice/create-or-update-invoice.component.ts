@@ -152,10 +152,6 @@ export class CreateOrUpdateInvoiceComponent extends AppComponentBase implements 
 
   onVendorItemClick(item: VendorDto) {
     console.log(item);
-    this.Model.hasInvoice = item.hasInvoice;
-    if(!this.Model.hasInvoice) {
-      this.Model.invoiceNumber = "";
-    }
   }
 
 }

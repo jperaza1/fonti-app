@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AppComponentBase } from '../../../../AppComponentBase';
 import { InvoiceService } from '../invoice.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -27,7 +28,8 @@ export class ViewInvoiceComponent extends AppComponentBase implements OnInit {
     private _invoiceService: InvoiceService,
     private _route: ActivatedRoute,
     private _router: Router,
-    private _configService: ConfigService
+    private _configService: ConfigService,
+    private _sanitizer: DomSanitizer
   ) { 
     super();
     this.routeSub = this._route.params.subscribe((params) => {
@@ -59,9 +61,10 @@ export class ViewInvoiceComponent extends AppComponentBase implements OnInit {
     this.addPayment.showAdd(this.Model.id);
   }
 
-  getDocumentImageUrl(id: number): string {
-    if (!this._configService?.config?.document || !id) return '';
-    return `${this._configService.config.document}Attachment/GetAttachmentById?id=${id}`;
+  getDocumentUrl(id: number): SafeResourceUrl {
+    if (!this._configService?.config?.document || !id) return this._sanitizer.bypassSecurityTrustResourceUrl('');
+    const url = `${this._configService.config.document}Attachment/GetAttachmentById?id=${id}`;
+    return this._sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   openImageLightbox() {

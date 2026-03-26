@@ -154,14 +154,7 @@ export class CreateOrUpdatePurchaseOrderComponent extends AppComponentBase imple
         const detail = new PurchaseOrderDetailDto();
         detail.productId = existProduct.id;
         detail.product = `${existProduct.name}`;
-        detail.cost = existProduct.cost;
         detail.quantity = 0;
-        detail.tax = 0;
-        detail.taxPercentage = existProduct.tax;
-        detail.discount = 0;
-        detail.discountPercentage = existProduct.discount;
-        detail.subTotal = 0;
-        detail.total = 0;
         detail.id = 0;
         this.Model.details.push(detail);
       }

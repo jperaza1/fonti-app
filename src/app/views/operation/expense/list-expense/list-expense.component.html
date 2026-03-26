@@ -1,0 +1,131 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="expense-list">
+    <div class="expense-list__filters">
+      <div class="expense-list__legend">
+        <i class="fas fa-filter"></i> Filtros
+      </div>
+      <div class="row row-space-10">
+        <section class="col-md-3 col-xs-12">
+          <div class="form-group">
+            <label class="expense-list__label">Categoría</label>
+            <dx-select-box
+              [(value)]="filterModel.categoryId"
+              [dataSource]="DxDatasourceCategory"
+              displayExpr="name"
+              valueExpr="id"
+              (onValueChanged)="onFilterCategoryChanged()"
+              placeholder="Todas"
+            ></dx-select-box>
+          </div>
+        </section>
+        <section class="col-md-3 col-xs-12">
+          <div class="form-group">
+            <label class="expense-list__label">Subcategoría</label>
+            <dx-select-box
+              [(value)]="filterModel.subCategoryId"
+              [dataSource]="DxDatasourceSubCategory"
+              displayExpr="name"
+              valueExpr="id"
+              [disabled]="!filterModel.categoryId"
+              placeholder="Todas"
+            ></dx-select-box>
+          </div>
+        </section>
+        <section class="col-md-3 col-xs-12">
+          <div class="form-group">
+            <label class="expense-list__label">Desde</label>
+            <dx-date-box
+              [(max)]="filterModel.dateTo"
+              [(value)]="filterModel.dateFrom"
+              [displayFormat]="DisplayFormatDate"
+            ></dx-date-box>
+          </div>
+        </section>
+        <section class="col-md-3 col-xs-12">
+          <div class="form-group">
+            <label class="expense-list__label">Hasta</label>
+            <dx-date-box
+              [(value)]="filterModel.dateTo"
+              [displayFormat]="DisplayFormatDate"
+              [(min)]="filterModel.dateFrom"
+            ></dx-date-box>
+          </div>
+        </section>
+        <section class="col-md-12 col-xs-12 expense-list__actions">
+          <button type="button" class="expense-list__btn expense-list__btn--secondary" (click)="search()">
+            <i class="fa fa-search"></i> Buscar
+          </button>
+          <button
+            type="button"
+            class="expense-list__btn expense-list__btn--primary"
+            (click)="showAdd()"
+            [appCanAccess]="['OPERATION.EXPENSE.CREATE']"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+        </section>
+      </div>
+    </div>
+
+    <div class="expense-list__grid-wrap">
+      <dx-data-grid
+        id="expenseGrid"
+        [dataSource]="DataSource"
+        [columns]="columns"
+        [remoteOperations]="false"
+        [allowColumnReordering]="true"
+        [rowAlternationEnabled]="true"
+        [showBorders]="true"
+        [columnAutoWidth]="true"
+      >
+        <dxo-paging [pageSize]="10"></dxo-paging>
+        <dxo-pager
+          [showPageSizeSelector]="true"
+          [allowedPageSizes]="[10, 25, 50, 100]"
+        ></dxo-pager>
+        <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true">
+        </dxo-search-panel>
+        <dxo-export
+          [enabled]="true"
+          fileName="Gastos"
+          [allowExportSelectedData]="false"
+        >
+        </dxo-export>
+        <div *dxTemplate="let data of 'actionTemplate'">
+          <button
+            type="button"
+            class="expense-list__btn expense-list__btn--primary expense-list__btn--sm"
+            (click)="edit(data.data)"
+            title="Editar"
+            [appCanAccess]="['OPERATION.EXPENSE.UPDATE']"
+          >
+            <i class="fa fa-edit"></i>
+          </button>
+        </div>
+        <div *dxTemplate="let data of 'dateTemplate'">
+          {{ data.value | date: DisplayFormatDate }}
+        </div>
+        <div *dxTemplate="let data of 'amountTemplate'">
+          {{ data.value | currency: Currency }}
+        </div>
+        <div *dxTemplate="let data of 'boolTemplate'">
+          <span *ngIf="data.value" class="label label-success">Sí</span>
+          <span *ngIf="!data.value" class="label label-default">No</span>
+        </div>
+        <dxo-summary>
+          <dxi-total-item
+            column="total"
+            summaryType="sum"
+            [customizeText]="dxCustomizeCurrency"
+            displayFormat="{0}"
+          ></dxi-total-item>
+        </dxo-summary>
+      </dx-data-grid>
+    </div>
+  </div>
+</panel>
+
+<app-create-or-update-expense
+  #createOrUpdate
+  (modalSave)="search()"
+></app-create-or-update-expense>

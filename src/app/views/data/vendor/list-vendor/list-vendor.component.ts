@@ -37,26 +37,6 @@ export class ListVendorComponent extends AppComponentBase implements OnInit {
         allowEditing: false
       },
       {
-        dataField: "rtn",
-        caption: "RTN",
-        allowEditing: false
-      },
-      {
-        dataField: "address",
-        caption: "Dirección",
-        allowEditing: false
-      },
-      {
-        dataField: "phone",
-        caption: "Teléfono",
-        allowEditing: false
-      },
-      {
-        dataField: "seller",
-        caption: "Vendedor",
-        allowEditing: false
-      },
-      {
         dataField: "isActive",
         caption: "Status",
         allowEditing: false,

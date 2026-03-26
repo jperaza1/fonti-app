@@ -129,6 +129,27 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'route',
+    loadChildren: () =>
+      import('./views/data/route/route.module').then((m) => m.RouteModule),
+    data: { title: 'Rutas' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'correlative',
+    loadChildren: () =>
+      import('./views/data/correlative/correlative.module').then((m) => m.CorrelativeModule),
+    data: { title: 'Correlativos' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'category',
+    loadChildren: () =>
+      import('./views/data/category/category.module').then((m) => m.CategoryModule),
+    data: { title: 'Categorías' },
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'purchase-order',
     loadChildren: () =>
       import('./views/operation/purchase-order/purchase-order.module').then((m) => m.PurchaseOrderModule),
@@ -136,31 +157,17 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'special-service',
-    loadChildren: () =>
-      import('./views/operation/special-service/special-service.module').then((m) => m.SpecialServiceModule),
-    data: { title: 'Servicios Especiales' },
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'inventory',
-    loadChildren: () =>
-      import('./views/operation/inventory/inventory.module').then((m) => m.InventoryModule),
-    data: { title: 'Inventario' },
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'office-requisition',
-    loadChildren: () =>
-      import('./views/operation/office-requisition/office-requisition.module').then((m) => m.OfficeRequisitionModule),
-    data: { title: 'Ordenes de Requisición' },
-    canActivate: [AuthGuard],
-  },
-  {
     path: 'invoice',
     loadChildren: () =>
       import('./views/operation/invoice/invoice.module').then((m) => m.InvoiceModule),
     data: { title: 'Facturas' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'expense',
+    loadChildren: () =>
+      import('./views/operation/expense/expense.module').then((m) => m.ExpenseModule),
+    data: { title: 'Gastos' },
     canActivate: [AuthGuard],
   },
   {
@@ -175,6 +182,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./views/rrhh/employee/employee.module').then((m) => m.EmployeeModule),
     data: { title: 'Empleados' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'route',
+    loadChildren: () =>
+      import('./views/data/route/route.module').then((m) => m.RouteModule),
+    data: { title: 'Rutas' },
     canActivate: [AuthGuard],
   }
 ]

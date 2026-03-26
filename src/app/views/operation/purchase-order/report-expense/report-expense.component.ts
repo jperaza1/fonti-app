@@ -8,6 +8,7 @@ import { PurchaseOrderService } from '../purchase-order.service';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
+import { VendorService } from '../../../data/vendor/vendor.service';
 
 am4core.useTheme(am4themes_animated);
 
@@ -37,6 +38,7 @@ export class ReportExpenseComponent extends AppComponentBase implements OnInit, 
   filterExpenseReportDto: ExpenseReportFilterDto = new ExpenseReportFilterDto();
   DxDatasourceCafeteria: any = {};
   DxDatasourceFilterType: any = {};
+  DxDatasourceVendor: any = {};
 
   DataSource: any[] = [];
   columns: any[] = [];
@@ -64,6 +66,7 @@ export class ReportExpenseComponent extends AppComponentBase implements OnInit, 
   constructor(
     private _cafeteriaService: CafeteriaService,
     private _purchaseOrderService: PurchaseOrderService,
+    private _vendorService: VendorService,
     @Inject(PLATFORM_ID) private platformId: any,
     private zone: NgZone,
   ) {
@@ -73,6 +76,7 @@ export class ReportExpenseComponent extends AppComponentBase implements OnInit, 
   async ngOnInit() {
     await this.getCafeteria();
     await this.getFilterType();
+    await this.getVendor();
   }
 
   ngOnDestroy() {
@@ -86,6 +90,11 @@ export class ReportExpenseComponent extends AppComponentBase implements OnInit, 
 
   async getFilterType() {
     this.DxDatasourceFilterType = [{ value: 1, text: 'Semanal' }, { value: 2, text: 'Mensual' }];
+  }
+
+  async getVendor() {
+    let result = await this._vendorService.getActives();
+    this.DxDatasourceVendor = this.getDataSourceDx(result);
   }
 
   async getReport() {

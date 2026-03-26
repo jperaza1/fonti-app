@@ -7,27 +7,15 @@ var pageMenus = [
   },
   {
     icon: 'fa fa-shopping-cart',
-    title: 'Ordenes de Compra',
-    url: 'purchase-order',
-    permissions: ['OPERATION.PURCHASE_ORDER'],
+    title: 'Ventas',
+    url: 'sale',
+    permissions: [],
   },
   {
-    icon: 'fa fa-boxes',
-    title: 'Inventario',
-    url: 'inventory',
-    permissions: ['OPERATION.INVENTORY'],
-  },
-  {
-    icon: 'fa fa-list-alt',
-    title: 'Servicios Especiales',
-    url: 'special-service',
-    permissions: ['OPERATION.SPECIAL_SERVICE'],
-  },
-  {
-    icon: 'fa fa-list-alt',
-    title: 'Ordenes de Requisición',
-    url: 'office-requisition',
-    permissions: ['OPERATION.OFFICE_REQUISITION'],
+    icon: 'fa fa-money-bill-alt',
+    title: 'Gastos',
+    url: 'expense',
+    permissions: [],
   },
   {
     icon: 'fa fa-file-invoice-dollar',
@@ -50,73 +38,11 @@ var pageMenus = [
   },
   {
     icon: 'fas fa-user-shield',
-    title: 'RRHH',
-    url: '',
-    caret: 'true',
-    permissions: ['RRHH.EMPLOYEE'],
-    submenu: [
-      {
-        url: 'employee',
-        title: 'Empleados',
-        permissions: ['RRHH.EMPLOYEE'],
-      },
-    ]
-  },
-  {
-    icon: 'fas fa-store',
-    title: 'Punto de Venta',
-    url: '',
-    caret: 'true',
-    permissions: ['OPERATION.SALE'],
-    submenu: [
-      {
-        url: 'dish',
-        title: 'Platos',
-        permissions: ['OPERATION.SALE'],
-      },
-      {
-        url: 'side-item',
-        title: 'Complementos',
-        permissions: ['OPERATION.SALE'],
-      },
-    ]
-  },
-  {
-    icon: 'fa fa-file-invoice-dollar',
-    title: 'Finanzas',
-    url: '',
-    caret: 'true',
-    permissions: ['OPERATION.INVOICE', 'OPERATION.SALE'],
-    submenu: [
-      {
-        url: 'invoice',
-        title: 'Facturas',
-        permissions: ['OPERATION.INVOICE'],
-      },
-      {
-        url: 'sale',
-        title: 'Ventas',
-        permissions: ['OPERATION.SALE'],
-      },
-    ]
-  },
-  {
-    icon: 'fas fa-user-shield',
     title: 'Operaciones',
     url: '',
     caret: 'true',
-    permissions: ['DATA.CAFETERIA', 'DATA.REGISTER', 'DATA.VENDORS', 'DATA.PRODUCT'],
+    permissions: ['DATA.VENDORS', 'DATA.PRODUCT', 'DATA.ROUTE', 'DATA.CORRELATIVE', 'DATA.CATEGORY'],
     submenu: [
-      {
-        url: 'cafeteria',
-        title: 'Cafeterias',
-        permissions: ['DATA.CAFETERIA'],
-      },
-      {
-        url: 'register',
-        title: 'Cajas',
-        permissions: ['DATA.REGISTER'],
-      },
       {
         url: 'vendor',
         title: 'Proveedores',
@@ -131,6 +57,21 @@ var pageMenus = [
         url: 'product',
         title: 'Productos',
         permissions: ['DATA.PRODUCT'],
+      },
+      {
+        url: 'route',
+        title: 'Rutas',
+        permissions: ['DATA.ROUTE'],
+      },
+      {
+        url: 'correlative',
+        title: 'Correlativos',
+        permissions: ['DATA.CORRELATIVE'],
+      },
+      {
+        url: 'category',
+        title: 'Categorías',
+        permissions: ['DATA.CATEGORY'],
       },
     ]
   },

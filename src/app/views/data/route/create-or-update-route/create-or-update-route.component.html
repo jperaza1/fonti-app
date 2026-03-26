@@ -1,0 +1,72 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" [size]="'xxxl'">
+  <div class="route-form">
+    <!-- Información general -->
+    <div class="route-form__section">
+      <div class="route-form__legend">
+        <i class="fas fa-route"></i> Información general
+      </div>
+      <div class="row row-space-10">
+        <section class="col-md-12 col-xs-12">
+          <div class="form-group">
+            <label for="name">Nombre<i class="text-danger">*</i></label>
+            <dx-text-box #name [(value)]="Model.name" placeholder="Ej: Ruta Norte, Ruta Centro...">
+            </dx-text-box>
+            <app-validator-message [error]="errors" field="name"></app-validator-message>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Talonario: precios por producto -->
+    <div class="route-form__section route-form__section--talonario">
+      <div class="route-form__legend">
+        <i class="fas fa-receipt"></i> Talonario
+      </div>
+      <p class="route-form__hint">Agregue los productos y precios asociados a esta ruta.</p>
+
+      <div class="row row-space-10">
+        <section class="col-md-5 col-xs-12">
+          <div class="form-group">
+            <label class="route-form__label">Producto</label>
+            <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+              [dataSource]="DxDataSourceProduct" [(value)]="detail.productId"
+              (onItemClick)="onItemClickProduct($event.itemData)" placeholder="Buscar producto...">
+            </dx-select-box>
+          </div>
+        </section>
+        <section class="col-md-5 col-xs-12">
+          <div class="form-group">
+            <label class="route-form__label">Precio</label>
+            <dx-number-box #price [showSpinButtons]="false" [format]="CurrencyDxNumber"
+              [(value)]="detail.price" placeholder="0.00">
+            </dx-number-box>
+          </div>
+        </section>
+        <section class="col-md-2 col-xs-12" style="margin-top: 22px;">
+          <div class="form-group">
+            <button type="button" class="route-form__btn-add" (click)="addDetail()">
+              <i class="fas fa-plus"></i> Agregar
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <div class="route-form__grid-wrapper">
+        <dx-data-grid [dataSource]="Model.productRoutePrices" [showBorders]="true" [columnAutoWidth]="true">
+          <dxi-column dataField="productName" caption="Producto"></dxi-column>
+          <dxi-column dataField="price" caption="Precio" cellTemplate="amountTemplate"></dxi-column>
+          <dxi-column dataField="action" caption="Acciones" cellTemplate="actionTemplate"></dxi-column>
+          <div *dxTemplate="let data of 'amountTemplate'">
+            {{data.value | currency : Currency}}
+          </div>
+          <div *dxTemplate="let data of 'actionTemplate'">
+            <button type="button" class="btn btn-danger btn-sm" (click)="removeDetail(data.data)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</app-modal-with-option-buttons>

@@ -1,57 +1,154 @@
-<app-basic-table-list [title]="title" [columns]="columns" [dataSource]="DataSource" [appCanAccess]="[]"
-    [permissionAllowCreate]="['OPERATION.SALE.CREATE']" [permissionAllowUpdate]="['OPERATION.SALE.UPDATE']"
-    [permissionAllowDisable]="['OPERATION.SALE.DISABLE']" [permissionAllowEnable]="['OPERATION.SALE.ENABLE']"
-    (onRefresh)="getAll()" (onNew)="create()" (onEdit)="update($event)" (onDisable)="disable($event)"
-    (onEnable)="enable($event)" (onSearch)="getAll()" showSearchButton="true">
-
-    <div filterBody>
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="sale-list">
+    <div class="sale-list__filters">
+      <div class="sale-list__legend">
+        <i class="fas fa-filter"></i> Filtros
+      </div>
       <div class="row row-space-10">
-        <section class="col-md-4 col-xs-12">
+        <section class="col-md-3 col-xs-12">
           <div class="form-group">
-            <label for="name">Cafeteria</label>
-            <dx-tag-box [dataSource]="DxDataSourceCafeteria" [(value)]="filterModel.cafeterias" displayExpr="name"
-              valueExpr="id" [showSelectionControls]="true" [searchEnabled]="true" [disabled]="currentUser.cafeteriaId">
-            </dx-tag-box>
-          </div>
-        </section>
-        <section class="col-md-4 col-xs-12">
-          <div class="form-group">
-            <label for="name">Tipo de Venta</label>
-            <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
-              [dataSource]="DxDataSourceSaleType" [(value)]="filterModel.saleType">
+            <label class="sale-list__label" for="sale-filter-route">Ruta</label>
+            <dx-select-box
+              id="sale-filter-route"
+              displayExpr="name"
+              valueExpr="id"
+              [searchEnabled]="true"
+              [dataSource]="DxDataSourceRoute"
+              [(value)]="filterModel.routeId"
+            >
             </dx-select-box>
           </div>
         </section>
-        <section class="col-md-4 col-xs-12">
+        <section class="col-md-3 col-xs-12">
           <div class="form-group">
-            <label for="name">Categoría</label> 
-            <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
-              [dataSource]="DxDataSourceCategory" [(value)]="filterModel.categoryId">
+            <label class="sale-list__label" for="sale-filter-type">Tipo de venta</label>
+            <dx-select-box
+              id="sale-filter-type"
+              displayExpr="text"
+              valueExpr="value"
+              [searchEnabled]="true"
+              [dataSource]="DxDataSourceSaleType"
+              [(value)]="filterModel.saleType"
+            >
             </dx-select-box>
           </div>
         </section>
-        <section class="col-md-4 col-xs-12">
+        <section class="col-md-3 col-xs-12">
           <div class="form-group">
-            <label for="name">Producto</label>
-            <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
-              [dataSource]="DxDataSourceProductType" [(value)]="filterModel.productTypeId">
-            </dx-select-box>
+            <label class="sale-list__label" for="sale-filter-from">Desde</label>
+            <dx-date-box
+              id="sale-filter-from"
+              [(max)]="filterModel.dateTo"
+              [(value)]="filterModel.dateFrom"
+              [displayFormat]="DisplayFormatDate"
+            ></dx-date-box>
           </div>
         </section>
-        <section class="col-md-4 col-xs-12">
+        <section class="col-md-3 col-xs-12">
           <div class="form-group">
-            <label for="name">Inicio</label>
-            <dx-date-box [(max)]="filterModel.dateTo" [(value)]="filterModel.dateFrom" [displayFormat]="DisplayFormatDate"></dx-date-box>
+            <label class="sale-list__label" for="sale-filter-to">Hasta</label>
+            <dx-date-box
+              id="sale-filter-to"
+              [(value)]="filterModel.dateTo"
+              [displayFormat]="DisplayFormatDate"
+              [(min)]="filterModel.dateFrom"
+            ></dx-date-box>
           </div>
         </section>
-        <section class="col-md-4 col-xs-12">
-          <div class="form-group">
-            <label for="name">Fin</label>
-            <dx-date-box [(value)]="filterModel.dateTo" [displayFormat]="DisplayFormatDate" [(min)]="filterModel.dateFrom"></dx-date-box>
-          </div>
+        <section class="col-md-12 col-xs-12 sale-list__actions">
+          <button type="button" class="sale-list__btn sale-list__btn--secondary" (click)="getAll()">
+            <i class="fa fa-search"></i> Buscar
+          </button>
+          <button
+            type="button"
+            class="sale-list__btn sale-list__btn--secondary"
+            (click)="getAll()"
+            title="Actualizar lista"
+          >
+            <i class="fas fa-sync-alt"></i> Actualizar
+          </button>
+          <button
+            type="button"
+            class="sale-list__btn sale-list__btn--primary"
+            (click)="create()"
+            [appCanAccess]="['OPERATION.SALE.CREATE']"
+          >
+            <i class="fa fa-plus"></i> Agregar
+          </button>
         </section>
       </div>
     </div>
-</app-basic-table-list>
+    <div class="sale-list__grid-wrap">
+      <dx-data-grid
+        id="dataGrid"
+        [dataSource]="DataSource"
+        [columns]="columns"
+        [remoteOperations]="false"
+        [allowColumnReordering]="true"
+        [rowAlternationEnabled]="true"
+        [showBorders]="true"
+        [columnAutoWidth]="true">
+        <dxo-paging [pageSize]="10"></dxo-paging>
+        <dxo-pager
+          [showPageSizeSelector]="true"
+          [allowedPageSizes]="[10, 25, 50, 100]"
+        ></dxo-pager>
+        <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true">
+        </dxo-search-panel>
+        <dxo-export
+          [enabled]="true"
+          fileName="Gastos"
+          [allowExportSelectedData]="false"
+        >
+        </dxo-export>
+        <div *dxTemplate="let data of 'actionTemplate'">
+          <button
+            type="button"
+            class="sale-list__btn sale-list__btn--primary sale-list__btn--sm"
+            (click)="update(data.data)"
+            title="Editar"
+            [appCanAccess]="['OPERATION.SALE.UPDATE']"
+          >
+            <i class="fa fa-edit"></i>
+          </button>
+          <button
+          type="button"
+          [appCanAccess]="['OPERATION.SALE.DISABLE']"
+          *ngIf="data.data.isActive"
+          (click)="disable(data.data)"
+          [ngClass]="
+            designLine
+              ? 'sale-list__btn sale-list__btn--danger sale-list__btn--sm sale-list__btn--inline'
+              : 'btn btn-danger pull-left btn-sm'
+          "
+          title="Disable"
+        >
+          <i class="fas fa-trash-alt"></i>
+        </button>
+        <button
+          type="button"
+          [appCanAccess]="['OPERATION.SALE.ENABLE']"
+          *ngIf="!data.data.isActive"
+          (click)="enable(data.data)"
+          [ngClass]="
+            designLine
+              ? 'sale-list__btn sale-list__btn--success sale-list__btn--sm sale-list__btn--inline'
+              : 'btn btn-success pull-left btn-sm'
+          "
+          title="Enable"
+        >
+          <i class="fas fa-check-circle"></i>
+        </button>
+        </div>
+        <div *dxTemplate="let data of 'dateTemplate'">
+          {{ data.value | date: DisplayFormatDate }}
+        </div>
+        <div *dxTemplate="let data of 'amountTemplate'">
+          {{ data.value | currency: Currency }}
+        </div>
+      </dx-data-grid>
+    </div>
+  </div>
+</panel>
 
 <app-create-or-update-sale #createOrUpdateModal (modalSave)="getAll()"></app-create-or-update-sale>

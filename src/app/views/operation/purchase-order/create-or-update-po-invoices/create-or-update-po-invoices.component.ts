@@ -186,10 +186,6 @@ export class CreateOrUpdatePoInvoicesComponent extends AppComponentBase implemen
 
   async searchVendor(vendorId: number) {
     const vendor = await this._vendorService.getById(vendorId);
-    this.Model.hasInvoice = vendor.hasInvoice;
-    if(!this.Model.hasInvoice) {
-      this.Model.invoiceNumber = "";
-    }
   }
 
   getDocumentImageUrl(id: number): string {

@@ -26,8 +26,8 @@ export class ProductService {
     return this.http.get<ProductDto[]>(`${this._config.config.data}Product/GetByVendor?vendorId=${vendorId}`).toPromise();
   }
 
-  getActives(): Promise<ProductDto[]> {
-    return this.http.get<ProductDto[]>(`${this._config.config.data}Product/GetAllActive`).toPromise();
+  getActives(productType: number): Promise<ProductDto[]> {
+    return this.http.get<ProductDto[]>(`${this._config.config.data}Product/GetAllActive?productType=${productType}`).toPromise();
   }
 
   create(model: ProductDto): Promise<RequestResult> {

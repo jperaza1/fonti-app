@@ -7,6 +7,7 @@ import { TypeService } from '../../type/type.service';
 import { VendorService } from '../../vendor/vendor.service';
 import { RequestResult } from '../../../../../_models/RequestResult';
 import { ModalWithOptionButtonsComponent } from '../../../shared/components/modal-with-option-buttons/modal-with-option-buttons.component';
+import { EnumDefinitionsService } from '../../../../../_services/enum-definitions.service';
 
 @Component({
   selector: 'app-create-or-update-product',
@@ -19,8 +20,7 @@ export class CreateOrUpdateProductComponent extends AppComponentBase implements 
   errors: any = {};
   title: string = "Producto";
 
-  DxDataSourceMeasure: any = {};
-  DxDataSourceVendor: any = {};
+  DxDataSourceProductType: any = {};
 
   @ViewChild("entityComponent") entityComponent: ModalWithOptionButtonsComponent;
   @Output() modalSave = new EventEmitter<any>();
@@ -28,8 +28,7 @@ export class CreateOrUpdateProductComponent extends AppComponentBase implements 
 
   constructor(
     private _productService: ProductService,
-    private _typeService: TypeService,
-    private _vendorService: VendorService
+    private _enumDefinitionsService: EnumDefinitionsService
   ) {   
     super();
   }
@@ -37,20 +36,16 @@ export class CreateOrUpdateProductComponent extends AppComponentBase implements 
   ngOnInit(): void {
   }
 
-  async getVendors() {
-    const response = await this._vendorService.getAll();
-    this.DxDataSourceVendor = this.getDataSourceDx(response);
-  }
-
-  async getMeasures() {
-    const response = await this._typeService.getAciteTypesByGroupCode("MEASUREMENT_UNIT");
-    this.DxDataSourceMeasure = this.getDataSourceDx(response);
-  }
+  
 
   async initializeView() {
     this.errors = {};
-    await this.getVendors();
-    await this.getMeasures();
+    await this.getProductTypes();
+  }
+
+  async getProductTypes() {
+    const response = await this._enumDefinitionsService.getProductType();
+    this.DxDataSourceProductType = this.getDataSourceDx(response);
   }
 
   setButtonOptions(update?: boolean | null) {

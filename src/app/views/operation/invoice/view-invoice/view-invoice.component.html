@@ -87,7 +87,7 @@
       <div class="invoice-view__hero-label">Factura</div>
       <div class="invoice-doc-preview" (click)="openImageLightbox()" role="button" tabindex="0" (keydown.enter)="openImageLightbox()" (keydown.space)="openImageLightbox()">
         <div class="invoice-doc-preview__frame">
-          <img [src]="getDocumentImageUrl(Model.documentId)" alt="Vista previa del documento" class="invoice-doc-preview__img" />
+          <iframe [src]="getDocumentUrl(Model.documentId)" title="Vista previa del documento" class="invoice-doc-preview__doc"></iframe>
           <div class="invoice-doc-preview__overlay">
             <span class="invoice-doc-preview__icon" aria-hidden="true"><i class="fa fa-eye"></i></span>
             <span class="invoice-doc-preview__hint">Ver en grande</span>
@@ -150,7 +150,7 @@
     <i class="fa fa-times" aria-hidden="true"></i>
   </button>
   <div class="invoice-lightbox__content" (click)="$event.stopPropagation()">
-    <img [src]="getDocumentImageUrl(Model.documentId)" alt="Documento en tamaño completo" class="invoice-lightbox__img" />
+    <iframe [src]="getDocumentUrl(Model.documentId)" title="Documento en tamaño completo" class="invoice-lightbox__doc"></iframe>
   </div>
 </div>
 

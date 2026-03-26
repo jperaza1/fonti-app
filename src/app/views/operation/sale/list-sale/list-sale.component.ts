@@ -10,6 +10,7 @@ import { CafeteriaService } from '../../../data/cafeteria/cafeteria.service';
 import { EnumDefinitionsService } from '../../../../../_services/enum-definitions.service';
 import { AuthenticationService } from '../../../../../_services/authentication.service';
 import { FilterSaleDto } from '../dtos/filter-sale-dto';
+import { RouteService } from '../../../data/route/route.service';
 
 @Component({
   selector: 'app-list-sale',
@@ -23,17 +24,14 @@ export class ListSaleComponent extends AppComponentBase implements OnInit {
   currentUser: User;
   filterModel: FilterSaleDto = new FilterSaleDto();
 
-  DxDataSourceCafeteria: any = {};
+  DxDataSourceRoute: any = {};
   DxDataSourceSaleType: any = {};
-  DxDataSourceCategory: any = {};
-  DxDataSourceProductType: any = {};
 
   @ViewChild("createOrUpdateModal") createOrUpdateModal: CreateOrUpdateSaleComponent;
 
   constructor(
     private _saleService: SaleService,
-    private _typeService: TypeService,
-    private _cafeteriaService: CafeteriaService,
+    private _routeService: RouteService,
     private _enumDefinitionsService: EnumDefinitionsService,
     private _authenticationService: AuthenticationService
   ) { 
@@ -49,10 +47,8 @@ export class ListSaleComponent extends AppComponentBase implements OnInit {
   }
 
   async initializeView() {
-    await this.getCafeterias();
+    await this.getRoutes();
     await this.getSaleTypes();
-    await this.getCategories();
-    await this.getProductTypes();
   }
 
   initializeColumns() {
@@ -80,28 +76,8 @@ export class ListSaleComponent extends AppComponentBase implements OnInit {
         caption: "Tipo de Venta",
       },
       {
-        dataField: "cafeteria",
-        caption: "Cafetería",
-      },
-      {
-        dataField: "customer",
-        caption: "Cliente",
-      },
-      {
-        dataField: "register",
-        caption: "Caja",
-      },
-      {
-        dataField: "category",
-        caption: "Categoría",
-      },
-      {
-        dataField: "productType",
-        caption: "Proveedor",
-      },
-      {
-        dataField: "servicePeriod",
-        caption: "Periodo de Servicio",
+        dataField: "route",
+        caption: "Ruta",
       },
     ]
   }
@@ -153,26 +129,14 @@ export class ListSaleComponent extends AppComponentBase implements OnInit {
     }
   }
 
-  async getCafeterias() {
-    let response = await this._cafeteriaService.getAll();
-    this.DxDataSourceCafeteria = this.getDataSourceDx(response);
+  async getRoutes() {
+    let response = await this._routeService.getAll();
+    this.DxDataSourceRoute = this.getDataSourceDx(response);
   }
 
   async getSaleTypes() {
     let response = await this._enumDefinitionsService.getSaleType();
     response.unshift({ value: 0, text: "Todas" } as any);
     this.DxDataSourceSaleType = this.getDataSourceDx(response);
-  }
-
-  async getCategories() {
-    let response = await this._typeService.getAciteTypesByGroupCode("SALE_CATEGORY");
-    response.unshift({ id: 0, name: "Todas" } as any);
-    this.DxDataSourceCategory = this.getDataSourceDx(response);
-  }
-
-  async getProductTypes() {
-    let response = await this._typeService.getAciteTypesByGroupCode("SALE_PRODUCT_TYPE");
-    response.unshift({ id: 0, name: "Todas" } as any);
-    this.DxDataSourceProductType = this.getDataSourceDx(response);
   }
 }

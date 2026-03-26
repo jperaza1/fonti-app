@@ -2,7 +2,7 @@
   <!-- Filtros -->
   <div class="expense-filters">
     <div class="row row-space-10">
-      <section class="col-md-3 col-xs-12">
+      <section class="col-md-4 col-xs-12">
         <div class="form-group">
           <label for="cafeteriaId">Cafeteria</label>
           <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true" [dataSource]="DxDatasourceCafeteria"
@@ -10,7 +10,7 @@
           </dx-select-box>
         </div>
       </section>
-      <section class="col-md-3 col-xs-12">
+      <section class="col-md-4 col-xs-12">
         <div class="form-group">
           <label for="cafeteriaId">Tipo de Agrupación</label>
           <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true" [dataSource]="DxDatasourceFilterType"
@@ -18,13 +18,21 @@
           </dx-select-box>
         </div>
       </section>
-      <section class="col-md-3 col-xs-12">
+      <section class="col-md-4 col-xs-12">
+        <div class="form-group">
+          <label for="vendors">Proveedores</label>
+          <dx-tag-box [dataSource]="DxDatasourceVendor" [(value)]="filterExpenseReportDto.vendors" displayExpr="name"
+            valueExpr="id" [showSelectionControls]="true" [searchEnabled]="true">
+          </dx-tag-box>
+        </div>
+      </section>
+      <section class="col-md-6 col-xs-12">
         <div class="form-group">
           <label for="name">Inicio</label>
           <dx-date-box [(max)]="filterExpenseReportDto.endDate" [(value)]="filterExpenseReportDto.startDate" [displayFormat]="DisplayFormatDate"></dx-date-box>
         </div>
       </section>
-      <section class="col-md-3 col-xs-12">
+      <section class="col-md-6 col-xs-12">
         <div class="form-group">
           <label for="name">Fin</label>
           <dx-date-box [(value)]="filterExpenseReportDto.endDate" [displayFormat]="DisplayFormatDate" [(min)]="filterExpenseReportDto.startDate"></dx-date-box>

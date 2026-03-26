@@ -197,5 +197,9 @@ export class EnumDefinitionsService {
   getRequestType(): Promise<DefinitionValuesDto[]> {
     return this.http.get<DefinitionValuesDto[]>(`${this._config.config.data}EnumDefinition/GetRequestType`).toPromise();
   }
-  
+
+  getProductType(): Promise<DefinitionValuesDto[]> {
+    return this.http.get<DefinitionValuesDto[]>(`${this._config.config.data}EnumDefinition/GetProductType`).toPromise();
+  }
+
 }

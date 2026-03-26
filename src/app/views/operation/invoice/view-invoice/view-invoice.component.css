@@ -252,16 +252,11 @@
   background: linear-gradient(145deg, #fafbfc 0%, #f2f4f6 100%);
 }
 
-.invoice-doc-preview__img {
+.invoice-doc-preview__doc {
   width: 100%;
   height: 100%;
-  object-fit: cover;
   display: block;
-  transition: opacity 0.3s ease;
-}
-
-.invoice-doc-preview:hover .invoice-doc-preview__img {
-  opacity: 0.9;
+  border: none;
 }
 
 .invoice-doc-preview__overlay {
@@ -368,12 +363,11 @@
   }
 }
 
-.invoice-lightbox__img {
+.invoice-lightbox__doc {
   display: block;
-  max-width: 100%;
+  width: 80vw;
+  min-height: 80vh;
   max-height: 90vh;
-  width: auto;
-  height: auto;
-  object-fit: contain;
+  border: none;
   background: #1a2422;
 }

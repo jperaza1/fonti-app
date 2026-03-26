@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { AppComponentBase } from '../../../../AppComponentBase';
 
 @Component({
@@ -7,6 +7,14 @@ import { AppComponentBase } from '../../../../AppComponentBase';
   styleUrls: ['./basic-table-list.component.css']
 })
 export class BasicTableListComponent extends AppComponentBase implements OnInit {
+  /** Estilo alineado con list-expense / design-line (grid envuelto, botones de acción). */
+  @Input() designLine: boolean = false;
+
+  @HostBinding('class.basic-table-list--design-line')
+  get designLineHostClass(): boolean {
+    return this.designLine;
+  }
+
   @Input() title?: string;
   @Input() columns: any[] = [];
   @Input() dataSource: any[] = [];

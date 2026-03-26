@@ -13,8 +13,6 @@ import { PreviewPdfControlComponent } from './components/preview-pdf-control/pre
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { CanAccessDirective } from '../../directives/can-access.directive';
 import { WebSocketComponent } from './components/web-socket/web-socket.component';
-import { MapViewerComponent } from './components/map-viewer/map-viewer.component';
-import { AgmCoreModule } from '@agm/core';
 import { ValidatorMessageComponent } from '../../components/validator-message/validator-message.component';
 import { DocumentationControlComponent } from './components/documentation-control/documentation-control.component';
 import { PreviewDocumentationControlComponent } from './components/preview-documentation-control/preview-documentation-control.component';
@@ -54,10 +52,6 @@ export let AppInjector: Injector;
     DxPivotGridModule,
 		FormsModule,
 		SignaturePadModule,
-		AgmCoreModule.forRoot({
-			apiKey: 'AIzaSyBTDzb_U_gBSrkn7o7s8fLOivaS-WytwG8',
-			language: 'en'
-		}),
 		SignaturePadModule,
 		DxTagBoxModule,
 		
@@ -72,7 +66,6 @@ export let AppInjector: Injector;
 		CanAccessDirective,
     CanNotAccessDirective,
 		WebSocketComponent,
-		MapViewerComponent,
 		ValidatorMessageComponent,
 		DocumentationControlComponent,
 		PreviewDocumentationControlComponent,
@@ -86,7 +79,6 @@ export let AppInjector: Injector;
 	],
 	exports: [
 		CommonModule,
-		AgmCoreModule,
 		FormsModule,
 		DxDataGridModule,
 		DxTemplateModule,
@@ -116,7 +108,6 @@ export let AppInjector: Injector;
 		CanAccessDirective,
     CanNotAccessDirective,
 		WebSocketComponent,
-		MapViewerComponent,
 		ValidatorMessageComponent,
 		DocumentationControlComponent,
 		PreviewDocumentationControlComponent,

@@ -1,79 +1,13 @@
 <app-modal-with-option-buttons #entityComponent title="Type" [optionButtons]="OptionButtons"
-  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()">
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" [size]="'xxxl'">
   <div>
     <div class="row row-space-10">
-      <section class="col-md-6 col-xs-12">
+      <section class="col-md-12 col-xs-12">
         <div class="form-group">
           <label for="name">Nombre<i class="text-danger">*</i></label>
           <dx-text-box #name [(value)]="Model.name">
           </dx-text-box>
           <app-validator-message [error]="errors" field="name"></app-validator-message>
-        </div>
-      </section>
-
-      <section class="col-md-6 col-xs-12">
-        <div class="form-group">
-          <label for="code">Rtn<i class="text-danger">*</i></label>
-          <dx-text-box #rtn [(value)]="Model.rtn">
-          </dx-text-box>
-          <app-validator-message [error]="errors" field="rtn"></app-validator-message>
-        </div>
-      </section>
-
-      <section class="col-md-6 col-xs-12">
-        <div class="form-group">
-          <label for="code">Telefono<i class="text-danger">*</i></label>
-          <dx-text-box #phone [(value)]="Model.phone" [mask]="PhoneFormat">
-          </dx-text-box>
-          <app-validator-message [error]="errors" field="phone"></app-validator-message>
-        </div>
-      </section>
-
-      <section class="col-md-6 col-xs-12">
-        <div class="form-group">
-          <label for="code">Vendedor<i class="text-danger">*</i></label>
-          <dx-text-box #seller [(value)]="Model.seller">
-          </dx-text-box>
-          <app-validator-message [error]="errors" field="seller"></app-validator-message>
-        </div>
-      </section>
-
-      <section class="col-md-12 col-xs-12">
-        <div class="form-group">
-            <label for="address">Direccion</label>
-            <dx-text-area [height]="150" #address [(value)]="Model.address"></dx-text-area>
-            <app-validator-message [error]="errors" field="address"></app-validator-message>
-        </div>
-      </section>
-
-      <section class="col-md-4 col-xs-12" >
-        <div class="custom-control custom-switch">
-            <input type="checkbox" [(ngModel)]="Model.hasInvoice" #hasInvoice="ngModel"
-                class="custom-control-input" id="hasInvoice">
-            <label class="custom-control-label" for="hasInvoice">¿El proveedor emite facturas con RTN?</label>
-        </div>
-      </section>
-
-      <section class="col-md-4 col-xs-12" >
-        <div class="custom-control custom-switch">
-            <input type="checkbox" [(ngModel)]="Model.hasCredit" #hasCredit="ngModel"
-                class="custom-control-input" id="hasCredit">
-            <label class="custom-control-label" for="hasCredit">¿El proveedor otorga crédito?</label>
-        </div>
-      </section>
-
-      <section class="col-md-4 col-xs-12" *ngIf="Model.hasCredit">
-        <div class="form-group">
-          <label for="creditDays">Días de crédito</label>
-          <dx-number-box #creditDays [(value)]="Model.creditDays"></dx-number-box>
-          <app-validator-message [error]="errors" field="creditDays"></app-validator-message>
-        </div>
-      </section>
-      <section class="col-md-4 col-xs-12" [appCanAccess]="['DATA.PRODUCT.SHOW_ADMIN_CONFIG']">
-        <div class="custom-control custom-switch">
-            <input type="checkbox" [(ngModel)]="Model.requiresAdminApproval" #requiresAdminApproval="ngModel"
-                class="custom-control-input" id="requiresAdminApproval">
-            <label class="custom-control-label" for="requiresAdminApproval">¿El proveedor requiere aprobación de administrador?</label>
         </div>
       </section>
     </div>

@@ -1,0 +1,8 @@
+<app-basic-table-list [title]="title" [columns]="columns" [dataSource]="DataSource" [appCanAccess]="[]"
+  [permissionAllowCreate]="['DATA.CATEGORY.CREATE']" [permissionAllowUpdate]="['DATA.CATEGORY.UPDATE']"
+  [permissionAllowDisable]="['DATA.CATEGORY.DISABLE']" [permissionAllowEnable]="['DATA.CATEGORY.ENABLE']"
+  (onRefresh)="getAll()" (onNew)="create()" (onEdit)="update($event)" (onDisable)="disable($event)"
+  (onEnable)="enable($event)">
+</app-basic-table-list>
+
+<app-create-or-update-category #createOrUpdateModal (modalSave)="getAll()"></app-create-or-update-category>

@@ -96,20 +96,20 @@ export class GraphicPreviewComponent extends AppComponentBase implements OnInit,
     const grouped: Record<string, any> = {};
     sales.forEach(item => {
       if (!grouped[item.month]) grouped[item.month] = { category: item.month };
-      grouped[item.month][item.cafeteria] = item.total;
+      grouped[item.month][item.route] = item.total;
     });
     this.monthChartData = Object.values(grouped);
-    this.monthCafeterias = Array.from(new Set(sales.map(x => x.cafeteria)));
+    this.monthCafeterias = Array.from(new Set(sales.map(x => x.route)));
   }
 
   private processWeekData(sales: GetSalesByMonthDto[]) {
     const grouped: Record<string, any> = {};
     sales.forEach(item => {
       if (!grouped[item.day]) grouped[item.day] = { category: item.day };
-      grouped[item.day][item.cafeteria] = item.total;
+      grouped[item.day][item.route] = item.total;
     });
     this.weekChartData = Object.values(grouped);
-    this.weekCafeterias = Array.from(new Set(sales.map(x => x.cafeteria)));
+    this.weekCafeterias = Array.from(new Set(sales.map(x => x.route)));
   }
 
   // --- Chart rendering ---

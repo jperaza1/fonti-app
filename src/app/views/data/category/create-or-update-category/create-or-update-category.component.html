@@ -1,0 +1,56 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" [size]="'xxxl'">
+  <div class="category-form">
+    <div class="category-form__section">
+      <div class="category-form__legend">
+        <i class="fas fa-folder"></i> Información general
+      </div>
+      <div class="row row-space-10">
+        <section class="col-md-12 col-xs-12">
+          <div class="form-group">
+            <label for="name">Nombre<i class="text-danger">*</i></label>
+            <dx-text-box #name [(value)]="Model.name" placeholder="Ej: Bebidas, Snacks...">
+            </dx-text-box>
+            <app-validator-message [error]="errors" field="name"></app-validator-message>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="category-form__section category-form__section--detail">
+      <div class="category-form__legend">
+        <i class="fas fa-sitemap"></i> Subcategorías
+      </div>
+      <p class="category-form__hint">Agregue las subcategorías asociadas a esta categoría.</p>
+
+      <div class="row row-space-10">
+        <section class="col-md-10 col-xs-12">
+          <div class="form-group">
+            <label class="category-form__label">Nombre de subcategoría</label>
+            <dx-text-box [(value)]="detail.name" placeholder="Ej: Gaseosas, Jugos...">
+            </dx-text-box>
+          </div>
+        </section>
+        <section class="col-md-2 col-xs-12" style="margin-top: 22px;">
+          <div class="form-group">
+            <button type="button" class="category-form__btn-add" (click)="addDetail()">
+              <i class="fas fa-plus"></i> Agregar
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <div class="category-form__grid-wrapper">
+        <dx-data-grid [dataSource]="Model.subCategories" [showBorders]="true" [columnAutoWidth]="true">
+          <dxi-column dataField="name" caption="Subcategoría"></dxi-column>
+          <dxi-column dataField="action" caption="Acciones" cellTemplate="actionTemplate"></dxi-column>
+          <div *dxTemplate="let data of 'actionTemplate'">
+            <button type="button" class="btn btn-danger btn-sm" (click)="removeDetail(data.data)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</app-modal-with-option-buttons>

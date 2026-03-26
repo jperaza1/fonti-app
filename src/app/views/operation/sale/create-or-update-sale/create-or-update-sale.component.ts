@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/cor
 import { AppComponentBase } from '../../../../AppComponentBase';
 import { OptionButton } from '../../../shared/models/option-button';
 import { ProductDto } from '../../../data/product/dtos/product-dto';
-import { SaleDto } from '../dtos/sale-dto';
+import { SaleDetailModel, SaleDto } from '../dtos/sale-dto';
 import { ModalWithOptionButtonsComponent } from '../../../shared/components/modal-with-option-buttons/modal-with-option-buttons.component';
 import { TypeService } from '../../../data/type/type.service';
 import { SaleService } from '../sale.service';
@@ -14,6 +14,9 @@ import { AuthenticationService } from '../../../../../_services/authentication.s
 import { CafeteriaDto } from '../../../data/cafeteria/dtos/cafeteria-dto';
 import { RegisterService } from '../../../data/register/register.service';
 import { CustomerService } from '../../../data/customer/customer.service';
+import { RouteDto } from '../../../data/route/dtos/route-dto';
+import { RouteService } from '../../../data/route/route.service';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
   selector: 'app-create-or-update-sale',
@@ -26,37 +29,32 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
   errors: any = {};
   title: string = "Producto";
 
-  DxDataSourceCafeteria: any = {};
+  DxDataSourceRoute: any = {};
   DxDataSourceSaleType: any = {};
-  DxDataSourceCategory: any = {};
-  DxDataSourceProductType: any = {};
-  DxDataSourceRegister: any = {};
-  DxDataSourceServicePeriod: any = {};
-  DxDataSourceCustomer: any = {};
   currentUser: User;
 
   @ViewChild("entityComponent") entityComponent: ModalWithOptionButtonsComponent;
   @Output() modalSave = new EventEmitter<any>();
 
+  @ViewChild('dataGrid', { static: false }) dataGrid: DxDataGridComponent;
+
   constructor(
     private _saleService: SaleService,
-    private _typeService: TypeService,
-    private _cafeteriaService: CafeteriaService,
+    private _routeService: RouteService,
     private _enumDefinitionsService: EnumDefinitionsService,
     private _authenticationService: AuthenticationService,
-    private _registerService: RegisterService,
-    private _customerService: CustomerService
   ) { 
     super();
     this.currentUser = this._authenticationService.currentUserValue;
   }
 
-  ngOnInit(): void {
+  refreshDataGrid() {
+    if (this.dataGrid) {
+      this.dataGrid.instance.refresh();
+    }
   }
 
-  async getCafeterias() {
-    const response = await this._cafeteriaService.getAll();
-    this.DxDataSourceCafeteria = this.getDataSourceDx(response);
+  ngOnInit(): void {
   }
 
   async getSaleTypes() {
@@ -64,33 +62,16 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
     this.DxDataSourceSaleType = this.getDataSourceDx(response);
   }
 
-  async getCategories() {
-    const response = await this._typeService.getAciteTypesByGroupCode("SALE_CATEGORY");
-    this.DxDataSourceCategory = this.getDataSourceDx(response);
+  async getRoutes() {
+    const response = await this._routeService.getAll();
+    this.DxDataSourceRoute = this.getDataSourceDx(response);
   }
 
-  async getProductTypes() {
-    const response = await this._typeService.getAciteTypesByGroupCode("SALE_PRODUCT_TYPE");
-    this.DxDataSourceProductType = this.getDataSourceDx(response);
-  }
-
-  async getServicePeriods() {
-    const response = await this._typeService.getAciteTypesByGroupCode("SERVICE_PERIOD");
-    this.DxDataSourceServicePeriod = this.getDataSourceDx(response);
-  }
-
-  async getCustomers(cafeteriaId: number) {
-    const response = await this._customerService.getByCafeteriaId(cafeteriaId);
-    this.DxDataSourceCustomer = this.getDataSourceDx(response);
-  }
 
   async initializeView() {
     this.errors = {};
-    await this.getCafeterias();
+    await this.getRoutes();
     await this.getSaleTypes();
-    await this.getCategories();
-    await this.getProductTypes();
-    await this.getServicePeriods();
   }
 
   setButtonOptions(update?: boolean | null) {
@@ -110,8 +91,6 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
     await this.initializeView();
     this.setButtonOptions(true);
     this.Model = await this._saleService.getById(data.id);
-    await this.loadRegisters(this.Model.cafeteriaId);
-    await this.getCustomers(this.Model.cafeteriaId);
     this.entityComponent.show();
   }
 
@@ -120,11 +99,6 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
     await this.initializeView();
     this.setButtonOptions();
     this.Model = new SaleDto();
-    this.Model.cafeteriaId = this.currentUser.cafeteriaId == null ? 0 : this.currentUser.cafeteriaId;
-    if(this.Model.cafeteriaId > 0){
-      await this.loadRegisters(this.Model.cafeteriaId);
-      await this.getCustomers(this.Model.cafeteriaId);
-    }
     this.entityComponent.show();
   }
 
@@ -144,11 +118,6 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
       this.success(requestResult.title, requestResult.messageResponse);
       this.modalSave.emit();
       this.Model = new SaleDto();
-      this.Model.cafeteriaId = this.currentUser.cafeteriaId == null ? 0 : this.currentUser.cafeteriaId;
-      if(this.Model.cafeteriaId > 0){
-        await this.loadRegisters(this.Model.cafeteriaId);
-        await this.getCustomers(this.Model.cafeteriaId);
-      }
       //this.close();
     } else {
       this.error(requestResult.title, requestResult.messageResponse);
@@ -173,18 +142,34 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
     this.entityComponent.close();
   }
 
-  async onCafeteriaItemClick(itemData: CafeteriaDto) {
-    this.Model.registerId = 0;
-    this.Model.register = "";
-    await this.loadRegisters(itemData.id);
-    await this.getCustomers(itemData.id);
+  async onRouteItemClick(itemData: RouteDto) {
+    this.Model.saleDetails = [];
+    var products = await this._routeService.getProductRoutePrices(itemData.id);
+    console.log(products);
+
+    for(var product of products) {
+      var detail = new SaleDetailModel();
+      detail.productId = product.productId;
+      detail.product = product.productName;
+      detail.price = product.price;
+      detail.quantity = 0;
+      detail.total = 0;
+      this.Model.saleDetails.push(detail);
+    }
   }
 
-  async loadRegisters(cafeteriaId: number) {
-    let registers = await this._registerService.getByCafeteriaId(cafeteriaId);
-    console.log(registers);
-    this.DxDataSourceRegister = this.getDataSourceDx(registers);
+  onQuantityChange(e: any, data: SaleDetailModel) {
+    data.total = this.roundTo(data.price * data.quantity, 3);
+    this.Model.amount = this.roundTo(this.Model.saleDetails.reduce((total, detail) => total + detail.total, 0), 3);
+    this.refreshDataGrid();
   }
-  
+
+  removeDetail(saleDetails: SaleDetailModel) {
+    console.log(saleDetails);
+    let result = this.Model.saleDetails.filter(item => item !== saleDetails);
+    this.Model.saleDetails = result;
+    this.Model.amount = this.roundTo(this.Model.saleDetails.reduce((total, detail) => total + detail.total, 0), 3);
+    this.refreshDataGrid();
+  }
   
 }

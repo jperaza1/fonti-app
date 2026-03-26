@@ -31,37 +31,14 @@ export class ListProductComponent extends AppComponentBase implements OnInit {
         allowExporting: false
       },
       {
-        dataField: "vendor",
-        caption: "Proveedor",
-        allowEditing: false,
-        
-      },
-      {
         dataField: "name",
         caption: "Producto",
         allowEditing: false
       },
       {
-        dataField: "measure",
-        caption: "Medida",
+        dataField: "productTypeName",
+        caption: "Tipo de Producto",
         allowEditing: false
-      },
-      {
-        dataField: "unit",
-        caption: "Unidad por Medida",
-        allowEditing: false
-      },
-      {
-        dataField: "cost",
-        caption: "Costo",
-        allowEditing: false,
-        cellTemplate: "amountTemplate"
-      },
-      {
-        dataField: "tax",
-        caption: "Impuesto",
-        allowEditing: false,
-        cellTemplate: "percentageTemplate"
       },
       {
         dataField: "isActive",

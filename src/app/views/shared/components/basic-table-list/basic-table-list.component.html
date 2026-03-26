@@ -1,12 +1,12 @@
 <panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
   <ng-content select="[filterBody]"></ng-content>
 
-  <div *ngIf="showAdd || showRefresh" class="row">
-    <div class="col-lg-12">
+  <div *ngIf="showAdd || showRefresh || showSearchButton" class="row basic-table-list__toolbar-row">
+    <div class="col-lg-12 basic-table-list__toolbar-inner">
       <button
         *ngIf="showAdd"
         [appCanAccess]="permissionAllowCreate"
-        class="btn btn-primary"
+        [ngClass]="designLine ? 'basic-table-list__btn basic-table-list__btn--primary' : 'btn btn-primary'"
         type="button"
         (click)="onClickNew()"
       >
@@ -16,7 +16,7 @@
       <button
         *ngIf="showSearchButton"
         [appCanAccess]="permissionAllowCreate"
-        class="btn btn-primary"
+        [ngClass]="designLine ? 'basic-table-list__btn basic-table-list__btn--secondary' : 'btn btn-primary'"
         type="button"
         (click)="onClickSearch()"
       >
@@ -25,7 +25,9 @@
       </button>
       <button
         *ngIf="showRefresh"
-        class="btn btn-warning pull-right"
+        [ngClass]="
+          designLine ? 'basic-table-list__btn basic-table-list__btn--secondary basic-table-list__btn--pull-right' : 'btn btn-warning pull-right'
+        "
         type="button"
         (click)="onClickRefresh()"
       >
@@ -36,7 +38,9 @@
 
   <ng-container outsideBody>
     <!-- (onRowPrepared)="dxOnRowPrepared($event)" -->
-    <div class="table-responsive text-nowrap">
+    <div
+      class="basic-table-list__grid-wrap"
+    >
       <dx-data-grid
         id="dataGrid"
         [dataSource]="dataSource"
@@ -45,6 +49,7 @@
         [allowColumnReordering]="true"
         [rowAlternationEnabled]="true"
         [showBorders]="true"
+        [columnAutoWidth]="designLine"
       >
         <dxo-paging [pageSize]="10"></dxo-paging>
         <dxo-pager
@@ -77,7 +82,11 @@
             type="button"
             [appCanAccess]="permissionAllowUpdate"
             *ngIf="data.data.isActive"
-            class="btn btn-warning pull-left btn-sm"
+            [ngClass]="
+              designLine
+                ? 'basic-table-list__btn basic-table-list__btn--primary basic-table-list__btn--sm basic-table-list__btn--inline'
+                : 'btn btn-warning pull-left btn-sm'
+            "
             (click)="onClickEdit(data.data)"
             title="Edit"
           >
@@ -88,7 +97,11 @@
             [appCanAccess]="permissionAllowDisable"
             *ngIf="data.data.isActive && showDisable"
             (click)="onClickDisable(data.data)"
-            class="btn btn-danger pull-left btn-sm"
+            [ngClass]="
+              designLine
+                ? 'basic-table-list__btn basic-table-list__btn--danger basic-table-list__btn--sm basic-table-list__btn--inline'
+                : 'btn btn-danger pull-left btn-sm'
+            "
             title="Disable"
           >
             <i class="fas fa-trash-alt"></i>
@@ -98,7 +111,11 @@
             [appCanAccess]="permissionAllowEnable"
             *ngIf="!data.data.isActive && showEnable"
             (click)="onClickEnable(data.data)"
-            class="btn btn-success pull-left btn-sm"
+            [ngClass]="
+              designLine
+                ? 'basic-table-list__btn basic-table-list__btn--success basic-table-list__btn--sm basic-table-list__btn--inline'
+                : 'btn btn-success pull-left btn-sm'
+            "
             title="Enable"
           >
             <i class="fas fa-check-circle"></i>
@@ -107,7 +124,11 @@
             type="button"
             *ngIf="showGoTo === true"
             (click)="onClickGoTo(data.data)"
-            class="btn btn-info pull-left btn-sm"
+            [ngClass]="
+              designLine
+                ? 'basic-table-list__btn basic-table-list__btn--info basic-table-list__btn--sm basic-table-list__btn--inline'
+                : 'btn btn-info pull-left btn-sm'
+            "
             title="Go to"
           >
             <i class="fas fa-share-square"></i>
@@ -119,7 +140,11 @@
             type="button"
             [appCanAccess]="permissionAllowUpdate"
             *ngIf="data.data.isActive"
-            class="btn btn-warning pull-left btn-sm"
+            [ngClass]="
+              designLine
+                ? 'basic-table-list__btn basic-table-list__btn--primary basic-table-list__btn--sm basic-table-list__btn--inline'
+                : 'btn btn-warning pull-left btn-sm'
+            "
             (click)="onClickEdit(data.data)"
             title="Edit"
           >
@@ -129,7 +154,11 @@
             type="button"
             [appCanAccess]="permissionAllowUpdate"
             *ngIf="data.data.isActive"
-            class="btn btn-primary pull-left btn-sm"
+            [ngClass]="
+              designLine
+                ? 'basic-table-list__btn basic-table-list__btn--secondary basic-table-list__btn--sm basic-table-list__btn--inline'
+                : 'btn btn-primary pull-left btn-sm'
+            "
             (click)="onClickDriverCall(data.data)"
             title="Edit"
           >
@@ -140,7 +169,11 @@
             [appCanAccess]="permissionAllowDisable"
             *ngIf="data.data.isActive && showDisable"
             (click)="onClickDisable(data.data)"
-            class="btn btn-danger pull-left btn-sm"
+            [ngClass]="
+              designLine
+                ? 'basic-table-list__btn basic-table-list__btn--danger basic-table-list__btn--sm basic-table-list__btn--inline'
+                : 'btn btn-danger pull-left btn-sm'
+            "
             title="Disable"
           >
             <i class="fas fa-trash-alt"></i>
@@ -150,7 +183,11 @@
             [appCanAccess]="permissionAllowEnable"
             *ngIf="!data.data.isActive && showEnable"
             (click)="onClickEnable(data.data)"
-            class="btn btn-success pull-left btn-sm"
+            [ngClass]="
+              designLine
+                ? 'basic-table-list__btn basic-table-list__btn--success basic-table-list__btn--sm basic-table-list__btn--inline'
+                : 'btn btn-success pull-left btn-sm'
+            "
             title="Enable"
           >
             <i class="fas fa-check-circle"></i>

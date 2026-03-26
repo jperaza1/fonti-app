@@ -17,7 +17,6 @@ import { TopMenuComponent } from './components/top-menu/top-menu.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { FloatSubMenuComponent } from './components/float-sub-menu/float-sub-menu.component';
 // Component Module
-import { AgmCoreModule } from '@agm/core';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TrendModule } from 'ngx-trend';
@@ -73,7 +72,6 @@ export const configFactory = (configService: ConfigService) => {
 	imports: [
 		HttpClientModule,
 		AppRoutingModule,
-		AgmCoreModule.forRoot({ apiKey: 'AIzaSyBTDzb_U_gBSrkn7o7s8fLOivaS-WytwG8' }),
 		BrowserAnimationsModule,
 		BrowserModule,
 		CalendarModule.forRoot({
@@ -119,7 +117,7 @@ export class AppModule {
 	constructor(private router: Router, private titleService: Title, private route: ActivatedRoute) {
 		router.events.subscribe((e) => {
 			if (e instanceof NavigationEnd) {
-				var title = 'COD | ' + this.route.snapshot.firstChild.data['title'];
+				var title = 'FONTI | ' + this.route.snapshot.firstChild.data['title'];
 				this.titleService.setTitle(title);
 			}
 		});
