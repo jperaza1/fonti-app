@@ -1,0 +1,194 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0" panelClass="sale-invoice-view-panel">
+  <div class="siv">
+    <header class="siv__hero">
+      <div class="siv__identity">
+        <p class="siv__eyebrow">Factura de venta</p>
+        <h2 class="siv__customer">{{ Model.customer || '—' }}</h2>
+        <p class="siv__number">{{ Model.invoiceNumber || '—' }}</p>
+      </div>
+      <div class="siv__hero-side">
+        <div class="siv__badges">
+          <span
+            class="siv__chip"
+            [class.siv__chip--pending]="Model.paymentStatus === 1"
+            [class.siv__chip--partial]="Model.paymentStatus === 2"
+            [class.siv__chip--paid]="Model.paymentStatus === 3"
+            [class.siv__chip--void]="Model.paymentStatus === 4">
+            {{ Model.paymentStatusName || 'Sin estado' }}
+          </span>
+          <span
+            class="siv__chip siv__chip--type"
+            *ngIf="Model.paymentTypeName"
+            [class.siv__chip--cash]="Model.paymentType === 1"
+            [class.siv__chip--credit]="Model.paymentType === 2">
+            {{ Model.paymentTypeName }}
+          </span>
+        </div>
+        <dl class="siv__dates">
+          <div>
+            <dt>Fecha de factura</dt>
+            <dd>{{ (Model.invoiceDate | date: DisplayFormatDate) || '—' }}</dd>
+          </div>
+          <div>
+            <dt>Vencimiento</dt>
+            <dd>{{ (Model.dueDate | date: DisplayFormatDate) || '—' }}</dd>
+          </div>
+        </dl>
+      </div>
+    </header>
+
+    <div class="siv__layout">
+      <section class="siv__card">
+        <h3 class="siv__card-title">Documento</h3>
+        <dl class="siv__facts">
+          <div>
+            <dt>Cliente</dt>
+            <dd>{{ Model.customer || '—' }}</dd>
+          </div>
+          <div>
+            <dt>Número de factura</dt>
+            <dd class="siv__mono">{{ Model.invoiceNumber || '—' }}</dd>
+          </div>
+          <div>
+            <dt>Tipo de pago</dt>
+            <dd>{{ Model.paymentTypeName || '—' }}</dd>
+          </div>
+          <div>
+            <dt>Estado de pago</dt>
+            <dd>{{ Model.paymentStatusName || '—' }}</dd>
+          </div>
+        </dl>
+
+        <div class="siv__audit" role="status">
+          <div class="siv__audit-item">
+            <span class="siv__audit-label">
+              <i class="fas fa-user-edit" aria-hidden="true"></i>
+              Creado por
+            </span>
+            <span class="siv__audit-value">{{ Model.creatorUser || '—' }}</span>
+            <span class="siv__audit-meta siv__mono">{{ (Model.creationTime | date: DisplayFormatDateTime) || '—' }}</span>
+          </div>
+          <div class="siv__audit-item" *ngIf="Model.paid; else unpaidAudit">
+            <span class="siv__audit-label">
+              <i class="fas fa-calendar-check" aria-hidden="true"></i>
+              Pagado por
+            </span>
+            <span class="siv__audit-value">{{ Model.paidUser || '—' }}</span>
+            <span class="siv__audit-meta siv__mono">{{ (Model.paidAt | date: DisplayFormatDate) || '—' }}</span>
+          </div>
+          <ng-template #unpaidAudit>
+            <div class="siv__audit-item siv__audit-item--muted">
+              <span class="siv__audit-label">
+                <i class="fas fa-hourglass-half" aria-hidden="true"></i>
+                Pago
+              </span>
+              <span class="siv__audit-value">Pendiente</span>
+            </div>
+          </ng-template>
+        </div>
+      </section>
+
+      <section class="siv__card siv__card--ledger">
+        <h3 class="siv__card-title">Desglose</h3>
+        <dl class="siv__ledger">
+          <div>
+            <dt>Gravado 15%</dt>
+            <dd>{{ Model.taxableAmount | currency: Currency }}</dd>
+          </div>
+          <div>
+            <dt>Gravado 18%</dt>
+            <dd>{{ Model.taxableAmount18 | currency: Currency }}</dd>
+          </div>
+          <div>
+            <dt>Exento</dt>
+            <dd>{{ Model.exemptAmount | currency: Currency }}</dd>
+          </div>
+          <div>
+            <dt>Descuento</dt>
+            <dd>{{ Model.discount | currency: Currency }}</dd>
+          </div>
+          <div class="siv__ledger-row--sub">
+            <dt>Subtotal</dt>
+            <dd>{{ Model.subTotal | currency: Currency }}</dd>
+          </div>
+          <div>
+            <dt>ISV 15%</dt>
+            <dd>{{ Model.taxAmount | currency: Currency }}</dd>
+          </div>
+          <div>
+            <dt>ISV 18%</dt>
+            <dd>{{ Model.tax18Amount | currency: Currency }}</dd>
+          </div>
+          <div class="siv__ledger-row--total">
+            <dt>Total</dt>
+            <dd>{{ Model.total | currency: Currency }}</dd>
+          </div>
+          <div class="siv__ledger-row--balance" [class.siv__ledger-row--open]="Model.balance > 0">
+            <dt>Saldo</dt>
+            <dd>{{ Model.balance | currency: Currency }}</dd>
+          </div>
+        </dl>
+      </section>
+    </div>
+
+    <section class="siv__card siv__card--grid">
+      <div class="siv__grid-head">
+        <h3 class="siv__card-title">Ventas incluidas</h3>
+        <span class="siv__count"><strong>{{ Model.details?.length || 0 }}</strong> línea(s)</span>
+      </div>
+      <div class="siv__grid-wrap">
+        <dx-data-grid
+          id="dataGrid"
+          [dataSource]="Model.details"
+          [columns]="columns"
+          [remoteOperations]="false"
+          [allowColumnReordering]="true"
+          [rowAlternationEnabled]="true"
+          [showBorders]="true"
+          [columnAutoWidth]="true"
+          [pager]="false"
+          #GridView>
+          <div *dxTemplate="let data of 'dateTemplate'">
+            {{ data.value | date: DisplayFormatDate }}
+          </div>
+          <div *dxTemplate="let data of 'amountTemplate'">
+            {{ data.value | currency : Currency }}
+          </div>
+          <div *dxTemplate="let data of 'saleTemplate'">
+            <a href="javascript:void(0)" (click)="showSale(data.value)">{{ data.value }}</a>
+          </div>
+          <dxo-summary>
+            <dxi-total-item
+              column="amount"
+              summaryType="sum"
+              [customizeText]="dxCustomizeCurrency"
+              displayFormat="{0}">
+            </dxi-total-item>
+          </dxo-summary>
+        </dx-data-grid>
+      </div>
+    </section>
+
+    <div class="siv__actions">
+      <button type="button" class="siv__btn siv__btn--ghost" (click)="return()">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        Regresar
+      </button>
+      <button type="button" class="siv__btn siv__btn--file" (click)="showInvoiceFile()" *ngIf="Model.id" [appCanAccess]="['OPERATION.INVOICE_SALE.PRINT']">
+        <i class="fa fa-file-pdf" aria-hidden="true"></i>
+        Ver PDF
+      </button>
+      <button
+        type="button"
+        class="siv__btn siv__btn--primary"
+        (click)="payInvoice()"
+        *ngIf="Model.paymentStatus === 1"
+        [appCanAccess]="['OPERATION.INVOICE_SALE.MARK_PAID']">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        Pagar factura
+      </button>
+    </div>
+  </div>
+</panel>
+
+<app-create-or-update-sale #createOrUpdateSaleModal (modalSave)="loadInvoiceInfo()"></app-create-or-update-sale>

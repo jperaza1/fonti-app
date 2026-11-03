@@ -1,0 +1,123 @@
+<panel [title]="title" footerClass="dispatch-form-footer" panelClass="dispatch-form-panel">
+  <div class="dispatch-form">
+    <section class="dispatch-form__card dispatch-form__card--animate">
+      <h3 class="dispatch-form__legend">
+        <i class="fas fa-clipboard-list"></i>
+        Información del despacho
+      </h3>
+      <div class="row">
+        <div class="col-md-3 col-xs-12 dispatch-form__field">
+          <label class="dispatch-form__label">Fecha</label>
+          <dx-date-box #date [(value)]="model.dispatchControlDate" [disabled]="id > 0 && !update"></dx-date-box>
+        </div>
+        <div class="col-md-3 col-xs-12 dispatch-form__field">
+          <label class="dispatch-form__label">Ruta</label>
+          <dx-select-box #route [(value)]="model.routeId" [dataSource]="DxDataSourceRoute" displayExpr="name" valueExpr="id" [disabled]="id > 0 && !update" (onItemClick)="onRouteItemClick($event.itemData)"></dx-select-box>
+        </div>
+        <div class="col-md-3 col-xs-12 dispatch-form__field">
+          <label class="dispatch-form__label">Camión</label>
+          <span class="dispatch-form__truck">{{ model.truck }}</span>
+        </div>
+        <div class="col-md-3 col-xs-12 dispatch-form__field">
+          <label class="dispatch-form__label">Vendedor</label>
+          <dx-text-box #seller [(value)]="model.vendor" [disabled]="id > 0 && !update"></dx-text-box>
+        </div>
+      </div>
+    </section>
+
+    <section class="dispatch-form__card dispatch-form__card--animate dispatch-form__card--movements">
+      <div class="dispatch-form__card-header">
+        <div>
+          <h3 class="dispatch-form__legend dispatch-form__legend--flush">
+            <i class="fas fa-truck"></i>
+            Salida de equipo de la planta
+          </h3>
+          <p class="dispatch-form__hint">Carga inicial, recargas y retorno lleno del turno.</p>
+        </div>
+        <div class="dispatch-form__actions" *ngIf="id > 0 && update && model.status == 1">
+          <button type="button" class="dispatch-form__btn dispatch-form__btn--accent" (click)="addDetail(2)"
+          *ngIf="update">
+            <i class="fas fa-plus"></i>
+            Agregar recarga
+          </button>
+          <button type="button" class="dispatch-form__btn dispatch-form__btn--ghost" (click)="addDetail(3)"
+          *ngIf="id > 0 && update && model.status == 1">
+            <i class="fas fa-undo"></i>
+            Retorno lleno
+          </button>
+        </div>
+      </div>
+
+      <article
+        class="dispatch-movement"
+        *ngFor="let detail of model.dispatchControlDetails; let i = index"
+        [attr.data-type]="detail.dispatchControlType"
+        [style.animation-delay.ms]="i * 80">
+        <header class="dispatch-movement__head">
+          <span class="dispatch-movement__index">{{ i + 1 }}</span>
+          <div class="dispatch-movement__titles">
+            <span class="dispatch-movement__badge" *ngIf="detail.dispatchControlType == 1">
+              <i class="fas fa-sun"></i>
+              Salida por la mañana
+            </span>
+            <span class="dispatch-movement__badge" *ngIf="detail.dispatchControlType == 2">
+              <i class="fas fa-sync-alt"></i>
+              Recarga
+            </span>
+            <span class="dispatch-movement__badge" *ngIf="detail.dispatchControlType == 3">
+              <i class="fas fa-undo"></i>
+              Retorno lleno
+            </span>
+            <span class="dispatch-movement__caption" *ngIf="detail.dispatchControlType == 1">Equipo que sale de planta</span>
+            <span class="dispatch-movement__caption" *ngIf="detail.dispatchControlType == 2">Reposición en ruta</span>
+            <span class="dispatch-movement__caption" *ngIf="detail.dispatchControlType == 3">Inventario que regresa</span>
+          </div>
+        </header>
+
+        <div class="row dispatch-movement__products">
+          <div class="col-md-4 col-xs-12" *ngFor="let product of detail.productMovements">
+            <div class="dispatch-product">
+              <label class="dispatch-form__label">{{ product.product }}</label>
+              <dx-number-box #quantity [(value)]="product.quantity" [disabled]="!update"></dx-number-box>
+            </div>
+          </div>
+        </div>
+
+        <div class="row dispatch-movement__extras" *ngIf="detail.dispatchControlType != 3">
+          <div class="col-md-6 col-xs-12">
+            <div class="dispatch-product">
+              <label class="dispatch-form__label">Botes</label>
+              <dx-number-box #bottleQuantity [(value)]="detail.bottleQuantity" [disabled]="!update"></dx-number-box>
+            </div>
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <div class="dispatch-product">
+              <label class="dispatch-form__label">Cajas</label>
+              <dx-number-box #crateQuantity [(value)]="detail.crateQuantity" [disabled]="!update"></dx-number-box>
+            </div>
+          </div>
+        </div>
+
+        <div class="row dispatch-movement__notes" *ngIf="detail.dispatchControlType == 3">
+          <div class="col-md-6 col-xs-12">
+            <div class="dispatch-product">
+              <label class="dispatch-form__label">Botes faltantes</label>
+              <dx-number-box #missingBottleQuantity [(value)]="detail.missingBottleQuantity" [disabled]="!update"></dx-number-box>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <div footer class="dispatch-form__footer">
+    <button type="button" class="dispatch-form__btn dispatch-form__btn--ghost" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+      Regresar
+    </button>
+    <button type="button" class="dispatch-form__btn dispatch-form__btn--accent" (click)="save()" >
+      <i class="fas fa-save"></i>
+      Guardar
+    </button>
+  </div>
+</panel>

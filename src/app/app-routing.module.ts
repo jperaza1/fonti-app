@@ -136,6 +136,20 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'distributor',
+    loadChildren: () =>
+      import('./views/data/distributor/distributor.module').then((m) => m.DistributorModule),
+    data: { title: 'Distribuidores' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'truck',
+    loadChildren: () =>
+      import('./views/data/truck/truck.module').then((m) => m.TruckModule),
+    data: { title: 'Camiones' },
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'correlative',
     loadChildren: () =>
       import('./views/data/correlative/correlative.module').then((m) => m.CorrelativeModule),
@@ -147,6 +161,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./views/data/category/category.module').then((m) => m.CategoryModule),
     data: { title: 'Categorías' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'bank',
+    loadChildren: () =>
+      import('./views/data/bank/bank.module').then((m) => m.BankModule),
+    data: { title: 'Bancos' },
     canActivate: [AuthGuard],
   },
   {
@@ -164,10 +185,31 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'invoice-sale',
+    loadChildren: () =>
+      import('./views/operation/invoice-sale/invoice-sale.module').then((m) => m.InvoiceSaleModule),
+    data: { title: 'Facturas de Ventas' },
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'expense',
     loadChildren: () =>
       import('./views/operation/expense/expense.module').then((m) => m.ExpenseModule),
     data: { title: 'Gastos' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'payment',
+    loadChildren: () =>
+      import('./views/operation/payment/payment.module').then((m) => m.PaymentModule),
+    data: { title: 'Pagos' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'bank-account',
+    loadChildren: () =>
+      import('./views/operation/bank-account/bank-account.module').then((m) => m.BankAccountModule),
+    data: { title: 'Cuentas bancarias' },
     canActivate: [AuthGuard],
   },
   {
@@ -190,7 +232,49 @@ const routes: Routes = [
       import('./views/data/route/route.module').then((m) => m.RouteModule),
     data: { title: 'Rutas' },
     canActivate: [AuthGuard],
-  }
+  },
+  {
+    path: 'dispatch-control',
+    loadChildren: () =>
+      import('./views/operation/dispatch-control/dispatch-control.module').then((m) => m.DispatchControlModule),
+    data: { title: 'Control de Salidas' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'inventory',
+    loadChildren: () =>
+      import('./views/operation/inventory/inventory.module').then((m) => m.InventoryModule),
+    data: { title: 'Inventario' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'production',
+    loadChildren: () =>
+      import('./views/operation/production/production.module').then((m) => m.ProductionModule),
+    data: { title: 'Producción' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'kardex',
+    loadChildren: () =>
+      import('./views/operation/kardex/kardex.module').then((m) => m.KardexModule),
+    data: { title: 'Kardex' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'product-recipe',
+    loadChildren: () =>
+      import('./views/operation/product-recipe/product-recipe.module').then((m) => m.ProductRecipeModule),
+    data: { title: 'Recetas' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'unit-of-measure',
+    loadChildren: () =>
+      import('./views/operation/unit-of-measure/unit-of-measure.module').then((m) => m.UnitOfMeasureModule),
+    data: { title: 'Unidades de medida' },
+    canActivate: [AuthGuard],
+  },
 ]
 
 @NgModule({

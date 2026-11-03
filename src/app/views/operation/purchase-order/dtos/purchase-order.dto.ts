@@ -5,8 +5,6 @@ export class PurchaseOrderDto {
   reference: string;
   vendor: string;
   vendorId: number;
-  cafeteria: string;
-  cafeteriaId: number;
   total: number;
   quantity: number;
   date: Date;
@@ -31,6 +29,7 @@ export class PurchaseOrderDetailDto {
   id: number;
   purchaseOrderId: number;
   productId: number;
+  productVendorId: number;
   product: string;
   cost: number;
   quantity: number;

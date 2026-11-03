@@ -1,7 +1,5 @@
 import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { SwPush } from '@angular/service-worker';
 import { AppComponentBase } from '../../AppComponentBase';
-import { PwaService } from '../../pwa/pwa.service';
 import { UserAlertInfoDto } from '../auth/user/dtos/user-alert-info-dto';
 import { UserChartDto } from '../auth/user/dtos/user-chart-info-dto';
 import { UserService } from '../auth/user/user.service';
@@ -24,9 +22,7 @@ export class HomeComponent extends AppComponentBase implements OnInit {
 
   @ViewChild("alertPreview") alertPreview: AlertPreviewComponent;
 
-  constructor(private _pwaService: PwaService,
-    private _swPush: SwPush,
-    private _userService: UserService,
+  constructor(private _userService: UserService,
     private _autenticationService: AuthenticationService,
     
     

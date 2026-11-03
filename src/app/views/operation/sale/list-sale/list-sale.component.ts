@@ -61,23 +61,33 @@ export class ListSaleComponent extends AppComponentBase implements OnInit {
         cellTemplate: "actionTemplate",
       },
       {
+        dataField: "route",
+        caption: "Ruta",
+      },
+      {
+        dataField: "customerName",
+        caption: "Cliente",
+      },
+      {
+        dataField: "saleInvoiceId",
+        caption: "Factura",
+        width: "180",
+        cellTemplate: "invoiceNumberTemplate",
+      },
+      {
         dataField: "saleDate",
         caption: "Fecha de Venta",
         cellTemplate: "dateTemplate",
-      },
-      {
-        dataField: "amount",
-        caption: "Monto",
-        width: "180",
-        cellTemplate: "amountTemplate",
       },
       {
         dataField: "saleTypeName",
         caption: "Tipo de Venta",
       },
       {
-        dataField: "route",
-        caption: "Ruta",
+        dataField: "amount",
+        caption: "Monto",
+        width: "180",
+        cellTemplate: "amountTemplate",
       },
     ]
   }
@@ -130,7 +140,7 @@ export class ListSaleComponent extends AppComponentBase implements OnInit {
   }
 
   async getRoutes() {
-    let response = await this._routeService.getAll();
+    let response = await this._routeService.getActives();
     this.DxDataSourceRoute = this.getDataSourceDx(response);
   }
 

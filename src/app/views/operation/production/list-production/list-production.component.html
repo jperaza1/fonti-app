@@ -1,0 +1,53 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="row row-space-10">
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Fecha de inicio</label>
+        <dx-date-box [(value)]="filterModel.dateFrom" [(max)]="filterModel.dateTo" [displayFormat]="DisplayFormatDate"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Fecha de fin</label>
+        <dx-date-box [(value)]="filterModel.dateTo" [(min)]="filterModel.dateFrom" [displayFormat]="DisplayFormatDate"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <div>
+          <button type="button" class="btn btn-primary" (click)="search()">
+            <i class="fa fa-search"></i> Buscar
+          </button>
+          <button type="button" class="btn btn-success m-l-5" (click)="openCreate()" [appCanAccess]="['OPERATION.PRODUCTION.CREATE']">
+            <i class="fa fa-plus"></i> Abrir turno
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <dx-data-grid [dataSource]="productions" [showBorders]="true" [columnAutoWidth]="true" [rowAlternationEnabled]="true">
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]"></dxo-pager>
+    <dxo-search-panel [visible]="true"></dxo-search-panel>
+    <dxo-export [enabled]="true" fileName="Produccion"></dxo-export>
+    <dxi-column dataField="productionDate" caption="Fecha" dataType="date" [format]="DisplayFormatDate"></dxi-column>
+    <dxi-column dataField="shift" caption="Turno"></dxi-column>
+    <dxi-column dataField="status" caption="Estado"></dxi-column>
+    <dxi-column caption="" [width]="150" cellTemplate="actions" alignment="center"></dxi-column>
+    <div *dxTemplate="let row of 'actions'">
+      <button type="button" class="btn btn-primary btn-sm" (click)="openShift(row.data)" title="Abrir">
+        <i class="fa fa-folder-open"></i>
+      </button>
+      <button type="button" class="btn btn-warning btn-sm m-l-5" *ngIf="row.data.isActive && !row.data.isClosed" (click)="closeShift(row.data)" title="Cerrar turno" [appCanAccess]="['OPERATION.PRODUCTION.CLOSE']">
+        <i class="fa fa-lock"></i>
+      </button>
+      <button type="button" class="btn btn-danger btn-sm m-l-5" *ngIf="row.data.isActive && !row.data.isClosed" (click)="cancel(row.data)" title="Anular turno" [appCanAccess]="['OPERATION.PRODUCTION.CANCEL']">
+        <i class="fa fa-ban"></i>
+      </button>
+    </div>
+  </dx-data-grid>
+</panel>
+
+<app-create-production #createModal (modalSave)="search()"></app-create-production>

@@ -1,6 +1,6 @@
 <app-basic-table-list [title]="title" [columns]="columns" [dataSource]="DataSource" [appCanAccess]="[]"
-    [permissionAllowCreate]="['DATA.REGISTER.CREATE']" [permissionAllowUpdate]="['DATA.REGISTER.UPDATE']"
-    [permissionAllowDisable]="['DATA.REGISTER.DISABLE']" [permissionAllowEnable]="['DATA.REGISTER.ENABLE']"
+    [permissionAllowCreate]="['DATA.CUSTOMER.CREATE']" [permissionAllowUpdate]="['DATA.CUSTOMER.UPDATE']"
+    [permissionAllowDisable]="['DATA.CUSTOMER.DISABLE']" [permissionAllowEnable]="['DATA.CUSTOMER.ENABLE']"
     (onRefresh)="getAll()" (onNew)="create()" (onEdit)="update($event)" (onDisable)="disable($event)"
     (onEnable)="enable($event)">
 </app-basic-table-list>

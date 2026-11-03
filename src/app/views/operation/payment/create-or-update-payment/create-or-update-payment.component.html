@@ -1,0 +1,340 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="payment-create">
+    <div class="row-space-10">
+      <section class="col-md-12 col-xs-12">
+        <div class="row row-space-10" *ngIf="id === undefined">
+          <section class="col-md-12 col-xs-12">
+            <div class="payment-filters-card">
+              <p class="section-label">Criterios de búsqueda</p>
+              <div class="alert alert-info payment-filters-hint">
+                <p class="payment-filters-hint__text">
+                  Seleccione la cafetería y el rango de fechas para listar facturas pendientes de pago. Marque las filas para ver el total a pagar.
+                </p>
+              </div>
+              <div class="row row-space-10">
+                <section class="col-md-4 col-xs-12">
+                  <div class="form-group">
+                    <label>Fecha de inicio<i class="text-danger">*</i></label>
+                    <dx-date-box [(value)]="filterModel.startDate" [displayFormat]="DisplayFormatDate" [max]="filterModel.endDate"></dx-date-box>
+                    <app-validator-message [error]="errors" field="startDate"></app-validator-message>
+                  </div>
+                </section>
+                <section class="col-md-4 col-xs-12">
+                  <div class="form-group">
+                    <label>Fecha de fin<i class="text-danger">*</i></label>
+                    <dx-date-box [(value)]="filterModel.endDate" [displayFormat]="DisplayFormatDate" [min]="filterModel.startDate"></dx-date-box>
+                    <app-validator-message [error]="errors" field="endDate"></app-validator-message>
+                  </div>
+                </section>
+                <section class="col-md-4 col-xs-12">
+                  <div class="form-group payment-actions">
+                    <button type="button" class="btn btn-primary" (click)="getPendingInvoices()">Filtrar</button>
+                    
+                  </div>
+                </section>
+              </div>
+            </div>
+          </section>
+          <section class="col-md-12 col-xs-12" *ngIf="DxDataSourceInvoice.length > 0">
+            <p class="section-label section-label--below-filters">Facturas pendientes</p>
+            <div class="payment-grid-wrap">
+              <dx-data-grid
+                [dataSource]="DxDataSourceInvoice"
+                #invoiceGrid
+                (onSelectionChanged)="onInvoiceSelectionChanged()"
+                [remoteOperations]="false"
+                [allowColumnReordering]="true"
+                [rowAlternationEnabled]="true"
+                [showBorders]="true"
+                [columnAutoWidth]="true"
+                style="min-width: 100% !important;"
+              >
+                <dxo-paging [pageSize]="10"></dxo-paging>
+                <dxo-pager
+                  [showPageSizeSelector]="true"
+                  [allowedPageSizes]="[10, 25, 50, 100]"
+                ></dxo-pager>
+                <dxo-search-panel
+                  [visible]="true"
+                  [highlightCaseSensitive]="true"
+                  [remoteOperations]="false"
+                >
+                </dxo-search-panel>
+                <dxo-selection selectAllMode="allPages" showCheckBoxesMode="onClick" mode="multiple"></dxo-selection>
+                <dxi-column dataField="vendor" caption="Proveedor" width="250"></dxi-column>
+                <dxi-column dataField="invoiceNumber" caption="Número de factura" cellTemplate="invoiceNumberTemplate" width="150"></dxi-column>
+                <dxi-column dataField="invoiceDate" caption="Fecha de factura" cellTemplate="dateTemplate" width="150"></dxi-column>
+                <dxi-column dataField="balance" caption="Saldo" cellTemplate="amountTemplate" width="120"></dxi-column>
+                <dxi-column dataField="remainingDays" caption="Días restantes" width="120"></dxi-column>
+                <dxi-column dataField="bankName" caption="Banco" width="150"></dxi-column>
+                <dxi-column dataField="bankAccount" caption="Cuenta bancaria" width="120"></dxi-column>
+                <dxi-column dataField="description" caption="Notas" width="250"></dxi-column>
+                <div *dxTemplate="let data of 'invoiceNumberTemplate'">
+                  <a href="javascript:void(0)" (click)="openInvoicev2(data.data)">{{ formatInvoiceNumber(data.value) }}</a>
+                </div>
+                <div *dxTemplate="let data of 'dateTemplate'">
+                  {{ data.value | date: DisplayFormatDate }}
+                </div>
+                <div *dxTemplate="let data of 'amountTemplate'">
+                  {{ data.value | currency : Currency }}
+                </div>
+              </dx-data-grid>
+              <error-message [error]="errors" field="invoiceCount"></error-message>
+
+              <div class="payment-summary" [class.payment-summary--empty]="selectedInvoicesCount === 0">
+                <div class="payment-summary__meta">
+                  <span *ngIf="selectedInvoicesCount > 0">
+                    <strong>{{ selectedInvoicesCount }}</strong>
+                    {{ selectedInvoicesCount === 1 ? 'factura seleccionada' : 'facturas seleccionadas' }}
+                  </span>
+                  <span *ngIf="selectedInvoicesCount === 0">Ninguna factura seleccionada</span>
+                </div>
+                <div class="payment-summary__total">
+                  <span class="payment-summary__label">Total del pago</span>
+                  <span class="payment-summary__amount">
+                    {{ selectedInvoicesCount > 0 ? (selectedInvoicesTotal | currency : Currency) : '—' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="row row-space-10" style="padding-top: 10px;">
+          <section class="col-md-12 col-xs-12">
+            <div class="payment-filters-card">
+              <p class="section-label">Información del pago</p>
+              <div class="row row-space-10">
+                <section class="col-md-4 col-xs-12">
+                  <div class="form-group">
+                    <label>Fecha de pago<i class="text-danger">*</i></label>
+                    <dx-date-box [(value)]="Model.paymentDate" [displayFormat]="DisplayFormatDate" [disabled]="id !== undefined"></dx-date-box>
+                    <app-validator-message [error]="errors" field="paymentDate"></app-validator-message>
+                  </div>
+                </section>
+                <section class="col-md-4 col-xs-12">
+                  <div class="form-group">
+                    <label>Cuenta bancaria<i class="text-danger">*</i></label>
+                    <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+                      [dataSource]="DxDataSourceBankAccount" [(value)]="Model.bankAccountId" [disabled]="id !== undefined && !updatePaymentFlag">
+                    </dx-select-box>
+                    <app-validator-message [error]="errors" field="bankAccount"></app-validator-message>
+                  </div>
+                </section>
+                <section class="col-md-4 col-xs-12" *ngIf="id !== undefined">
+                  <div class="form-group">
+                    <label>Cafetería<i class="text-danger">*</i></label>
+                    <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+                      [dataSource]="DxDataSourceCafeteria" [(value)]="Model.cafeteriaId" [disabled]="true">
+                    </dx-select-box>
+                  </div>
+                </section>
+                <section class="col-md-4 col-xs-12" *ngIf="id !== undefined">
+                  <div class="form-group">
+                    <label>Estado<i class="text-danger">*</i></label>
+                    <dx-text-box [(value)]="Model.paymentStatusName" [disabled]="true"></dx-text-box>
+                  </div>
+                </section>
+                <section class="col-md-4 col-xs-12" *ngIf="id !== undefined && Model.paymentStatus !== 1">
+                  <div class="form-group">
+                    <label>Referencia<i class="text-danger">*</i></label>
+                    <dx-text-box [(value)]="Model.bankReference" [disabled]="Model.paymentStatus === 3"></dx-text-box>
+                  </div>
+                </section>
+                <section class="col-md-4 col-xs-12" *ngIf="id !== undefined">
+                  <div class="form-group">
+                    <label>Cantidad de facturas<i class="text-danger">*</i></label>
+                    <dx-text-box [(value)]="Model.invoiceCount" [disabled]="true"></dx-text-box>
+                  </div>
+                </section>
+                <section class="col-md-4 col-xs-12" *ngIf="id !== undefined">
+                  <div class="form-group">
+                    <label>Total a pagar<i class="text-danger">*</i></label>
+                    <dx-number-box #amount [showSpinButtons]="false" [format]="CurrencyDxNumber" [(value)]="Model.amount" [disabled]="true"></dx-number-box>
+                  </div>  
+                </section>
+                
+                <section class="col-md-12 col-xs-12">
+                  <div class="form-group">
+                    <label>Nota: </label>
+                    <dx-text-area [(value)]="Model.notes" [height]="100" [disabled]="id !== undefined"></dx-text-area>
+                    <app-validator-message [error]="errors" field="notes"></app-validator-message>
+                  </div>
+                </section>
+                <section class="col-md-12 col-xs-12" *ngIf="id !== undefined && Model.paymentStatus !== 3">
+                  <div class="payment-add-invoices">
+                    <button
+                      [appCanAccess]="['OPERATION.PAYMENT.ADD_INVOICES']"
+                      type="button"
+                      class="btn btn-primary"
+                      (click)="openAddInvoicesModal()">
+                      <i class="fa fa-plus"></i> Agregar Facturas
+                    </button>
+                  </div>
+                </section>
+                <section class="col-md-12 col-xs-12" *ngIf="id !== undefined">
+                  <dx-data-grid 
+                    [dataSource]="Model.details" 
+                    #detailsGrid
+                    [remoteOperations]="false"
+                    [allowColumnReordering]="true"
+                    [rowAlternationEnabled]="true"
+                    [showBorders]="true"
+                    [columnAutoWidth]="true">
+                    <dxi-column dataField="vendorName" caption="Proveedor"></dxi-column>
+                    <dxi-column dataField="invoiceNumber" caption="Número de factura" cellTemplate="invoiceNumberTemplate"></dxi-column>
+                    <dxi-column dataField="invoiceDate" caption="Fecha de factura" cellTemplate="dateTemplate"></dxi-column>
+                    <dxi-column dataField="bankName" caption="Banco"></dxi-column>
+                    <dxi-column dataField="bankAccount" caption="Cuenta bancaria"></dxi-column>
+                    <dxi-column dataField="amount" caption="Total" cellTemplate="amountTemplate"></dxi-column>
+                    <dxi-column dataField="invoiceNote" caption="Notas de la factura" width="250"></dxi-column>
+                    <dxi-column dataField="description" caption="Descripción" cellTemplate="descriptionTemplate"></dxi-column>
+                    <dxi-column dataField="id" caption="Acciones" cellTemplate="actionTemplate"></dxi-column>
+                    <div *dxTemplate="let data of 'invoiceNumberTemplate'">
+                      <a href="javascript:void(0)" (click)="openInvoice(data.data)">{{ formatInvoiceNumber(data.value) }}</a>
+                    </div>
+                    <div *dxTemplate="let data of 'dateTemplate'">
+                      {{ data.value | date: DisplayFormatDate }}
+                    </div>
+                    <div *dxTemplate="let data of 'amountTemplate'">
+                      {{ data.value | currency : Currency }}
+                    </div>
+                    <div *dxTemplate="let data of 'descriptionTemplate'">
+                      <dx-text-area [(value)]="data.data.description" [height]="100" [disabled]="Model.paymentStatus === 3"></dx-text-area>
+                    </div>
+                    <div *dxTemplate="let data of 'actionTemplate'">
+                      <button 
+                        [appCanAccess]="['OPERATION.PAYMENT.DELETE_DETAIL']"
+                        type="button" 
+                        class="btn btn-danger" 
+                        (click)="removeInvoice(data.data)" 
+                        title="Eliminar factura" 
+                        *ngIf="Model.paymentStatus !== 3"><i class="fa fa-trash"></i></button>
+                      <button 
+                        [appCanAccess]="['OPERATION.PAYMENT.VIEW_RECEIPT']"
+                        type="button" 
+                        class="btn btn-primary" 
+                        (click)="viewReceipt(data.data)" 
+                        title="Ver recibo" 
+                        *ngIf="Model.paymentStatus === 3"><i class="fa fa-file-pdf"></i></button>
+                    </div>
+                  </dx-data-grid>
+                </section>
+                <section class="col-md-6 col-xs-12" style="margin-top: 20px;">
+                  <button [appCanAccess]="['OPERATION.PAYMENT.CREATE']" type="button" class="btn btn-default" (click)="createPayment()" *ngIf="id === undefined"><i class="fa fa-plus"></i> Crear Pago</button>
+                  <button [appCanAccess]="['OPERATION.PAYMENT.UPDATE']" type="button" class="btn btn-primary" (click)="updatePayment()" *ngIf="id !== undefined && Model.paymentStatus !== 3"><i class="fa fa-save"></i> Guardar</button>
+                  <button [appCanAccess]="['OPERATION.PAYMENT.GENERATE_FILE']" type="button" class="btn btn-primary" (click)="generateFilePayment()" *ngIf="id !== undefined && Model.paymentStatus !== 3"><i class="fa fa-file-pdf"></i> Generar archivo de pago</button>
+                  <button [appCanAccess]="['OPERATION.PAYMENT.FINISH']" type="button" class="btn btn-success" (click)="finishPayment()" *ngIf="id !== undefined && Model.paymentStatus === 2"><i class="fa fa-check"></i> Finalizar Pago</button>
+                  <button type="button" class="btn btn-danger" (click)="closeTab()"><i class="fa fa-times"></i> Salir</button>
+                </section>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>
+  </div>
+</panel>
+
+<app-modal-with-option-buttons #addInvoicesModal title="Agregar facturas" size="xxl">
+  <div class="payment-create">
+    <div class="payment-filters-card">
+      <p class="section-label">Criterios de búsqueda</p>
+      <div class="alert alert-info payment-filters-hint">
+        <p class="payment-filters-hint__text">
+          Elija el rango de fechas y pulse Filtrar. Marque las facturas y pulse Agregar para incluirlas en el pago.
+        </p>
+      </div>
+      <div class="row row-space-10">
+        <section class="col-md-3 col-xs-12">
+          <div class="form-group">
+            <label>Fecha de inicio<i class="text-danger">*</i></label>
+            <dx-date-box [(value)]="filterModel.startDate" [displayFormat]="DisplayFormatDate" [max]="filterModel.endDate"></dx-date-box>
+          </div>
+        </section>
+        <section class="col-md-3 col-xs-12">
+          <div class="form-group">
+            <label>Fecha de fin<i class="text-danger">*</i></label>
+            <dx-date-box [(value)]="filterModel.endDate" [displayFormat]="DisplayFormatDate" [min]="filterModel.startDate"></dx-date-box>
+          </div>
+        </section>
+        <section class="col-md-3 col-xs-12">
+          <div class="form-group payment-actions">
+            <button type="button" class="btn btn-primary" (click)="getPendingInvoicesForAdd()">Filtrar</button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="alert alert-info payment-filters-hint" *ngIf="addInvoicesFiltered && DxDataSourceInvoice.length === 0">
+      <p class="payment-filters-hint__text">No hay facturas pendientes en el rango seleccionado.</p>
+    </div>
+
+    <div *ngIf="DxDataSourceInvoice.length > 0">
+      <p class="section-label section-label--below-filters">Facturas pendientes</p>
+      <div class="payment-grid-wrap">
+        <dx-data-grid
+          [dataSource]="DxDataSourceInvoice"
+          (onSelectionChanged)="onAddInvoiceSelectionChanged($event)"
+          (onContentReady)="onAddInvoicesGridReady($event)"
+          [remoteOperations]="false"
+          [allowColumnReordering]="true"
+          [rowAlternationEnabled]="true"
+          [showBorders]="true"
+          [columnAutoWidth]="true"
+          style="min-width: 100% !important;"
+        >
+          <dxo-paging [pageSize]="10"></dxo-paging>
+          <dxo-pager
+            [showPageSizeSelector]="true"
+            [allowedPageSizes]="[10, 25, 50, 100]"
+          ></dxo-pager>
+          <dxo-search-panel
+            [visible]="true"
+            [highlightCaseSensitive]="true"
+            [remoteOperations]="false"
+          >
+          </dxo-search-panel>
+          <dxo-selection selectAllMode="allPages" showCheckBoxesMode="onClick" mode="multiple"></dxo-selection>
+          <dxi-column dataField="vendor" caption="Proveedor" width="250"></dxi-column>
+          <dxi-column dataField="invoiceNumber" caption="Número de factura" cellTemplate="addInvoiceNumberTemplate" width="150"></dxi-column>
+          <dxi-column dataField="invoiceDate" caption="Fecha de factura" cellTemplate="addDateTemplate" width="150"></dxi-column>
+          <dxi-column dataField="balance" caption="Saldo" cellTemplate="addAmountTemplate" width="120"></dxi-column>
+          <dxi-column dataField="remainingDays" caption="Días restantes" width="120"></dxi-column>
+          <dxi-column dataField="bankName" caption="Banco" width="150"></dxi-column>
+          <dxi-column dataField="bankAccount" caption="Cuenta bancaria" width="120"></dxi-column>
+          <dxi-column dataField="description" caption="Notas" width="250"></dxi-column>
+          <div *dxTemplate="let data of 'addInvoiceNumberTemplate'">
+            <a href="javascript:void(0)" (click)="openInvoicev2(data.data)">{{ formatInvoiceNumber(data.value) }}</a>
+          </div>
+          <div *dxTemplate="let data of 'addDateTemplate'">
+            {{ data.value | date: DisplayFormatDate }}
+          </div>
+          <div *dxTemplate="let data of 'addAmountTemplate'">
+            {{ data.value | currency : Currency }}
+          </div>
+        </dx-data-grid>
+
+        <div class="payment-summary" [class.payment-summary--empty]="modalSelectedCount === 0">
+          <div class="payment-summary__meta">
+            <span *ngIf="modalSelectedCount > 0">
+              <strong>{{ modalSelectedCount }}</strong>
+              {{ modalSelectedCount === 1 ? 'factura seleccionada' : 'facturas seleccionadas' }}
+            </span>
+            <span *ngIf="modalSelectedCount === 0">Ninguna factura seleccionada</span>
+          </div>
+          <div class="payment-summary__actions" *ngIf="modalSelectedCount > 0">
+            <button type="button" class="btn btn-success" (click)="addSelectedInvoices()">
+              <i class="fa fa-plus"></i> Agregar
+            </button>
+          </div>
+          <div class="payment-summary__total">
+            <span class="payment-summary__label">Total del pago</span>
+            <span class="payment-summary__amount">
+              {{ modalSelectedCount > 0 ? (modalSelectedTotal | currency : Currency) : '—' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal-with-option-buttons>

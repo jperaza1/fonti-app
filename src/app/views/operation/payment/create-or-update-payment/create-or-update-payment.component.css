@@ -1,0 +1,141 @@
+/* Alineado con docs/design-line.md — cards, accent #0d9488 */
+
+.payment-create {
+  max-width: 100%;
+}
+
+.payment-filters-card {
+  background: #ffffff;
+  border: 1px solid rgba(13, 148, 136, 0.3);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem 1.5rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.payment-filters-card .section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin: 0 0 1rem;
+}
+
+.payment-filters-card .alert {
+  border-radius: 12px;
+  border: none;
+  background: rgba(13, 148, 136, 0.08);
+  color: #0f172a;
+}
+
+.payment-filters-hint {
+  margin-bottom: 1.25rem;
+}
+
+.payment-filters-hint__text {
+  margin: 0;
+}
+
+.section-label--below-filters {
+  margin-bottom: 0.75rem;
+}
+
+.payment-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.payment-actions .btn {
+  border-radius: 8px;
+}
+
+.payment-add-invoices {
+  margin-bottom: 0.75rem;
+}
+
+.payment-add-invoices .btn {
+  border-radius: 8px;
+}
+
+.payment-summary__actions .btn {
+  border-radius: 8px;
+}
+
+.payment-grid-wrap {
+  background: #ffffff;
+  border: 1px solid rgba(13, 148, 136, 0.25);
+  border-radius: 16px;
+  padding: 1rem 1rem 0;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.payment-grid-wrap ::ng-deep .dx-datagrid {
+  border-radius: 12px;
+}
+
+.payment-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #f0fdfa 0%, #e0f2f1 100%);
+  border: 1px solid rgba(13, 148, 136, 0.35);
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+}
+
+.payment-summary__meta {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.payment-summary__meta strong {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.payment-summary__total {
+  text-align: right;
+}
+
+.payment-summary__label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #115e59;
+  margin-bottom: 0.25rem;
+}
+
+.payment-summary__amount {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #0f766e;
+  line-height: 1.2;
+}
+
+.payment-summary--empty .payment-summary__amount {
+  color: #64748b;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+@media (max-width: 576px) {
+  .payment-summary {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .payment-summary__total {
+    text-align: left;
+  }
+}

@@ -47,8 +47,6 @@ import { NgxMaskModule } from 'ngx-mask';
 import { LoaderComponent } from './views/loader/loader.component';
 import { HomeModule } from './views/home/home.module';
 import { ConfigService } from '../_services/ConfigService';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
 import { SharedService } from '../_services/SharedSvc.service';
 import { MainPipe } from './pipes/main-pipe.module';
 
@@ -94,7 +92,6 @@ export const configFactory = (configService: ConfigService) => {
 		NgxMaskModule.forRoot(),
 		HomeModule,
     MainPipe,
-		ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
 	],
 	providers: [Title, {
 		provide: PERFECT_SCROLLBAR_CONFIG,

@@ -24,9 +24,9 @@ export class ExpenseService {
       .toPromise();
   }
 
-  create(model: ExpenseDto): Promise<RequestResult> {
+  create(formData: FormData): Promise<RequestResult> {
     return this.http
-      .post<RequestResult>(`${this._config.config.data}Expense/Create`, model)
+      .post<RequestResult>(`${this._config.config.data}Expense/Create`, formData)
       .toPromise();
   }
 

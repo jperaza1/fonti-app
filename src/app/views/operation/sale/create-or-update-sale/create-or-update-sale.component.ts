@@ -31,6 +31,7 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
 
   DxDataSourceRoute: any = {};
   DxDataSourceSaleType: any = {};
+  DxDataSourceCustomer: any = {};
   currentUser: User;
 
   @ViewChild("entityComponent") entityComponent: ModalWithOptionButtonsComponent;
@@ -41,6 +42,7 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
   constructor(
     private _saleService: SaleService,
     private _routeService: RouteService,
+    private _customerService: CustomerService,
     private _enumDefinitionsService: EnumDefinitionsService,
     private _authenticationService: AuthenticationService,
   ) { 
@@ -63,7 +65,7 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
   }
 
   async getRoutes() {
-    const response = await this._routeService.getAll();
+    const response = await this._routeService.getActives();
     this.DxDataSourceRoute = this.getDataSourceDx(response);
   }
 
@@ -72,6 +74,12 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
     this.errors = {};
     await this.getRoutes();
     await this.getSaleTypes();
+    await this.getCustomers();
+  }
+
+  async getCustomers() {
+    const response = await this._customerService.getAllActive();
+    this.DxDataSourceCustomer = this.getDataSourceDx(response);
   }
 
   setButtonOptions(update?: boolean | null) {

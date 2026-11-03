@@ -1,0 +1,15 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" [size]="'xxxl'">
+  <div>
+    <div class="row row-space-10">
+      <section class="col-md-6 col-xs-12">
+        <div class="form-group">
+          <label for="name">Nombre<i class="text-danger">*</i></label>
+          <dx-text-box #name [(value)]="Model.name" placeholder="Ej: Libra, Unidad">
+          </dx-text-box>
+          <app-validator-message [error]="errors" field="name"></app-validator-message>
+        </div>
+      </section>
+    </div>
+  </div>
+</app-modal-with-option-buttons>

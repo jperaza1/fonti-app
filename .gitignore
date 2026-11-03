@@ -49,3 +49,5 @@ Thumbs.db
 *.wmv
 
 dist.rar
+# Contraseña local de Web Deploy. No se versiona.
+.deploy-password

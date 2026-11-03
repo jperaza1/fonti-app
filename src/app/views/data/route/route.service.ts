@@ -35,6 +35,12 @@ export class RouteService {
       .toPromise();
   }
 
+  getAvalible(): Promise<RouteDto[]> {
+    return this.http
+      .get<RouteDto[]>(`${this._config.config.data}Route/GetAvalible`)
+      .toPromise();
+  }
+
   create(model: RouteDto): Promise<RequestResult> {
     return this.http
       .post<RequestResult>(`${this._config.config.data}Route/Create`, model)

@@ -39,11 +39,6 @@ export class ListUserComponent extends AppComponentBase implements OnInit {
         allowEditing: false
       },
       {
-        dataField: "email",
-        caption: "Email",
-        allowEditing: false
-      },
-      {
         dataField: "userTypeText",
         caption: "User Type",
         allowEditing: false

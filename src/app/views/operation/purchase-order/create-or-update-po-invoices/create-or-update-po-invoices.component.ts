@@ -118,7 +118,7 @@ export class CreateOrUpdatePoInvoicesComponent extends AppComponentBase implemen
     await this.initializeView();
     this.Model = new PurchaseOrderInvoiceDto();
     this.setButtonOptions();
-    this.Model.purchaseOrderId = purchaseOrderId;
+    //this.Model.purchaseOrderId = purchaseOrderId;
     await this.searchVendor(vendorId);
     // Limpiar documentos al agregar nueva factura
     this.DocumentsDataSource = [];

@@ -11,7 +11,7 @@
     <br />
     <hr *ngIf="optionButtons != null && optionButtons.length > 0" class="cod-modal-separator" />
     <button *ngFor="let option of optionButtons" [className]="'option-button ' + option.btnClass"
-      (click)="onOptionButtonClicked(option)" [appCanAccess]="option.permission">
+      (click)="onOptionButtonClicked(option)" [appCanAccess]="option.permission" [disabled]="option.disabled">
       <i *ngIf="!isEmptyOrNullString(option.btnIcon)" [className]="option.btnIcon"></i>
       {{option.btnText}}
     </button>

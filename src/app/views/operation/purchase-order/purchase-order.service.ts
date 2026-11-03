@@ -7,6 +7,7 @@ import { FilterPurchaseOrderDto } from './dtos/filter-purchase-order.dto';
 import { PurchaseOrderInvoiceDto } from '../invoice/dtos/purchase-order-invoice.dto';
 import { PivotPurchaseOrderDto } from './dtos/pivot-purchase-order.dto';
 import { ExpenseReportFilterDto } from './dtos/expense-report-filter.dto';
+import { ApprovePriceRequestDto, PriceApprovalDto } from './dtos/price-approval.dto';
 
 @Injectable({ providedIn: 'root' })
 export class PurchaseOrderService {
@@ -68,6 +69,14 @@ export class PurchaseOrderService {
 
   cancelPurchaseOrder(model: any): Promise<RequestResult> {
     return this.http.post<RequestResult>(`${this._config.config.data}PurchaseOrder/Cancel`, model).toPromise();
+  }
+
+  getPriceApproval(token: string): Promise<PriceApprovalDto> {
+    return this.http.get<PriceApprovalDto>(`${this._config.config.data}PriceApproval/GetByToken?token=${token}`).toPromise();
+  }
+
+  resolvePriceApproval(dto: ApprovePriceRequestDto): Promise<RequestResult> {
+    return this.http.post<RequestResult>(`${this._config.config.data}PriceApproval/Resolve`, dto).toPromise();
   }
 
 

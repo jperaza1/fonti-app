@@ -1,22 +1,159 @@
 <app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
   (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" [size]="'xxxl'">
-  <div class="row row-space-10">
-    <section class="col-md-6 col-xs-12">
-      <div class="form-group">
-        <label for="name">Nombre<i class="text-danger">*</i></label>
-        <dx-text-box #name [(value)]="Model.name">
-        </dx-text-box>
-        <app-validator-message [error]="errors" field="name"></app-validator-message>
+  <div class="product-form">
+    <div class="product-form__section product-form__section--animate">
+      <div class="product-form__legend">
+        <i class="fas fa-box"></i> Información general
       </div>
-    </section>
-    <section class="col-md-6 col-xs-12">
-      <div class="form-group">
-        <label for="name">Tipo de Producto<i class="text-danger">*</i></label>
-        <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
-          [dataSource]="DxDataSourceProductType" [(value)]="Model.productType">
-        </dx-select-box>
-        <app-validator-message [error]="errors" field="productType"></app-validator-message>
+      <p class="product-form__hint">Defina el nombre, tipo e impuesto del producto.</p>
+
+      <div class="row row-space-10">
+        <section class="col-md-6 col-xs-12">
+          <div class="form-group">
+            <label class="product-form__label" for="productName">Nombre <i class="text-danger">*</i></label>
+            <dx-text-box #name id="productName" [(value)]="Model.name" placeholder="Ej: Agua 5 galones...">
+            </dx-text-box>
+            <app-validator-message [error]="errors" field="name"></app-validator-message>
+          </div>
+        </section>
+
+        <section class="col-md-6 col-xs-12">
+          <div class="form-group">
+            <label class="product-form__label" for="productType">Tipo de producto <i class="text-danger">*</i></label>
+            <dx-select-box
+              id="productType"
+              displayExpr="text"
+              valueExpr="value"
+              [searchEnabled]="true"
+              [dataSource]="DxDataSourceProductType"
+              [(value)]="Model.productType"
+              placeholder="Seleccione tipo...">
+            </dx-select-box>
+            <app-validator-message [error]="errors" field="productType"></app-validator-message>
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
+
+    <div class="product-form__section product-form__section--animate" *ngIf="Model.productType == rawMaterialType">
+      <div class="product-form__legend">
+        <i class="fas fa-balance-scale"></i> Materia prima
+      </div>
+      <p class="product-form__hint">La unidad es la del inventario. El costo se registra por proveedor y solo aplica a materia prima.</p>
+      <div class="row row-space-10">
+        <section class="col-md-6 col-xs-12">
+          <div class="form-group">
+            <label class="product-form__label">Unidad de medida <i class="text-danger">*</i></label>
+            <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
+              [items]="units" [(value)]="Model.unitOfMeasureId" placeholder="Seleccione unidad...">
+            </dx-select-box>
+            <app-validator-message [error]="errors" field="unitOfMeasureId"></app-validator-message>
+          </div>
+        </section>
+      </div>
+
+      <div class="product-form__legend product-form__legend--next">
+        <i class="fas fa-truck"></i> Proveedores
+      </div>
+      <p class="product-form__hint">El inventario usa el costo unitario del primer proveedor activo de la lista.</p>
+      <p class="product-form__hint" *ngIf="Model.cost != null">Costo unitario actual del inventario: {{ Model.cost | currency : Currency }}</p>
+      <div class="row row-space-10 align-items-end">
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="product-form__label">Proveedor <i class="text-danger">*</i></label>
+            <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+              [dataSource]="DxDataSourceVendor" [(value)]="productVendor.vendorId"
+              placeholder="Seleccione proveedor...">
+            </dx-select-box>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="product-form__label">Unidad del proveedor <i class="text-danger">*</i></label>
+            <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
+              [items]="units" [(value)]="productVendor.unitOfMeasureId" placeholder="Seleccione unidad...">
+            </dx-select-box>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="product-form__label">Unidades por medida <i class="text-danger">*</i></label>
+            <dx-number-box [(value)]="productVendor.unit" [min]="0" format="#,##0"></dx-number-box>
+          </div>
+        </section>
+        <section class="col-md-3 col-xs-12">
+          <div class="form-group">
+            <label class="product-form__label">Costo <i class="text-danger">*</i></label>
+            <dx-number-box [(value)]="productVendor.cost" [min]="0" [format]="CurrencyDxNumber"></dx-number-box>
+          </div>
+        </section>
+        <section class="col-md-3 col-xs-12">
+          <div class="form-group">
+            <label class="product-form__label">Costo unitario <i class="text-danger">*</i></label>
+            <dx-number-box [(value)]="productVendor.unitCost" [min]="0" [format]="CurrencyDxNumber"></dx-number-box>
+          </div>
+        </section>
+        <section class="col-md-3 col-xs-12">
+          <div class="form-group">
+            <label class="product-form__label">Descuento</label>
+            <dx-number-box [(value)]="productVendor.discount" [min]="0" [format]="CurrencyDxNumberWithThrees"></dx-number-box>
+          </div>
+        </section>
+        <section class="col-md-3 col-xs-12 product-form__add">
+          <div class="form-group">
+            <button type="button" class="product-form__btn-add" (click)="addProductVendor()">
+              <i class="fas fa-plus"></i> Agregar
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <div class="product-form__grid-wrapper">
+        <dx-data-grid
+          [dataSource]="Model.productVendors"
+          [showBorders]="true"
+          [columnAutoWidth]="true"
+          [rowAlternationEnabled]="true">
+          <dxo-editing mode="cell" [allowUpdating]="true" [allowAdding]="false" [allowDeleting]="false"></dxo-editing>
+          <dxi-column dataField="vendorName" caption="Proveedor" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="unitOfMeasureName" caption="Unidad" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="unit" caption="Unidades por medida" dataType="number"></dxi-column>
+          <dxi-column dataField="cost" caption="Costo" dataType="number" cellTemplate="amountTemplate"></dxi-column>
+          <dxi-column dataField="unitCost" caption="Costo unitario" dataType="number" cellTemplate="amountTemplate"></dxi-column>
+          <dxi-column dataField="discount" caption="Descuento" dataType="number" cellTemplate="amountTemplate"></dxi-column>
+          <dxi-column dataField="isActive" caption="Estado" [allowEditing]="false" cellTemplate="isActiveTemplate"></dxi-column>
+          <dxi-column caption="" [width]="70" [allowEditing]="false" cellTemplate="actionTemplate"></dxi-column>
+          <div *dxTemplate="let data of 'amountTemplate'">
+            <span>{{ data.value | currency : Currency }}</span>
+          </div>
+          <div *dxTemplate="let data of 'isActiveTemplate'">
+            <span *ngIf="data.data.isActive">Activo</span>
+            <span *ngIf="!data.data.isActive">Inactivo</span>
+          </div>
+          <div *dxTemplate="let data of 'actionTemplate'">
+            <button type="button" class="btn btn-danger btn-sm" (click)="removeProductVendor(data.data)" *ngIf="data.data.isActive" title="Desactivar">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+            <button type="button" class="btn btn-success btn-sm" (click)="activateProductVendor(data.data)" *ngIf="!data.data.isActive" title="Activar">
+              <i class="fas fa-check-circle"></i>
+            </button>
+          </div>
+        </dx-data-grid>
+        <app-validator-message [error]="errors" field="details"></app-validator-message>
+      </div>
+    </div>
+
+    <div class="product-form__section product-form__section--tax product-form__section--animate">
+      <div class="product-form__legend">
+        <i class="fas fa-percent"></i> Impuesto
+      </div>
+      <label class="product-form__tax-toggle" for="productTax">
+        <div class="product-form__tax-copy">
+          <span class="product-form__tax-title">Aplica impuesto</span>
+          <span class="product-form__tax-hint">Indica si este producto está gravado.</span>
+        </div>
+        <dx-check-box id="productTax" [(value)]="Model.tax"></dx-check-box>
+      </label>
+    </div>
   </div>
 </app-modal-with-option-buttons>

@@ -1,0 +1,77 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" [size]="'xxxl'">
+  <div>
+    <p class="text-muted">
+      La bobina se carga como cantidad 1 que produce 230 bolsas, y el paquete agrupa las unidades de abajo.
+      La bolsa 1.5 x 2.5 se marca por paquete.
+    </p>
+    <div class="row row-space-10">
+      <section class="col-md-6 col-xs-12">
+        <div class="form-group">
+          <label>Producto de venta<i class="text-danger">*</i></label>
+          <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
+            [items]="saleProducts" [(value)]="Model.productId" placeholder="Seleccione producto...">
+          </dx-select-box>
+          <app-validator-message [error]="errors" field="productId"></app-validator-message>
+        </div>
+      </section>
+      <section class="col-md-6 col-xs-12">
+        <div class="form-group">
+          <label>Unidades por paquete<i class="text-danger">*</i></label>
+          <dx-number-box [(value)]="Model.unitsPerPackage" [min]="0" [showSpinButtons]="true" format="#,##0.######">
+          </dx-number-box>
+          <app-validator-message [error]="errors" field="unitsPerPackage"></app-validator-message>
+        </div>
+      </section>
+    </div>
+
+    <div class="m-b-10">
+      <button type="button" class="btn btn-primary btn-sm" (click)="addDetail()">
+        <i class="fa fa-plus"></i> Insumo
+      </button>
+    </div>
+    <app-validator-message [error]="errors" field="details"></app-validator-message>
+
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Materia prima</th>
+            <th>Cantidad</th>
+            <th>Por paquete</th>
+            <th>Produce</th>
+            <th>Por unidad</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let detail of Model.details; let i = index">
+            <td>
+              <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
+                [items]="rawMaterials" [(value)]="detail.rawMaterialProductId" placeholder="Insumo...">
+              </dx-select-box>
+            </td>
+            <td style="width: 140px;">
+              <dx-number-box [(value)]="detail.quantity" [min]="0" format="#,##0.######"></dx-number-box>
+            </td>
+            <td style="width: 110px;" class="text-center">
+              <dx-check-box [(value)]="detail.perPackage"></dx-check-box>
+            </td>
+            <td style="width: 140px;">
+              <dx-number-box [(value)]="detail.producedUnits" [min]="0" [disabled]="detail.perPackage" format="#,##0.######"></dx-number-box>
+            </td>
+            <td style="width: 120px;">{{ quantityPerUnit(detail) | number:'1.0-6' }}</td>
+            <td style="width: 60px;">
+              <button type="button" class="btn btn-danger btn-sm" (click)="removeDetail(i)">
+                <i class="fa fa-times"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-validator-message [error]="errors" field="quantity"></app-validator-message>
+    <app-validator-message [error]="errors" field="producedUnits"></app-validator-message>
+    <app-validator-message [error]="errors" field="rawMaterialProductId"></app-validator-message>
+  </div>
+</app-modal-with-option-buttons>

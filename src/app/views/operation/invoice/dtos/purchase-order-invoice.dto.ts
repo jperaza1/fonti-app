@@ -4,7 +4,6 @@ import { PaymentDto } from "../../payment/dtos/payment.dto";
 
 export class PurchaseOrderInvoiceDto {
   id: number;
-  purchaseOrderId: number;
   invoiceNumber: string;
   description: string;
   invoiceDate: Date;
@@ -22,15 +21,11 @@ export class PurchaseOrderInvoiceDto {
   paymentType: PaymentType;
   paymentTypeName: string;
   vendorName: string;
-  purchaseOrder: string;
-  invoiceType: number;
-  invoiceTypeName: string;
   paymentStatus: number;
   paymentStatusName: string;
-  cafeteriaId: number;
-  cafeteria: string;
+  routeId: number;
+  route: string;
   vendorId: number;
-  vendor: string;
   remainingDays: number;
   payments: PaymentDto[];
   categoryId: number;
@@ -41,6 +36,11 @@ export class PurchaseOrderInvoiceDto {
   documentId: number;
   fileUploadedUser: string;
   fileUploadedAt: Date;
+  isRefound: boolean;
+  truckName: string;
+  truckId: number;
+  bankName: string;
+  bankAccount: string;
 
 
   constructor() {

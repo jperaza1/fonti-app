@@ -40,6 +40,7 @@ export class AuthenticationService {
 		currentUserAuth.userType = user.userAuth.userType;
 		currentUserAuth.identity = user.userAuth.identity;
     currentUserAuth.cafeteriaId = user.userAuth.cafeteriaId;
+    currentUserAuth.routes = user.userAuth.routes || [];
 		localStorage.setItem('currentUser', JSON.stringify(currentUserAuth));
 		this.currentUserSubject.next(currentUserAuth);
 	}

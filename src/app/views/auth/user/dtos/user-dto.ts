@@ -1,10 +1,8 @@
 export class UserDto {
     username: string;
     password: string;
-    email: string;
     firstName: string;
     lastName: string;
-    phone: string;
     extension: string;
     userType: number;
     userTypeText: number;
@@ -18,15 +16,15 @@ export class UserDto {
     newPassword: string;
     isActive: boolean;
     roleIds: number[];
+    routes: number[];
     userCharts: number[];
     userAlerts: number[];
-    cafeteriaId: number;
-    cafeteria: string;
     userId: string;
     /**
      *
      */
     constructor() {
         this.roleIds = [];
+        this.routes = [];
     }
 }

@@ -90,6 +90,10 @@ export class ListExpenseComponent extends AppComponentBase implements OnInit {
         caption: 'Ruta',
       },
       {
+        dataField: 'truckName',
+        caption: 'Camión',
+      },
+      {
         dataField: 'categoryName',
         caption: 'Categoría',
       },
@@ -102,24 +106,25 @@ export class ListExpenseComponent extends AppComponentBase implements OnInit {
         caption: 'Proveedor',
       },
       {
+        caption: 'Nº factura',
+        dataField: 'invoiceNumber',
+        cellTemplate: 'invoiceNumberTemplate',
+      },
+      {
         dataField: 'date',
         caption: 'Fecha',
         cellTemplate: 'dateTemplate',
       },
       {
-        caption: 'Nº factura',
-        calculateCellValue: (row: ExpenseDto) =>
-          row?.expenseInvoice?.invoiceNumber || '',
+        dataField: 'notes',
+        caption: 'Notas',
       },
       {
         dataField: 'total',
         caption: 'Total',
         cellTemplate: 'amountTemplate',
       },
-      {
-        dataField: 'notes',
-        caption: 'Notas',
-      },
+      
     ];
   }
 

@@ -1,0 +1,13 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" [size]="'xxxl'">
+  <dx-data-grid [dataSource]="movements" [showBorders]="true" [columnAutoWidth]="true" [rowAlternationEnabled]="true">
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxi-column dataField="movementDate" caption="Fecha" dataType="date" [format]="DisplayFormatDate"></dxi-column>
+    <dxi-column dataField="movementTypeName" caption="Movimiento"></dxi-column>
+    <dxi-column dataField="quantity" caption="Cantidad" format="#,##0.######"></dxi-column>
+    <dxi-column dataField="balance" caption="Saldo" format="#,##0.######"></dxi-column>
+    <dxi-column dataField="unitCost" caption="Costo" format="#,##0.00"></dxi-column>
+    <dxi-column dataField="sourceProduct" caption="Por receta de"></dxi-column>
+    <dxi-column dataField="note" caption="Nota"></dxi-column>
+  </dx-data-grid>
+</app-modal-with-option-buttons>

@@ -15,5 +15,6 @@ export class UserAuthenticateResponse {
     userType: number;
 	  identity: string;
     cafeteriaId: number;
+    routes: number[];
     permissions: string[];
 }

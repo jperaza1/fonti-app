@@ -90,12 +90,29 @@ export class CreateOrUpdateRouteComponent extends AppComponentBase implements On
       this.error('Error', 'El producto es requerido');
       return;
     }
-    if(this.isEmptyOrNullNumber(this.detail.price)) {
-      this.error('Error', 'El precio es requerido');
+    if(!this.isValidPrice(this.detail.price)) {
+      this.error('Error', this.priceError(this.detail.price));
       return;
     }
     this.Model.productRoutePrices.push(this.detail);
     this.detail = new ProductRoutePricesDto();
+  }
+
+  isValidPrice(price: number): boolean {
+    if (price == null || price == undefined || price < 0) {
+      return false;
+    }
+    return this.Model.deliversRegalia || price > 0;
+  }
+
+  priceError(price: number): string {
+    if (price == null || price == undefined) {
+      return 'El precio es requerido';
+    }
+    if (this.Model.deliversRegalia) {
+      return 'El precio no puede ser negativo';
+    }
+    return 'El precio debe ser mayor a 0';
   }
 
   validResponse(requestResult: RequestResult) {
@@ -110,6 +127,14 @@ export class CreateOrUpdateRouteComponent extends AppComponentBase implements On
   }
 
   async save() {
+    const invalidPrice = this.Model.productRoutePrices.find(item => !this.isValidPrice(item.price));
+    if (invalidPrice) {
+      this.error('Error', this.Model.deliversRegalia
+        ? 'El precio no puede ser negativo'
+        : 'Esta ruta no entrega regalía. Los precios deben ser mayores a 0');
+      return;
+    }
+
     if (this.isEmptyOrNullNumber(this.Model.id)) {
       const createResponse = await this._routeService.create(this.Model);
       this.validResponse(createResponse);

@@ -6,6 +6,7 @@
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
     "build": "ng build --prod && cpx web.config dist/",
+    "deploy": "bash scripts/deploy.sh",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -24,7 +25,6 @@
     "@angular/platform-browser": "^9.1.9",
     "@angular/platform-browser-dynamic": "^9.1.9",
     "@angular/router": "^9.1.9",
-    "@angular/service-worker": "^9.1.9",
     "@aspnet/signalr": "^1.1.4",
     "@fullcalendar/core": "^4.2.0",
     "@fullcalendar/daygrid": "^4.2.0",

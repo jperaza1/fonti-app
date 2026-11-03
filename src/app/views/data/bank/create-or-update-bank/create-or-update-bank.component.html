@@ -1,0 +1,31 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" [size]="'xxxl'">
+  <div>
+    <div class="row row-space-10">
+      <section class="col-md-6 col-xs-12">
+        <div class="form-group">
+          <label for="name">Nombre<i class="text-danger">*</i></label>
+          <dx-text-box #name [(value)]="Model.name">
+          </dx-text-box>
+          <app-validator-message [error]="errors" field="name"></app-validator-message>
+        </div>
+      </section>
+      <section class="col-md-6 col-xs-12">
+        <div class="form-group">
+          <label for="alias">Alias<i class="text-danger">*</i></label>
+          <dx-text-box #alias [(value)]="Model.alias">
+          </dx-text-box>
+          <app-validator-message [error]="errors" field="alias"></app-validator-message>
+        </div>
+      </section>
+      <section class="col-md-6 col-xs-12">
+        <div class="form-group">
+          <label for="code">Código<i class="text-danger">*</i></label>
+          <dx-text-box #code [(value)]="Model.code">
+          </dx-text-box>
+          <app-validator-message [error]="errors" field="code"></app-validator-message>
+        </div>
+      </section>
+    </div>
+  </div>
+</app-modal-with-option-buttons>

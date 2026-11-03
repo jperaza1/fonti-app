@@ -5,6 +5,7 @@ import { ListPurchaseOrderComponent } from './list-purchase-order/list-purchase-
 import { CreateOrUpdatePurchaseOrderComponent } from './create-or-update-purchase-order/create-or-update-purchase-order.component';
 import { ReportPurchaseOrderComponent } from './report-purchase-order/report-purchase-order.component';
 import { ReportExpenseComponent } from './report-expense/report-expense.component';
+import { PriceApprovalComponent } from './price-approval/price-approval.component';
 
 
 
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'update/:id', component: CreateOrUpdatePurchaseOrderComponent, canActivate: [AuthGuard] },
   { path: 'report', component: ReportPurchaseOrderComponent, canActivate: [AuthGuard] },
   { path: 'report-expense', component: ReportExpenseComponent, canActivate: [AuthGuard] },
+  { path: 'price-approval/:token', component: PriceApprovalComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

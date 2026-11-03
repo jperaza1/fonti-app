@@ -11,7 +11,7 @@
         <section class="col-md-6 col-xs-12">
           <div class="form-group">
             <label class="correlative-form__label" for="cai-correlative">CAI<i class="text-danger">*</i></label>
-            <dx-text-box #cai id="cai-correlative" [(value)]="Model.cai" [maxLength]="14"
+            <dx-text-box #cai id="cai-correlative" [(value)]="Model.cai"
               placeholder="Código según SAR">
             </dx-text-box>
             <app-validator-message [error]="errors" field="cai"></app-validator-message>

@@ -22,23 +22,7 @@
             <app-validator-message [error]="errors" field="lastName"></app-validator-message>
           </div>
         </section>
-        <section class="col-md-12">
-          <div class="form-group">
-            <label for="email">Email<i class="text-danger">*</i></label>
-            <input id="email" name="email" [(ngModel)]="Model.email" #email="ngModel" class="form-control"
-              placeholder="" type="email" required />
-            <app-validator-message [error]="errors" field="email"></app-validator-message>
-          </div>
-        </section>
-        <section class="col-sm-3 col-xs-12">
-          <div class="form-group">
-            <label for="phone">Phone #</label>
-            <dx-text-box [mask]="PhoneFormat" #phone [(value)]="Model.phone">
-            </dx-text-box>
-            <app-validator-message [error]="errors" field="phone">
-            </app-validator-message>
-          </div>
-        </section>
+        
         <section class="col-sm-6 col-xs-12">
           <div class="form-group">
             <label for="userType">User Type</label>
@@ -49,14 +33,13 @@
             <app-validator-message [error]="errors" field="userType"></app-validator-message>
           </div>
         </section>
-
-        <section class="col-sm-12 col-xs-12" *ngIf="ShowCustomer">
+        <section class="col-sm-12 col-xs-12" *ngIf="ShowRoutes">
           <div class="form-group">
-            <label for="cafeteriaId">Cafeteria</label>
-            <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true" [dataSource]="DxDataSourceCafeteria"
-              [(value)]="Model.cafeteriaId">
-            </dx-select-box>
-            <app-validator-message [error]="errors" field="cafeteria"></app-validator-message>
+            <label for="routes">Rutas<i class="text-danger">*</i></label>
+            <dx-tag-box [dataSource]="DxDataSourceRoute" [(value)]="Model.routes" displayExpr="name"
+              valueExpr="id" [showSelectionControls]="true" [searchEnabled]="true">
+            </dx-tag-box>
+            <app-validator-message [error]="errors" field="routes"></app-validator-message>
           </div>
         </section>
 

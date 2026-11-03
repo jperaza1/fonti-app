@@ -202,4 +202,8 @@ export class EnumDefinitionsService {
     return this.http.get<DefinitionValuesDto[]>(`${this._config.config.data}EnumDefinition/GetProductType`).toPromise();
   }
 
+  getTruckStatus(): Promise<DefinitionValuesDto[]> {
+    return this.http.get<DefinitionValuesDto[]>(`${this._config.config.data}EnumDefinition/GetTruckStatus`).toPromise();
+  }
+
 }

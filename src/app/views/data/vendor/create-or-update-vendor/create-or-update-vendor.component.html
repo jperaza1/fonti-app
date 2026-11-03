@@ -10,6 +10,72 @@
           <app-validator-message [error]="errors" field="name"></app-validator-message>
         </div>
       </section>
+      <section class="col-md-12 col-xs-12" *ngIf="Model.id > 0 && isInRoleShowBankAccount">
+        <div class="row">
+          <section class="col-md-4 col-xs-12">
+            <div class="form-group">
+              <label for="name">Banco<i class="text-danger">*</i></label>
+              <dx-select-box #bank [(value)]="Model.bankId" [dataSource]="DxDataSourceBank" displayExpr="name" valueExpr="id" (onItemClick)="onBankItemClick($event.itemData)"></dx-select-box>
+              <app-validator-message [error]="errors" field="typeAccount"></app-validator-message>
+            </div>
+          </section>
+          <section class="col-md-4 col-xs-12">
+            <div class="form-group">
+              <label for="name">Tipo de Cuenta<i class="text-danger">*</i></label>
+              <dx-select-box #typeAccount [(value)]="Model.typeAccountId" [dataSource]="DxDataSourceTypeAccount" displayExpr="name" valueExpr="id" (onItemClick)="onTypeAccountItemClick($event.itemData)"></dx-select-box>
+              <app-validator-message [error]="errors" field="typeAccount"></app-validator-message>
+            </div>
+          </section>
+          <section class="col-md-4 col-xs-12">
+            <div class="form-group">
+              <label for="name">Identidad / RTN del titular de la cuenta<i class="text-danger">*</i></label>
+              <dx-text-box #identificationHolder [(value)]="Model.identificationHolder">
+              </dx-text-box>
+              <app-validator-message [error]="errors" field="identificationHolder"></app-validator-message>
+            </div>
+          </section>
+          <section class="col-md-4 col-xs-12">
+            <div class="form-group">
+              <label for="name">Titular de la cuenta<i class="text-danger">*</i></label>
+              <dx-text-box #bankAccountHolder [(value)]="Model.bankAccountHolder">
+              </dx-text-box>
+              <app-validator-message [error]="errors" field="bankAccountHolder"></app-validator-message>
+            </div>
+          </section>
+          <section class="col-md-4 col-xs-12" *ngIf="Model.typeAccount == 'CC' && Model.bank == 'BANCO FICOHSA'">
+            <div class="form-group">
+              <label for="name">Correlativo #1<i class="text-danger">*</i></label>
+              <dx-text-box #c1 [(value)]="Model.c1">
+              </dx-text-box>
+              <app-validator-message [error]="errors" field="c1"></app-validator-message>
+            </div>
+          </section>
+          <section class="col-md-4 col-xs-12" *ngIf="Model.typeAccount == 'CC' && Model.bank == 'BANCO FICOHSA'">
+            <div class="form-group">
+              <label for="name">Correlativo #2<i class="text-danger">*</i></label>
+              <dx-text-box #c2 [(value)]="Model.c2">
+              </dx-text-box>
+              <app-validator-message [error]="errors" field="c2"></app-validator-message>
+            </div>
+          </section>
+          <section class="col-md-4 col-xs-12">
+            <div class="form-group">
+              <label for="name">Cuenta Bancaria<i class="text-danger">*</i></label>
+              <dx-text-box #bankAccount [(value)]="Model.bankAccount">
+              </dx-text-box>
+              <app-validator-message [error]="errors" field="bankAccount"></app-validator-message>
+            </div>
+          </section>
+          <section class="col-md-4 col-xs-12">
+            <div class="form-group">
+              <label for="name">Correo electrónico</label>
+              <dx-text-box #email [(value)]="Model.email">
+              </dx-text-box>
+              <app-validator-message [error]="errors" field="email"></app-validator-message>
+            </div>
+          </section>
+        </div>
+      </section>
     </div>
   </div>
 </app-modal-with-option-buttons>

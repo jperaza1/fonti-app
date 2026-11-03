@@ -38,6 +38,18 @@
   border-radius: 12px;
 }
 
+.expense-form__section--documents,
+.expense-form__section--preview {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.expense-form__section--documents:hover,
+.expense-form__section--preview:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
 .expense-form__hint {
   font-size: 0.75rem;
   color: var(--text-muted);
@@ -54,6 +66,147 @@
 .expense-form__label--total {
   color: var(--accent-dark);
   font-weight: 600;
+}
+
+.expense-form__truck {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 36px;
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0f172a;
+  background: #f8fafc;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+}
+
+.expense-form__truck i {
+  color: var(--accent-dark);
+  font-size: 0.85rem;
+}
+
+.expense-form__truck span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.expense-form__truck--empty {
+  font-weight: 500;
+  color: var(--text-muted);
+  border-style: dashed;
+}
+
+.expense-form__truck--empty i {
+  opacity: 0.55;
+}
+
+.expense-form__invoice-link {
+  color: var(--accent-dark);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.expense-form__invoice-link:hover {
+  color: var(--accent);
+}
+
+.expense-form__upload {
+  padding-top: 0.25rem;
+}
+
+.expense-form__upload-inner {
+  padding: 1.25rem;
+  background: linear-gradient(145deg, rgba(226, 232, 240, 0.85), rgba(203, 213, 225, 0.55));
+  border: 1px dashed var(--card-border);
+  border-radius: 12px;
+}
+
+.expense-form__preview {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.expense-doc-preview {
+  display: inline-block;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.expense-doc-preview:hover {
+  transform: scale(1.02);
+}
+
+.expense-doc-preview:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.expense-doc-preview__frame {
+  position: relative;
+  width: 220px;
+  height: 285px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #ffffff, var(--bg-light));
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+
+.invoice-doc-preview__img,
+.invoice-doc-preview__doc {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.invoice-doc-preview__img {
+  object-fit: cover;
+}
+
+.invoice-doc-preview__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(180deg, rgba(13, 148, 136, 0) 0%, rgba(13, 148, 136, 0.14) 45%, rgba(15, 118, 110, 0.72) 100%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.expense-doc-preview:hover .invoice-doc-preview__overlay,
+.expense-doc-preview:focus .invoice-doc-preview__overlay {
+  opacity: 1;
+}
+
+.invoice-doc-preview__icon {
+  display: inline-flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: rgba(15, 23, 42, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  font-size: 1.2rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.invoice-doc-preview__hint {
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 }
 
 :host ::ng-deep .expense-form__total-wrap .dx-numberbox .dx-texteditor-input {
@@ -75,6 +228,20 @@
   margin-top: 0.25rem;
 }
 
+:host ::ng-deep .expense-form__upload .dx-fileuploader {
+  border-radius: 10px;
+}
+
+:host ::ng-deep .expense-form__upload .dx-fileuploader-button {
+  border-color: var(--accent);
+  color: var(--accent-dark);
+  border-radius: 8px;
+}
+
+:host ::ng-deep .expense-form__upload .dx-fileuploader-button.dx-state-hover {
+  background: rgba(13, 148, 136, 0.08);
+}
+
 /* Dark mode (alineado con category-form) */
 :host-context(.dark-theme) .expense-form {
   --text-muted: #94a3b8;
@@ -85,6 +252,90 @@
   background: rgba(13, 148, 136, 0.08);
 }
 
+:host-context(.dark-theme) .expense-form__upload-inner,
+:host-context(.dark-theme) .expense-doc-preview__frame {
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.75));
+}
+
 :host-context(.dark-theme) .expense-form__label--total {
   color: #5eead4;
+}
+
+:host-context(.dark-theme) .expense-form__truck {
+  color: #e2e8f0;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.invoice-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(12px);
+  animation: invoice-lightbox-fade 0.25s ease-out;
+}
+
+.invoice-lightbox__close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.invoice-lightbox__close:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: scale(1.05);
+}
+
+.invoice-lightbox__content {
+  width: 80vw;
+  max-width: 95vw;
+  height: 85vh;
+  max-height: 90vh;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+  background: #0f172a;
+  animation: invoice-lightbox-scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.invoice-lightbox__content--image {
+  width: auto;
+  height: auto;
+  max-width: 95vw;
+  max-height: 90vh;
+  background: transparent;
+}
+
+.invoice-lightbox__img {
+  display: block;
+  max-width: 95vw;
+  max-height: 90vh;
+  object-fit: contain;
+  background: #fff;
+}
+
+.invoice-lightbox__doc {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #0f172a;
 }

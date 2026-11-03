@@ -1,6 +1,8 @@
 export class TenantDto {
     id: number;
     name: string;
+    companyName: string;
+    rtn: string;
     email: string;
     phoneNumber: string;
     faxNumber: string;

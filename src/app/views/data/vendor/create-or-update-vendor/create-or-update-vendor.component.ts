@@ -5,6 +5,9 @@ import { OptionButton } from '../../../shared/models/option-button';
 import { VendorService } from '../vendor.service';
 import { RequestResult } from '../../../../../_models/RequestResult';
 import { ModalWithOptionButtonsComponent } from '../../../shared/components/modal-with-option-buttons/modal-with-option-buttons.component';
+import { AuthenticationService } from '../../../../../_services/authentication.service';
+import { BankService } from '../../bank/bank.service';
+import { TypeService } from '../../type/type.service';
 
 @Component({
   selector: 'app-create-or-update-vendor',
@@ -19,10 +22,19 @@ export class CreateOrUpdateVendorComponent extends AppComponentBase implements O
   @ViewChild("entityComponent") entityComponent: ModalWithOptionButtonsComponent;
   @Output() modalSave = new EventEmitter<any>();
 
+  isInRoleShowBankAccount: boolean = false;
+
+  DxDataSourceBank: any = {};
+  DxDataSourceTypeAccount: any = {};
+
   constructor(
-    private _vendorService: VendorService
+    private _vendorService: VendorService,
+    private _bankService: BankService,
+    private _typeService: TypeService,
+    private _authenticationService: AuthenticationService,
   ) { 
     super();
+    this.isInRoleShowBankAccount = this._authenticationService.IsInRole('DATA.VENDOR.SHOW_BANK_ACCOUNT');
   }
 
   ngOnInit(): void {
@@ -31,6 +43,18 @@ export class CreateOrUpdateVendorComponent extends AppComponentBase implements O
 
   async initializeView() {
     this.errors = {};
+    await this.getBanks();
+    await this.getTypes();
+  }
+
+  async getBanks() {
+    const response = await this._bankService.getActives();
+    this.DxDataSourceBank = this.getDataSourceDx(response);
+  }
+
+  async getTypes() {
+    const response = await this._typeService.getAciteTypesByGroupCode('VENDOR_TYPE_ACCOUNT');
+    this.DxDataSourceTypeAccount = this.getDataSourceDx(response);
   }
 
   setButtonOptions(update?: boolean | null) {

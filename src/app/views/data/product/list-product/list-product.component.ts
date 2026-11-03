@@ -41,6 +41,19 @@ export class ListProductComponent extends AppComponentBase implements OnInit {
         allowEditing: false
       },
       {
+        dataField: "unitOfMeasureName",
+        caption: "Unidad",
+        allowEditing: false,
+        calculateCellValue: (row) => row.productType === 3 ? row.unitOfMeasureName : ""
+      },
+      {
+        dataField: "cost",
+        caption: "Costo unitario",
+        allowEditing: false,
+        format: "#,##0.00",
+        calculateCellValue: (row) => row.productType === 3 ? row.cost : null
+      },
+      {
         dataField: "isActive",
         caption: "Status",
         allowEditing: false,

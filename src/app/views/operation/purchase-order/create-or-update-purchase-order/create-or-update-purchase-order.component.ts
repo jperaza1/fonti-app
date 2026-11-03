@@ -1,17 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppComponentBase } from '../../../../AppComponentBase';
 import { PurchaseOrderService } from '../purchase-order.service';
-import { CafeteriaService } from '../../../data/cafeteria/cafeteria.service';
 import { VendorService } from '../../../data/vendor/vendor.service';
 import { ProductService } from '../../../data/product/product.service';
 import { PurchaseOrderDetailDto, PurchaseOrderDto } from '../dtos/purchase-order.dto';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VendorDto } from '../../../data/vendor/dtos/vendor-dto';
-import { ProductDto } from '../../../data/product/dtos/product-dto';
+import { VendorProductDto } from '../../../data/product/dtos/product-dto';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { AuthenticationService } from '../../../../../_services/authentication.service';
-import { User } from '../../../../../_models/user';
 import { EnumDefinitionsService } from '../../../../../_services/enum-definitions.service';
 import { DetailStatusEnum } from '../../../../../_enums/detail-status.enum';
 import Swal, { SweetAlertResult } from 'sweetalert2/dist/sweetalert2.js'
@@ -25,25 +23,22 @@ export class CreateOrUpdatePurchaseOrderComponent extends AppComponentBase imple
 
   Model: PurchaseOrderDto = new PurchaseOrderDto();
   DxDataSourceInvoiceType: any = {};
-  Products: ProductDto[] = [];
+  Products: VendorProductDto[] = [];
   ModelProducts: any[] = [];
   errors: any = {};
 
   title: string = 'Nueva Orden de Compra';
 
-  DxDataSourceCafeteria: any = {};
   DxDataSourceVendor: any = {};
   DxDataSourceProduct: any = {};
   DxDataSourceDetailStatus: any = {};
   routeSub: Subscription;
 
   id: number
-  currentUser: User;
   @ViewChild('dataGrid', { static: false }) dataGrid: DxDataGridComponent;
 
   constructor(
     private _purchaseOrderService: PurchaseOrderService,
-    private _cafeteriaService: CafeteriaService,
     private _vendorService: VendorService,
     private _productService: ProductService,
     private _route: ActivatedRoute,
@@ -61,8 +56,6 @@ export class CreateOrUpdatePurchaseOrderComponent extends AppComponentBase imple
   async ngOnInit() {
     await this.initializeView();
     this.routeSub.unsubscribe();
-    this.currentUser = this._authenticationService.currentUserValue;
-    this.Model.cafeteriaId = this.currentUser.cafeteriaId;
     if(this.id > 0) await this.showUpdate(this.id);
   }
 
@@ -82,10 +75,6 @@ export class CreateOrUpdatePurchaseOrderComponent extends AppComponentBase imple
     this.dataGrid.instance.refresh();
   }
 
-  onItemClickCafeteria(itemData: any) {
-    this.Model.cafeteria = itemData.name;
-  }
-
   onItemClickVendor(itemData: any) {
     this.Model.vendor = itemData.name;
   }
@@ -103,11 +92,6 @@ export class CreateOrUpdatePurchaseOrderComponent extends AppComponentBase imple
     this.DxDataSourceVendor = this.getDataSourceDx(result);
   }
 
-  async loadCafeterias() {
-    let result = await this._cafeteriaService.getActives();
-    this.DxDataSourceCafeteria = this.getDataSourceDx(result);
-  }
-
   async loadDetailStatus() {
     let result = await this._enumService.getDetailStatus();
     this.DxDataSourceDetailStatus = this.getDataSourceDx(result);
@@ -116,7 +100,6 @@ export class CreateOrUpdatePurchaseOrderComponent extends AppComponentBase imple
   async initializeView() {
     this.errors = {};
     await this.loadVendors();
-    await this.loadCafeterias();
     await this.loadDetailStatus();
     await this.loadInvoiceType();
   }
@@ -152,9 +135,17 @@ export class CreateOrUpdatePurchaseOrderComponent extends AppComponentBase imple
       const existProduct = this.Products.find(x => x.id === product);
       if(existProduct) {
         const detail = new PurchaseOrderDetailDto();
-        detail.productId = existProduct.id;
+        detail.productVendorId = existProduct.id;
+        detail.productId = existProduct.productId;
         detail.product = `${existProduct.name}`;
+        detail.cost = existProduct.cost;
         detail.quantity = 0;
+        detail.tax = 0;
+        detail.taxPercentage = existProduct.taxRate;
+        detail.discount = 0;
+        detail.discountPercentage = existProduct.discount;
+        detail.subTotal = 0;
+        detail.total = 0;
         detail.id = 0;
         this.Model.details.push(detail);
       }

@@ -108,9 +108,8 @@
         <div *dxTemplate="let data of 'amountTemplate'">
           {{ data.value | currency: Currency }}
         </div>
-        <div *dxTemplate="let data of 'boolTemplate'">
-          <span *ngIf="data.value" class="label label-success">Sí</span>
-          <span *ngIf="!data.value" class="label label-default">No</span>
+        <div *dxTemplate="let data of 'invoiceNumberTemplate'">
+          {{ formatInvoiceNumber(data.value) }}
         </div>
         <dxo-summary>
           <dxi-total-item

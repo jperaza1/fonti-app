@@ -6,6 +6,7 @@ import { OptionButton } from '../../../shared/models/option-button';
 import { ModalWithOptionButtonsComponent } from '../../../shared/components/modal-with-option-buttons/modal-with-option-buttons.component';
 import { RequestResult } from '../../../../../_models/RequestResult';
 import { PaymentService } from '../payment.service';
+import { InvoicePaymentDto } from '../dtos/invoice-payment.dto';
 
 @Component({
   selector: 'app-add-payment',
@@ -13,7 +14,7 @@ import { PaymentService } from '../payment.service';
   styleUrls: ['./add-payment.component.css']
 })
 export class AddPaymentComponent extends AppComponentBase implements OnInit {
-  Model: PaymentDto = new PaymentDto();
+  Model: InvoicePaymentDto = new InvoicePaymentDto();
   OptionButtons: OptionButton[];
   errors: any = {};
   title: string = "Agregar Pago";
@@ -54,7 +55,7 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
     this.title = "Agregar Pago";
     await this.initializeView();
     this.setButtonOptions();
-    this.Model = new PaymentDto();
+    this.Model = new InvoicePaymentDto();
     this.Model.invoiceId = invoiceId;
     this.entityComponent.show();
   }

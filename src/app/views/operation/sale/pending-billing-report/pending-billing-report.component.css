@@ -1,0 +1,369 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap");
+
+.sale-list {
+  --accent: #0d9488;
+  --accent-dark: #0f766e;
+  --text-primary: #0f172a;
+  --text-muted: #64748b;
+  --card-border: rgba(13, 148, 136, 0.3);
+  --bg-light: #e2e8f0;
+  --card-bg: #ffffff;
+}
+
+.sale-list__filters {
+  padding: 1.25rem 1.25rem 0.5rem;
+  margin-bottom: 1.25rem;
+  background: rgba(13, 148, 136, 0.04);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+}
+
+.sale-list__filters-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.sale-list__legend {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  margin: 0;
+}
+
+.sale-list__legend i {
+  margin-right: 0.5rem;
+  opacity: 0.9;
+}
+
+.sale-list__label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.sale-list__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.sale-list__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 36px;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.sale-list__btn--primary {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+}
+
+.sale-list__btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.35);
+}
+
+.sale-list__btn--secondary {
+  color: var(--accent-dark);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+}
+
+.sale-list__btn--secondary:hover {
+  background: rgba(13, 148, 136, 0.06);
+}
+
+:host ::ng-deep .sale-list__filters .dx-selectbox,
+:host ::ng-deep .sale-list__filters .dx-datebox {
+  border-radius: 8px;
+}
+
+:host ::ng-deep .sale-list__filters .dx-texteditor.dx-state-focused {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.16);
+}
+
+.sale-list__grid-wrap {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+}
+
+.sale-list__grid-wrap ::ng-deep .dx-datagrid {
+  border: none;
+}
+
+.sale-list__grid-wrap ::ng-deep .dx-datagrid-headers {
+  background: #cbd5e1;
+}
+
+.sale-list__grid-wrap ::ng-deep .dx-header-row td {
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.sale-list__grid-wrap ::ng-deep .dx-row-alt > td {
+  background: var(--bg-light);
+}
+
+.sale-list__grid-wrap ::ng-deep .dx-data-row:hover > td {
+  background: rgba(13, 148, 136, 0.06);
+}
+
+.sale-list__grid-wrap ::ng-deep .dx-datagrid-rowsview .dx-selection.dx-row:not(.dx-row-focused) > td {
+  background: rgba(13, 148, 136, 0.14);
+}
+
+.billing-amount {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.billing-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 0.9rem 1.15rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+}
+
+.billing-summary__action {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.billing-summary--active {
+  background: linear-gradient(105deg, rgba(13, 148, 136, 0.1) 0%, var(--card-bg) 42%);
+  border-color: rgba(13, 148, 136, 0.45);
+  box-shadow: 0 4px 20px rgba(13, 148, 136, 0.12);
+}
+
+.billing-summary__count {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.billing-summary__badge {
+  flex-shrink: 0;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.45rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-light);
+  border-radius: 8px;
+}
+
+.billing-summary--active .billing-summary__badge {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+}
+
+.billing-summary__caption {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.billing-summary--active .billing-summary__caption {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.billing-summary__total {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+}
+
+.billing-summary__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+
+.billing-summary__amount {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  color: var(--text-muted);
+}
+
+.billing-summary--active .billing-summary__amount {
+  color: var(--accent-dark);
+}
+
+@media (max-width: 767px) {
+  .sale-list__filters-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .billing-summary {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .billing-summary__total {
+    align-items: flex-start;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--card-border);
+  }
+
+  .sale-list__actions .sale-list__btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+:host-context(.dark-theme) .sale-list {
+  --accent: #14b8a6;
+  --accent-dark: #2dd4bf;
+  --text-primary: #f1f5f9;
+  --text-muted: #94a3b8;
+  --card-border: rgba(45, 212, 191, 0.25);
+  --bg-light: #334155;
+  --card-bg: #1e293b;
+}
+
+:host-context(.dark-theme) .sale-list__filters {
+  background: rgba(13, 148, 136, 0.08);
+}
+
+:host-context(.dark-theme) .sale-list__btn--secondary {
+  color: #5eead4;
+}
+
+:host-context(.dark-theme) .sale-list__grid-wrap ::ng-deep .dx-datagrid-headers {
+  background: #334155;
+}
+
+:host-context(.dark-theme) .billing-summary--active .billing-summary__amount {
+  color: #5eead4;
+}
+
+.billing-modal__hint {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  color: var(--text-muted, #64748b);
+}
+
+.billing-modal__date {
+  max-width: 280px;
+}
+
+.billing-customer {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) 140px minmax(180px, 220px);
+  gap: 1rem;
+  align-items: end;
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.75rem;
+  background: rgba(13, 148, 136, 0.04);
+  border: 1px solid rgba(13, 148, 136, 0.3);
+  border-radius: 12px;
+}
+
+.billing-customer__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+  padding-bottom: 0.35rem;
+}
+
+.billing-customer__name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary, #0f172a);
+}
+
+.billing-customer__meta {
+  font-size: 0.75rem;
+  color: var(--text-muted, #64748b);
+}
+
+.billing-customer__total {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-bottom: 0.35rem;
+}
+
+.billing-customer__amount {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f766e;
+}
+
+.billing-customer__date .sale-list__label,
+.billing-customer__total .sale-list__label {
+  margin-bottom: 0.2rem;
+}
+
+:host ::ng-deep .billing-modal .dx-datebox {
+  border-radius: 8px;
+}
+
+@media (max-width: 767px) {
+  .billing-summary__action {
+    width: 100%;
+    justify-content: center;
+    margin-left: 0;
+    order: 3;
+  }
+
+  .billing-customer {
+    grid-template-columns: 1fr;
+  }
+}
+
+:host-context(.dark-theme) .billing-customer {
+  background: rgba(13, 148, 136, 0.08);
+  border-color: rgba(45, 212, 191, 0.25);
+}
+
+:host-context(.dark-theme) .billing-customer__name {
+  color: #f1f5f9;
+}
+
+:host-context(.dark-theme) .billing-customer__amount {
+  color: #5eead4;
+}

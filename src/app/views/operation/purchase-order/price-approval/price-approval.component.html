@@ -1,0 +1,91 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="approval-request" *ngIf="priceApproval">
+    <section class="approval-card">
+      <p class="approval-card__label">Información de la solicitud</p>
+      <div class="approval-meta">
+        <div class="approval-meta__item">
+          <span class="approval-meta__caption">Proveedor</span>
+          <span class="approval-meta__value">{{ priceApproval.vendor || '—' }}</span>
+        </div>
+        <div class="approval-meta__item">
+          <span class="approval-meta__caption">Orden de compra</span>
+          <button type="button" class="btn btn-link approval-meta__link" (click)="openPurchaseOrder()">
+            {{ priceApproval.reference || '—' }}
+          </button>
+        </div>
+        <div class="approval-meta__item">
+          <span class="approval-meta__caption">Estado</span>
+          <span [ngClass]="statusBadgeClass(priceApproval.status)">
+            {{ priceApproval.statusName || 'Pendiente' }}
+          </span>
+        </div>
+        <div class="approval-meta__item" *ngIf="priceApproval.status == 2">
+          <span class="approval-meta__caption">Aprobado por</span>
+          <span class="approval-meta__value">{{ priceApproval.approvedUser || '—' }}</span>
+        </div>
+        <div class="approval-meta__item" *ngIf="priceApproval.status == 2">
+          <span class="approval-meta__caption">Fecha de aprobación</span>
+          <span class="approval-meta__value">{{ (priceApproval.approvedAt | date: DisplayFormatDateTime) || '—' }}</span>
+        </div>
+        <div class="approval-meta__item" *ngIf="priceApproval.status == 3">
+          <span class="approval-meta__caption">Rechazado por</span>
+          <span class="approval-meta__value">{{ priceApproval.rejectedUser || '—' }}</span>
+        </div>
+        <div class="approval-meta__item" *ngIf="priceApproval.status == 3">
+          <span class="approval-meta__caption">Fecha de rechazo</span>
+          <span class="approval-meta__value">{{ (priceApproval.rejectedAt | date: DisplayFormatDateTime) || '—' }}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="approval-card">
+      <p class="approval-card__label">Detalle de costos</p>
+      <div class="approval-grid-wrap">
+        <dx-data-grid
+          [dataSource]="details"
+          [remoteOperations]="false"
+          [allowColumnReordering]="true"
+          [rowAlternationEnabled]="true"
+          [showBorders]="true"
+          [columnAutoWidth]="true"
+          [noDataText]="'No hay productos en esta solicitud'"
+        >
+          <dxo-paging [enabled]="false"></dxo-paging>
+          <dxi-column dataField="product" caption="Producto"></dxi-column>
+          <dxi-column dataField="oldCost" caption="Costo anterior" cellTemplate="oldCostTemplate"></dxi-column>
+          <dxi-column dataField="newCost" caption="Costo nuevo" cellTemplate="newCostTemplate"></dxi-column>
+          <dxi-column caption="Diferencia" cellTemplate="differenceTemplate"></dxi-column>
+          <div *dxTemplate="let data of 'oldCostTemplate'">
+            {{ data.value | currency : Currency }}
+          </div>
+          <div *dxTemplate="let data of 'newCostTemplate'">
+            {{ data.value | currency : Currency }}
+          </div>
+          <div *dxTemplate="let data of 'differenceTemplate'">
+            <span
+              class="approval-diff"
+              [class.approval-diff--up]="costDifference(data.data) > 0"
+              [class.approval-diff--down]="costDifference(data.data) < 0"
+            >
+              {{ costDifference(data.data) | currency : Currency }}
+            </span>
+          </div>
+        </dx-data-grid>
+      </div>
+    </section>
+
+    <section class="approval-actions" *ngIf="priceApproval.status == 1">
+      <button type="button" class="btn btn-success" [disabled]="submitting" (click)="approve()" [appCanAccess]="['OPERATION.PURCHASE_ORDER.APPROVE_PRICE']">
+        <i class="fa fa-check"></i> Aprobar
+      </button>
+      <button type="button" class="btn btn-danger" [disabled]="submitting" (click)="reject()" [appCanAccess]="['OPERATION.PURCHASE_ORDER.REJECT_PRICE']">
+        <i class="fa fa-times"></i> Rechazar
+      </button>
+    </section>
+  </div>
+
+  <div class="approval-empty" *ngIf="loadError && !priceApproval">
+    <p class="approval-empty__title">No se encontró la solicitud</p>
+    <p class="approval-empty__text">Verifique el enlace o vuelva a intentar más tarde.</p>
+  </div>
+</panel>

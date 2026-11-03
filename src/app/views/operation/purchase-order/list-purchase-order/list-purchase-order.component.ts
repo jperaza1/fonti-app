@@ -8,7 +8,6 @@ import { AuthenticationService } from '../../../../../_services/authentication.s
 import { UserTypeEnum } from '../../../../../_enums/user-type.enum';
 import { User } from '../../../../../_models/user';
 import { FilterPurchaseOrderDto } from '../dtos/filter-purchase-order.dto';
-import { CafeteriaService } from '../../../data/cafeteria/cafeteria.service';
 import { VendorService } from '../../../data/vendor/vendor.service';
 @Component({
   selector: 'app-list-purchase-order',
@@ -20,7 +19,6 @@ export class ListPurchaseOrderComponent extends AppComponentBase implements OnIn
   DataSource: any[] = [];
   columns: any[] = [];
   DxDatasourcePurchaseOrderStatus: any = {};
-  DxDatasourceCafeteria: any = {};
   DxDatasourceVendor: any = {};
   currentUser: User;
   filterPurchaseOrderDto: FilterPurchaseOrderDto = new FilterPurchaseOrderDto();
@@ -28,14 +26,12 @@ export class ListPurchaseOrderComponent extends AppComponentBase implements OnIn
     private _router: Router,
     private _purchaseOrderService: PurchaseOrderService,
     private _enumDefinitionsService: EnumDefinitionsService,
-    private _cafeteriaService: CafeteriaService,
     private _authenticationService: AuthenticationService,
     private _vendorService: VendorService
   ) { 
     super();
     this.currentUser = this._authenticationService.currentUserValue;
     this.filterPurchaseOrderDto.userType = this.currentUser.userType;
-    this.filterPurchaseOrderDto.cafeterias = this.currentUser.cafeteriaId ? [this.currentUser.cafeteriaId] : [];
   }
 
   initializeColumns() {
@@ -67,10 +63,6 @@ export class ListPurchaseOrderComponent extends AppComponentBase implements OnIn
         caption: 'Tipo de Factura'
       },
       {
-        dataField: 'cafeteria',
-        caption: 'Cafetería'
-      },
-      {
         dataField: 'date',
         caption: 'Fecha',
         cellTemplate: 'dateTemplate'
@@ -79,11 +71,6 @@ export class ListPurchaseOrderComponent extends AppComponentBase implements OnIn
         dataField: 'total',
         caption: 'Total',
         cellTemplate: 'amountTemplate'
-      },
-      {
-        dataField: 'hasInvoice',
-        caption: 'Factura',
-        cellTemplate: 'hasInvoiceTemplate'
       },
       {
         dataField: 'creatorUser',
@@ -98,7 +85,6 @@ export class ListPurchaseOrderComponent extends AppComponentBase implements OnIn
 
   async ngOnInit() {
     this.initializeColumns();
-    await this.getCafeteria();
     await this.getVendor();
     await this.getPurchaseOrderStatus();
     this.getAll();
@@ -134,11 +120,6 @@ export class ListPurchaseOrderComponent extends AppComponentBase implements OnIn
 
   update(data: PurchaseOrderDto) {
     window.open(`/purchase-order/update/${data.id}`, '_blank');
-  }
-
-  async getCafeteria() {
-    let result = await this._cafeteriaService.getActives();
-    this.DxDatasourceCafeteria = this.getDataSourceDx(result);
   }
 
   async getVendor() {

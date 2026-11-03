@@ -9,11 +9,12 @@ import { CreateOrUpdatePoInvoicesComponent } from './create-or-update-po-invoice
 import { MainPipe } from '../../../pipes/main-pipe.module';
 import { ReportPurchaseOrderComponent } from './report-purchase-order/report-purchase-order.component';
 import { ReportExpenseComponent } from './report-expense/report-expense.component';
+import { PriceApprovalComponent } from './price-approval/price-approval.component';
 
 
 
 @NgModule({
-  declarations: [CreateOrUpdatePurchaseOrderComponent, ListPurchaseOrderComponent, ListPurchaseOrderInvoicesComponent, CreateOrUpdatePoInvoicesComponent, ReportPurchaseOrderComponent, ReportExpenseComponent],
+  declarations: [CreateOrUpdatePurchaseOrderComponent, ListPurchaseOrderComponent, ListPurchaseOrderInvoicesComponent, CreateOrUpdatePoInvoicesComponent, ReportPurchaseOrderComponent, ReportExpenseComponent, PriceApprovalComponent],
   imports: [
     CommonModule,
     SharedModule,

@@ -1,0 +1,40 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="row row-space-10">
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Fecha de inicio</label>
+        <dx-date-box [(value)]="filterModel.dateFrom" [(max)]="filterModel.dateTo" [displayFormat]="DisplayFormatDate"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Fecha de fin</label>
+        <dx-date-box [(value)]="filterModel.dateTo" [(min)]="filterModel.dateFrom" [displayFormat]="DisplayFormatDate"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <div>
+          <button type="button" class="btn btn-primary" (click)="search()">
+            <i class="fa fa-search"></i> Buscar
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <dx-data-grid [dataSource]="movements" [showBorders]="true" [columnAutoWidth]="true" [rowAlternationEnabled]="true">
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]"></dxo-pager>
+    <dxo-search-panel [visible]="true"></dxo-search-panel>
+    <dxo-export [enabled]="true" fileName="Kardex"></dxo-export>
+    <dxi-column dataField="movementDate" caption="Fecha" dataType="date" [format]="DisplayFormatDate"></dxi-column>
+    <dxi-column dataField="product" caption="Producto"></dxi-column>
+    <dxi-column dataField="unitOfMeasure" caption="Unidad"></dxi-column>
+    <dxi-column dataField="movementTypeName" caption="Movimiento"></dxi-column>
+    <dxi-column dataField="quantity" caption="Cantidad" format="#,##0.######"></dxi-column>
+    <dxi-column dataField="balance" caption="Saldo" format="#,##0.######"></dxi-column>
+    <dxi-column dataField="note" caption="Nota"></dxi-column>
+  </dx-data-grid>
+</panel>

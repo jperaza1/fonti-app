@@ -14,7 +14,7 @@
                             <section class="col-md-12">
                                 <legend> <i class="fas fa-info-circle"></i> General</legend>
                             </section>
-                            <section class="col-md-12">
+                            <section class="col-md-6">
                                 <div class="form-group">
                                     <label for="name">Name<i class="text-danger">*</i></label>
                                     <input id="name" name="name" [(ngModel)]="Model.name" #name="ngModel" class="form-control"
@@ -22,6 +22,14 @@
                                     <app-validator-message [error]="errors" field="name"></app-validator-message>
                                 </div>
                             </section>
+                            <section class="col-md-6">
+                              <div class="form-group">
+                                  <label for="companyName">Company Name</label>
+                                  <input id="companyName" name="companyName" [(ngModel)]="Model.companyName" #companyName="ngModel"
+                                      class="form-control" placeholder="" type="text" />
+                                  <app-validator-message [error]="errors" field="companyName"></app-validator-message>
+                              </div>
+                          </section>
                             <section class="col-md-12">
                                 <div class="form-group">
                                     <label for="email">Email<i class="text-danger">*</i></label>
@@ -40,7 +48,7 @@
                                 </div>
                             </section>
                             
-                            <section class="col-md-12">
+                            <section class="col-md-6">
                                 <div class="form-group">
                                     <label for="email">WebSite</label>
                                     <input id="webSite" name="webSite" [(ngModel)]="Model.webSite" #webSite="ngModel"
@@ -48,6 +56,18 @@
                                     <app-validator-message [error]="errors" field="webSite"></app-validator-message>
                                 </div>
                             </section>
+
+                            <section class="col-md-6">
+                              <div class="form-group">
+                                  <label for="email">RTN</label>
+                                  <dx-text-box [mask]="RTNFormat" #rtn [(value)]="Model.rtn">
+                                  </dx-text-box>
+                                  <app-validator-message [error]="errors" field="rtn">
+                                  </app-validator-message>
+                              </div>
+                          </section>
+
+                            
                         </div>
                         <div class="row row-space-10">
                             <section class="col-md-12">

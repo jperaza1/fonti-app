@@ -3,9 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { Router, NavigationEnd, NavigationStart, ActivatedRoute } from '@angular/router';
 import pageSettings from './config/page-settings';
 import * as global from './config/globals';
-import { SwPush } from '@angular/service-worker';
 import { AuthenticationService } from '../_services/authentication.service';
-import { PwaService } from '../app/pwa/pwa.service';
 import { TimezoneService } from './services/timezone.service';
 @Component({
   selector: 'app-root',
@@ -17,23 +15,11 @@ export class AppComponent implements OnInit {
 
   pageSettings;
 
-  readonly VAPID_PUBLIC_KEY = "BJlieW3II-AWxwNp_wXd73N9sDVQMW-8PRaVZoGJALXtLmIgZqISEQPrrzd0NQG4rtYm4zwRRO7y7p4DJbAwRQw";
-
   ngOnInit() {
     // page settings
     this.pageSettings = pageSettings;
     // this.pageSettings.pageTopMenu = true;
-    // this.subscribeToNotifications()
   }
-
-
-  // subscribeToNotifications() {
-  //   this.swPush.requestSubscription({
-  //     serverPublicKey: this.VAPID_PUBLIC_KEY
-  //   }).then(sub => {
-  //     this._pwaService.sendSubcription(sub);
-  //   }).catch(err => console.log(err))
-  // }
 
   // window scroll
   pageHasScroll;

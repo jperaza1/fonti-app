@@ -2,20 +2,14 @@
   <div class="row row-space-10">
     <section class="col-md-3 col-xs-12">
       <div class="form-group">
-        <label for="name">Cafeteria</label>
-        <dx-select-box #cafeteriaId [(value)]="filterModel.cafeteriaId" [dataSource]="DxDatasourceCafeteria" displayExpr="name" valueExpr="id" [disabled]="currentUser.cafeteriaId"></dx-select-box>
+        <label for="name">Ruta</label>
+        <dx-select-box #routeId [(value)]="filterModel.routeId" [dataSource]="DxDatasourceRoute" displayExpr="name" valueExpr="id"></dx-select-box>
       </div>
     </section>
     <section class="col-md-3 col-xs-12">
       <div class="form-group">
         <label for="name">Proveedor</label>
         <dx-select-box #vendorId [(value)]="filterModel.vendorId" [dataSource]="DxDatasourceVendor" displayExpr="name" valueExpr="id"></dx-select-box>
-      </div>
-    </section>
-    <section class="col-md-3 col-xs-12">
-      <div class="form-group">
-        <label for="name">Tipo de Factura</label>
-        <dx-select-box #invoiceType [(value)]="filterModel.invoiceType" [dataSource]="DxDatasourceInvoiceType" displayExpr="text" valueExpr="value"></dx-select-box>
       </div>
     </section>
     <section class="col-md-3 col-xs-12">
@@ -44,13 +38,6 @@
     </section>
     <section class="col-md-4 col-xs-12" style="margin-top: 25px;">
       <button class="btn btn-primary" (click)="search()"><i class="fa fa-search"></i> Buscar</button>
-      <button 
-        class="btn btn-primary" 
-        (click)="showAdd()"
-        [appCanAccess]="['OPERATION.INVOICE.CREATE']">
-          <i class="fa fa-plus"></i> 
-        Agregar
-      </button>
     </section>
   </div>
   <div class="row row-space-10">
@@ -80,10 +67,20 @@
           <button
             type="button"
             class="btn btn-primary pull-left btn-sm"
+            [appCanAccess]="['OPERATION.INVOICE.VIEW']"
             (click)="viewInvoice(data.data)"
             title="Ver"
           >
             <i class="fa fa-eye"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger pull-left btn-sm"
+            [appCanAccess]="['OPERATION.INVOICE.DELETE']"
+            (click)="deleteInvoice(data.data)"
+            title="Eliminar"
+          >
+            <i class="fa fa-trash"></i>
           </button>
         </div>
         <div *dxTemplate="let data of 'dateTemplate'">
@@ -94,9 +91,6 @@
         </div>
         <div *dxTemplate="let data of 'invoiceNumberTemplate'" >
           {{ formatInvoiceNumber(data.value) }}
-        </div>
-        <div *dxTemplate="let data of 'purchaseOrderTemplate'">
-          <a href="javascript:void(0)" (click)="viewPurchaseOrder(data.data)">{{ data.value }}</a>
         </div>
         <div *dxTemplate="let data of 'paymentStatusTemplate'">
           <span *ngIf="data.data.paymentStatus === 1" class="label label-warning">{{ data.data.paymentStatusName }}</span>
@@ -120,5 +114,3 @@
     </section>
   </div>
 </panel>
-
-<app-create-or-update-invoice #createOrUpdate (modalSave)="search()"></app-create-or-update-invoice>

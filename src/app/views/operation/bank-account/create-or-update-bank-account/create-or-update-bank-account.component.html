@@ -1,0 +1,38 @@
+<app-modal-with-option-buttons
+  #entityComponent
+  [title]="modalTitle"
+  [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)"
+  (onClose)="close()"
+  [size]="'xxxl'"
+>
+  <div class="row row-space-10">
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="bankId">Banco<i class="text-danger">*</i></label>
+        <dx-select-box id="bankId" [(value)]="Model.bankId" [items]="DxBanks" displayExpr="name" valueExpr="id"></dx-select-box>
+        <app-validator-message [error]="errors" field="bankId"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label for="bankAccountName">cuenta<i class="text-danger">*</i></label>
+        <dx-text-box id="bankAccountName" [(value)]="Model.name"></dx-text-box>
+        <app-validator-message [error]="errors" field="name"></app-validator-message>
+      </div>
+    </section>
+
+    <section class="col-md-6 col-xs-12" *ngIf="isEdit">
+      <div class="form-group">
+        <label for="bankAccountBalance">Saldo</label>
+        <dx-number-box
+          id="bankAccountBalance"
+          [(value)]="Model.balance"
+          [format]="CurrencyDxNumber"
+          [disabled]="true"
+        ></dx-number-box>
+        <app-validator-message [error]="errors" field="balance"></app-validator-message>
+      </div>
+    </section>
+  </div>
+</app-modal-with-option-buttons>

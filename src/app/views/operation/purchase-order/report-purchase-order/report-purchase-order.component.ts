@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppComponentBase } from '../../../../AppComponentBase';
 import { FilterPurchaseOrderDto } from '../dtos/filter-purchase-order.dto';
-import { CafeteriaService } from '../../../data/cafeteria/cafeteria.service';
 import { VendorService } from '../../../data/vendor/vendor.service';
 import { EnumDefinitionsService } from '../../../../../_services/enum-definitions.service';
 import { PurchaseOrderService } from '../purchase-order.service';
@@ -18,7 +17,6 @@ export class ReportPurchaseOrderComponent extends AppComponentBase implements On
   filterPurchaseOrderDto: FilterPurchaseOrderDto = new FilterPurchaseOrderDto();
   DataSource: any[] = [];
   DxDatasourcePurchaseOrderStatus: any = {};
-  DxDatasourceCafeteria: any = {};
   DxDatasourceVendor: any = {};
   dataSource: any  [];
   pivotGridDataSource: any = {};
@@ -26,7 +24,6 @@ export class ReportPurchaseOrderComponent extends AppComponentBase implements On
   @ViewChild('pivotGrid') pivotGrid: DxPivotGridComponent;
 
   constructor(
-    private _cafeteriaService: CafeteriaService,
     private _vendorService: VendorService,
     private _enumDefinitionsService: EnumDefinitionsService,
     private _purchaseOrderService: PurchaseOrderService
@@ -39,9 +36,9 @@ export class ReportPurchaseOrderComponent extends AppComponentBase implements On
     this.pivotGridDataSource = {
       fields: [
         {
-          caption: 'Cafeteria',
+          caption: 'Producto',
           width: 120,
-          dataField: 'cafeteria',
+          dataField: 'product',
           area: 'row',
           sortBySummaryField: 'Total',
         }, 
@@ -110,7 +107,6 @@ export class ReportPurchaseOrderComponent extends AppComponentBase implements On
   async ngOnInit() {
     //this.initializeColumns();
     await this.getPurchaseOrderStatus();
-    await this.getCafeteria();
     await this.getVendor();
 
     this.generateReport();
@@ -127,15 +123,6 @@ export class ReportPurchaseOrderComponent extends AppComponentBase implements On
       text: 'Todos'
     } as any);
     this.DxDatasourcePurchaseOrderStatus = this.getDataSourceDx(purchaseOrderStatus);
-  }
-
-  async getCafeteria() {
-    let result = await this._cafeteriaService.getActives();
-    result.unshift({
-      id: 0,
-      name: 'Todos'
-    } as any);
-    this.DxDatasourceCafeteria = this.getDataSourceDx(result);
   }
 
   async getVendor() {

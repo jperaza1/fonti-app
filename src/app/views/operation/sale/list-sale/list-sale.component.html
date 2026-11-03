@@ -101,6 +101,9 @@
           [allowExportSelectedData]="false"
         >
         </dxo-export>
+        <div *dxTemplate="let data of 'invoiceNumberTemplate'">
+          {{ data.data.invoiceNumber }}
+        </div>
         <div *dxTemplate="let data of 'actionTemplate'">
           <button
             type="button"
@@ -112,33 +115,33 @@
             <i class="fa fa-edit"></i>
           </button>
           <button
-          type="button"
-          [appCanAccess]="['OPERATION.SALE.DISABLE']"
-          *ngIf="data.data.isActive"
-          (click)="disable(data.data)"
-          [ngClass]="
-            designLine
-              ? 'sale-list__btn sale-list__btn--danger sale-list__btn--sm sale-list__btn--inline'
-              : 'btn btn-danger pull-left btn-sm'
-          "
-          title="Disable"
-        >
-          <i class="fas fa-trash-alt"></i>
-        </button>
-        <button
-          type="button"
-          [appCanAccess]="['OPERATION.SALE.ENABLE']"
-          *ngIf="!data.data.isActive"
-          (click)="enable(data.data)"
-          [ngClass]="
-            designLine
-              ? 'sale-list__btn sale-list__btn--success sale-list__btn--sm sale-list__btn--inline'
-              : 'btn btn-success pull-left btn-sm'
-          "
-          title="Enable"
-        >
-          <i class="fas fa-check-circle"></i>
-        </button>
+            type="button"
+            [appCanAccess]="['OPERATION.SALE.DISABLE']"
+            *ngIf="data.data.isActive"
+            (click)="disable(data.data)"
+            [ngClass]="
+              designLine
+                ? 'sale-list__btn sale-list__btn--danger sale-list__btn--sm sale-list__btn--inline'
+                : 'btn btn-danger pull-left btn-sm'
+            "
+            title="Disable"
+          >
+            <i class="fas fa-trash-alt"></i>
+          </button>
+          <button
+            type="button"
+            [appCanAccess]="['OPERATION.SALE.ENABLE']"
+            *ngIf="!data.data.isActive"
+            (click)="enable(data.data)"
+            [ngClass]="
+              designLine
+                ? 'sale-list__btn sale-list__btn--success sale-list__btn--sm sale-list__btn--inline'
+                : 'btn btn-success pull-left btn-sm'
+            "
+            title="Enable"
+          >
+            <i class="fas fa-check-circle"></i>
+          </button>
         </div>
         <div *dxTemplate="let data of 'dateTemplate'">
           {{ data.value | date: DisplayFormatDate }}
@@ -146,6 +149,14 @@
         <div *dxTemplate="let data of 'amountTemplate'">
           {{ data.value | currency: Currency }}
         </div>
+        <dxo-summary>
+          <dxi-total-item
+            column="amount"
+            summaryType="sum"
+            [customizeText]="dxCustomizeCurrency"
+            displayFormat="{0}"
+          ></dxi-total-item>
+        </dxo-summary>
       </dx-data-grid>
     </div>
   </div>

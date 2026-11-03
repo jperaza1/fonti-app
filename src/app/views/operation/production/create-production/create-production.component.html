@@ -1,0 +1,110 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" [size]="'xxxl'">
+  <div>
+    <div class="row row-space-10">
+      <section class="col-md-6 col-xs-12">
+        <div class="form-group">
+          <label>Fecha<i class="text-danger">*</i></label>
+          <dx-date-box [(value)]="Model.productionDate" [displayFormat]="DisplayFormatDate" [readOnly]="headerLocked" (onValueChanged)="onHeaderChanged()"></dx-date-box>
+          <app-validator-message [error]="errors" field="productionDate"></app-validator-message>
+        </div>
+      </section>
+      <section class="col-md-6 col-xs-12">
+        <div class="form-group">
+          <label>Turno<i class="text-danger">*</i></label>
+          <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true" [items]="shifts" [disabled]="headerLocked"
+            [(value)]="Model.shiftTypeId" (onValueChanged)="onHeaderChanged()" placeholder="Seleccione turno..."></dx-select-box>
+          <app-validator-message [error]="errors" field="shiftTypeId"></app-validator-message>
+          <small class="text-muted" *ngIf="!shifts.length">
+            Crea el grupo PRODUCTION_SHIFT en Type Groups y agrega Turno A y Turno B en Types.
+          </small>
+        </div>
+      </section>
+    </div>
+
+    <p class="text-muted" *ngIf="shiftMessage">{{ shiftMessage }}</p>
+
+    <div *ngIf="existingLines.length">
+      <label>Líneas del turno</label>
+      <dx-data-grid class="m-b-15" [dataSource]="existingLines" [showBorders]="true" [columnAutoWidth]="true" [rowAlternationEnabled]="true">
+        <dxi-column dataField="product" caption="Producto"></dxi-column>
+        <dxi-column dataField="quantity" caption="Cantidad" format="#,##0.######"></dxi-column>
+        <dxi-column dataField="losses" caption="Pérdidas"></dxi-column>
+        <dxi-column dataField="note" caption="Nota"></dxi-column>
+        <dxi-column dataField="status" caption="Estado"></dxi-column>
+        <dxi-column caption="" [width]="70" cellTemplate="lineActions" alignment="center"></dxi-column>
+        <div *dxTemplate="let row of 'lineActions'">
+          <button type="button" class="btn btn-danger btn-sm" *ngIf="row.data.isActive && currentShift && currentShift.isActive && !currentShift.isClosed" (click)="cancelLine(row.data)" title="Anular línea" [appCanAccess]="['OPERATION.PRODUCTION.CANCEL_LINE']">
+            <i class="fa fa-ban"></i>
+          </button>
+        </div>
+      </dx-data-grid>
+    </div>
+
+    <div *ngIf="!currentShift || (currentShift.isActive && !currentShift.isClosed)" [appCanAccess]="['OPERATION.PRODUCTION.CREATE']">
+      <div class="m-b-10">
+        <button type="button" class="btn btn-primary btn-sm" (click)="addLine()">
+          <i class="fa fa-plus"></i> Línea
+        </button>
+      </div>
+      <app-validator-message [error]="errors" field="lines"></app-validator-message>
+      <app-validator-message [error]="errors" field="losses"></app-validator-message>
+      <app-validator-message [error]="errors" field="stock"></app-validator-message>
+
+      <div class="m-b-15" *ngFor="let line of Model.lines; let i = index">
+        <div class="row row-space-10">
+          <section class="col-md-5 col-xs-12">
+            <div class="form-group">
+              <label>Producto</label>
+              <dx-select-box displayExpr="product" valueExpr="productId" [searchEnabled]="true" [items]="products"
+                [(value)]="line.productId" (onValueChanged)="preview(line)" placeholder="Seleccione producto..."></dx-select-box>
+            </div>
+          </section>
+          <section class="col-md-2 col-xs-12">
+            <div class="form-group">
+              <label>Cantidad</label>
+              <dx-number-box [(value)]="line.quantity" [min]="0" [showSpinButtons]="true" format="#,##0.######" (onValueChanged)="preview(line)"></dx-number-box>
+            </div>
+          </section>
+          <section class="col-md-4 col-xs-12">
+            <div class="form-group">
+              <label>Nota</label>
+              <dx-text-box [(value)]="line.note"></dx-text-box>
+            </div>
+          </section>
+          <section class="col-md-1 col-xs-12">
+            <div class="form-group">
+              <label>&nbsp;</label>
+              <div>
+                <button type="button" class="btn btn-danger btn-sm" (click)="removeLine(i)">
+                  <i class="fa fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="table-responsive" *ngIf="line.losses.length">
+          <table class="table table-bordered m-b-0">
+            <thead>
+              <tr>
+                <th>Materia prima</th>
+                <th>Unidad</th>
+                <th style="width: 160px;">Pérdida</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let loss of line.losses">
+                <td>{{ loss.product }}</td>
+                <td>{{ loss.unitOfMeasure }}</td>
+                <td>
+                  <dx-number-box [(value)]="loss.quantity" [min]="0" format="#,##0.######" placeholder="0"></dx-number-box>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal-with-option-buttons>

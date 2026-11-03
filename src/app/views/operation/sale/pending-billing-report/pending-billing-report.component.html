@@ -1,0 +1,167 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="sale-list">
+    <div class="sale-list__filters">
+      <div class="sale-list__filters-head">
+        <div class="sale-list__legend">
+          <i class="fas fa-filter"></i> Filtros
+        </div>
+        <div class="sale-list__actions">
+          <button type="button" class="sale-list__btn sale-list__btn--primary" (click)="getAll()">
+            <i class="fa fa-search"></i> Buscar
+          </button>
+          <button
+            type="button"
+            class="sale-list__btn sale-list__btn--secondary"
+            (click)="getAll()"
+            title="Actualizar lista"
+          >
+            <i class="fas fa-sync-alt"></i> Actualizar
+          </button>
+        </div>
+      </div>
+      <div class="row row-space-10">
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="sale-list__label" for="sale-filter-type">Tipo de venta</label>
+            <dx-select-box
+              id="sale-filter-type"
+              displayExpr="text"
+              valueExpr="value"
+              [searchEnabled]="true"
+              [dataSource]="DxDataSourceSaleType"
+              [(value)]="filterModel.saleType"
+            >
+            </dx-select-box>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="sale-list__label" for="sale-filter-from">Desde</label>
+            <dx-date-box
+              id="sale-filter-from"
+              [(max)]="filterModel.dateTo"
+              [(value)]="filterModel.dateFrom"
+              [displayFormat]="DisplayFormatDate"
+            ></dx-date-box>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="sale-list__label" for="sale-filter-to">Hasta</label>
+            <dx-date-box
+              id="sale-filter-to"
+              [(value)]="filterModel.dateTo"
+              [displayFormat]="DisplayFormatDate"
+              [(min)]="filterModel.dateFrom"
+            ></dx-date-box>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="sale-list__grid-wrap">
+      <dx-data-grid
+        id="dataGrid"
+        [dataSource]="DataSource"
+        [columns]="columns"
+        [remoteOperations]="false"
+        [allowColumnReordering]="true"
+        [rowAlternationEnabled]="true"
+        [showBorders]="true"
+        [columnAutoWidth]="true" 
+        (onSelectionChanged)="onSelectionChanged($event)"
+        #GridView>
+          <dxo-selection
+            selectAllMode="allPages"
+            showCheckBoxesMode="onClick"
+            mode="multiple"
+          ></dxo-selection>
+        <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true">
+        </dxo-search-panel>
+        <div *dxTemplate="let data of 'dateTemplate'">
+          {{ data.value | date: DisplayFormatDate }}
+        </div>
+        <div *dxTemplate="let data of 'amountTemplate'">
+          <span class="billing-amount">{{ data.value | currency: Currency }}</span>
+        </div>
+      </dx-data-grid>
+    </div>
+    <div class="billing-summary" [class.billing-summary--active]="selectedSalesCount > 0">
+      <div class="billing-summary__count">
+        <span class="billing-summary__badge">{{ selectedSalesCount }}</span>
+        <span class="billing-summary__caption">
+          {{ selectedSalesCount === 1 ? 'venta seleccionada' : 'ventas seleccionadas' }}
+        </span>
+      </div>
+      <button
+        *ngIf="selectionKind === 'cash'"
+        type="button"
+        class="sale-list__btn sale-list__btn--primary billing-summary__action"
+        (click)="openGenerateModal()"
+        [appCanAccess]="['OPERATION.INVOICE_SALE.CREATE']"
+      >
+        <i class="fas fa-file-invoice"></i> Generar factura al contado
+      </button>
+      <button
+        *ngIf="selectionKind === 'credit'"
+        type="button"
+        class="sale-list__btn sale-list__btn--primary billing-summary__action"
+        (click)="openGenerateModal()"
+        [appCanAccess]="['OPERATION.INVOICE_SALE.CREATE']"
+      >
+        <i class="fas fa-file-invoice"></i> Generar factura al crédito
+      </button>
+      <div class="billing-summary__total">
+        <span class="billing-summary__label">Total a facturar</span>
+        <span class="billing-summary__amount">{{ totalAmountToBill | currency : Currency }}</span>
+      </div>
+    </div>
+  </div>
+</panel>
+
+<app-create-or-update-sale #createOrUpdateModal (modalSave)="getAll()"></app-create-or-update-sale>
+
+<app-modal-with-option-buttons
+  #invoiceModal
+  [title]="invoiceModalTitle"
+  [optionButtons]="invoiceOptionButtons"
+  (onOptionButton)="onInvoiceOption($event)"
+>
+  <div class="billing-modal">
+    <ng-container *ngIf="billingMode === 'cash'">
+      <p class="billing-modal__hint">Selecciona la fecha con la que se emitirá la factura de las ventas al contado.</p>
+      <div class="form-group billing-modal__date">
+        <label class="sale-list__label" for="cash-invoice-date">Fecha de la factura</label>
+        <dx-date-box
+          id="cash-invoice-date"
+          [(value)]="cashInvoiceDate"
+          (onValueChanged)="onCashDateChanged($event)"
+          [displayFormat]="DisplayFormatDate"
+        ></dx-date-box>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="billingMode === 'credit'">
+      <p class="billing-modal__hint">Asigna la fecha de factura de cada cliente. Generar se habilita cuando todas las fechas están completas.</p>
+      <div class="billing-customer" *ngFor="let group of customerGroups">
+        <div class="billing-customer__info">
+          <span class="billing-customer__name">{{ group.customerName }}</span>
+          <span class="billing-customer__meta">
+            {{ group.salesCount }} {{ group.salesCount === 1 ? 'venta adjunta' : 'ventas adjuntas' }}
+          </span>
+        </div>
+        <div class="billing-customer__total">
+          <span class="sale-list__label">Total</span>
+          <span class="billing-customer__amount">{{ group.total | currency: Currency }}</span>
+        </div>
+        <div class="billing-customer__date">
+          <label class="sale-list__label">Fecha de la factura</label>
+          <dx-date-box
+            [(value)]="group.invoiceDate"
+            (onValueChanged)="onCustomerDateChanged(group, $event)"
+            [displayFormat]="DisplayFormatDate"
+          ></dx-date-box>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</app-modal-with-option-buttons>

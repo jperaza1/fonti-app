@@ -1,0 +1,29 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="m-b-10">
+    <button type="button" class="btn btn-warning pull-right" (click)="getAll()">
+      <i class="fas fa-sync-alt"></i>
+    </button>
+  </div>
+  <dx-data-grid [dataSource]="products" [showBorders]="true" [columnAutoWidth]="true" [rowAlternationEnabled]="true">
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]"></dxo-pager>
+    <dxo-search-panel [visible]="true"></dxo-search-panel>
+    <dxo-export [enabled]="true" fileName="Inventario"></dxo-export>
+    <dxi-column caption="" [width]="180" cellTemplate="actions" alignment="center"></dxi-column>
+    <dxi-column dataField="product" caption="Producto"></dxi-column>
+    <dxi-column dataField="productTypeName" caption="Tipo"></dxi-column>
+    <dxi-column dataField="unitOfMeasure" caption="Unidad"></dxi-column>
+    <dxi-column dataField="cost" caption="Costo" format="#,##0.00"></dxi-column>
+    <dxi-column dataField="quantity" caption="Saldo" format="#,##0.######"></dxi-column>
+    <div *dxTemplate="let row of 'actions'">
+      <button type="button" class="btn btn-success btn-sm" (click)="openEntry(row.data)" title="Entrada" [appCanAccess]="['OPERATION.INVENTORY.ENTRY']">
+        <i class="fa fa-plus"></i>
+      </button>
+      <button type="button" class="btn btn-danger btn-sm m-l-5" (click)="openExit(row.data)" [title]="exitTitle(row.data)" [appCanAccess]="['OPERATION.INVENTORY.EXIT']">
+        <i class="fa fa-minus"></i>
+      </button>
+    </div>
+  </dx-data-grid>
+</panel>
+
+<app-inventory-movement #movementModal (modalSave)="getAll()"></app-inventory-movement>

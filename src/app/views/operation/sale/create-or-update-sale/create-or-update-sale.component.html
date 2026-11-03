@@ -7,7 +7,7 @@
         <i class="fas fa-route"></i> Información general
       </div>
       <div class="row row-space-10">
-        <section class="col-md-6 col-xs-12">
+        <section class="col-md-4 col-xs-12">
           <div class="form-group">
             <label for="name">Ruta<i class="text-danger">*</i></label>
             <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
@@ -16,13 +16,22 @@
             <app-validator-message [error]="errors" field="cafeteria"></app-validator-message>
           </div>
         </section>
-        <section class="col-md-6 col-xs-12">
+        <section class="col-md-4 col-xs-12" >
           <div class="form-group">
             <label for="name">Tipo de Venta<i class="text-danger">*</i></label>
             <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
               [dataSource]="DxDataSourceSaleType" [(value)]="Model.saleType" [disabled]="Model.id > 0">
             </dx-select-box>
             <app-validator-message [error]="errors" field="saleType"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12" *ngIf="Model.saleType === 2">
+          <div class="form-group">
+            <label for="name">Cliente<i class="text-danger">*</i></label>
+            <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
+              [dataSource]="DxDataSourceCustomer" [(value)]="Model.customerId" [disabled]="Model.id > 0">
+            </dx-select-box>
+            <app-validator-message [error]="errors" field="customerId"></app-validator-message>
           </div>
         </section>
         <section class="col-md-6 col-xs-12">
@@ -70,6 +79,13 @@
               <i class="fas fa-trash"></i>
             </button>
           </div>
+          <dxo-summary>
+            <dxi-total-item 
+            column="total" 
+            summaryType="sum"
+            [customizeText]="dxCustomizeCurrency"
+            displayFormat="{0}"></dxi-total-item>
+          </dxo-summary>
         </dx-data-grid>
       </div>
     </div>

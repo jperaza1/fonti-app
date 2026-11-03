@@ -173,7 +173,7 @@ export abstract class AppComponentBase {
 	}
 	//NO USAR, USAR TEMPLATE Y EL PIPE DE CURRENCY  {{   AMOUNT | currency : Currency }}
 	dxCustomizeCurrency(column: any) {
-		return `Total: ${formatCurrency(column.value, this.CountryCode ?? 'en-US', this.Currency ?? 'L')}`;
+		return `${formatCurrency(column.value, this.CountryCode ?? 'en-US', this.Currency ?? 'L')}`;
 	}
 
 	getCurrency(value: any) {

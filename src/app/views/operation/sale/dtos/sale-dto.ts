@@ -1,5 +1,8 @@
 export class SaleDto {
  id: number;
+ customerId: number;
+ customer: string;
+ customerName: string;
  routeId: number;
  route: string;
  saleType: number;
@@ -7,6 +10,8 @@ export class SaleDto {
  saleDate: Date;
  amount: number;
  isActive: boolean;
+ saleInvoiceId: number;
+ invoiceNumber: string;
  saleDetails: SaleDetailModel[];
 
   constructor() {

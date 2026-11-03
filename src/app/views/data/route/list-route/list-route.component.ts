@@ -36,6 +36,14 @@ export class ListRouteComponent extends AppComponentBase implements OnInit {
         allowEditing: false,
       },
       {
+        dataField: 'deliversRegalia',
+        caption: 'Regalía',
+        allowEditing: false,
+        width: '120',
+        alignment: 'center',
+        calculateCellValue: (row) => row.deliversRegalia ? 'Sí' : 'No',
+      },
+      {
         dataField: 'isActive',
         caption: 'Status',
         allowEditing: false,

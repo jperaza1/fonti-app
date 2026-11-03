@@ -1,30 +1,24 @@
 <panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
   <div class="row row-space-10">
-    <section class="col-md-4 col-xs-12">
-      <div class="form-group">
-        <label for="name">Cafeteria</label>
-        <dx-select-box #cafeteriaId [(value)]="filterPurchaseOrderDto.cafeteriaId" [dataSource]="DxDatasourceCafeteria" displayExpr="name" valueExpr="id" [searchEnabled]="true"></dx-select-box>
-      </div>
-    </section>
-    <section class="col-md-4 col-xs-12">
+    <section class="col-md-3 col-xs-12">
       <div class="form-group">
         <label for="name">Proveedor</label>
         <dx-select-box #vendorId [(value)]="filterPurchaseOrderDto.vendorId" [dataSource]="DxDatasourceVendor" displayExpr="name" valueExpr="id" [searchEnabled]="true"></dx-select-box>
       </div>
     </section>
-    <section class="col-md-4 col-xs-12">
+    <section class="col-md-3 col-xs-12">
       <div class="form-group">
         <label for="name">Estado</label>
         <dx-select-box #orderStatus [(value)]="filterPurchaseOrderDto.orderStatus" [dataSource]="DxDatasourcePurchaseOrderStatus" displayExpr="text" valueExpr="value" [searchEnabled]="true" ></dx-select-box>
       </div>
     </section>
-    <section class="col-md-4 col-xs-12">
+    <section class="col-md-3 col-xs-12">
       <div class="form-group">
         <label for="name">Inicio</label>
         <dx-date-box [(max)]="filterPurchaseOrderDto.endDate" [(value)]="filterPurchaseOrderDto.startDate" [displayFormat]="DisplayFormatDate"></dx-date-box>
       </div>
     </section>
-    <section class="col-md-4 col-xs-12">
+    <section class="col-md-3 col-xs-12">
       <div class="form-group">
         <label for="name">Fin</label>
         <dx-date-box [(value)]="filterPurchaseOrderDto.endDate" [displayFormat]="DisplayFormatDate" [(min)]="filterPurchaseOrderDto.startDate"></dx-date-box>

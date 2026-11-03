@@ -1,0 +1,8 @@
+<app-basic-table-list [title]="title" [columns]="columns" [dataSource]="DataSource" [appCanAccess]="[]"
+  [permissionAllowCreate]="['OPERATION.UNIT_OF_MEASURE.CREATE']" [permissionAllowUpdate]="['OPERATION.UNIT_OF_MEASURE.UPDATE']"
+  [permissionAllowDisable]="['OPERATION.UNIT_OF_MEASURE.DISABLE']" [permissionAllowEnable]="['OPERATION.UNIT_OF_MEASURE.ENABLE']"
+  (onRefresh)="getAll()" (onNew)="create()" (onEdit)="update($event)" (onDisable)="disable($event)"
+  (onEnable)="enable($event)">
+</app-basic-table-list>
+
+<app-create-or-update-unit-of-measure #createOrUpdateModal (modalSave)="getAll()"></app-create-or-update-unit-of-measure>

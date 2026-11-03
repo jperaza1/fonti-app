@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConfigService } from '../../../../_services/ConfigService';
 import { RequestResult } from '../../../../_models/RequestResult';
-import { ProductDto } from './dtos/product-dto';
+import { ProductDto, VendorProductDto } from './dtos/product-dto';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
@@ -22,8 +22,8 @@ export class ProductService {
     return this.http.get<ProductDto>(`${this._config.config.data}Product/GetById?id=${id}`).toPromise();
   }
 
-  getByVendorId(vendorId: number): Promise<ProductDto[]> {
-    return this.http.get<ProductDto[]>(`${this._config.config.data}Product/GetByVendor?vendorId=${vendorId}`).toPromise();
+  getByVendorId(vendorId: number): Promise<VendorProductDto[]> {
+    return this.http.get<VendorProductDto[]>(`${this._config.config.data}Product/GetByVendor?vendorId=${vendorId}`).toPromise();
   }
 
   getActives(productType: number): Promise<ProductDto[]> {

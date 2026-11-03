@@ -9,39 +9,96 @@ var pageMenus = [
     icon: 'fa fa-shopping-cart',
     title: 'Ventas',
     url: 'sale',
-    permissions: [],
+    permissions: ['OPERATION.SALE'],
   },
   {
-    icon: 'fa fa-money-bill-alt',
-    title: 'Gastos',
-    url: 'expense',
-    permissions: [],
+    icon: 'fa fa-truck',
+    title: 'Control de Salida',
+    url: 'dispatch-control',
+    permissions: ['OPERATION.DISPATCH-CONTROL'],
+  },
+  {
+    icon: 'fa fa-shopping-cart',
+    title: 'Ordenes de Compra',
+    url: 'purchase-order',
+    permissions: ['OPERATION.PURCHASE_ORDER'],
+  },
+  {
+    icon: 'fa fa-boxes',
+    title: 'Inventario',
+    url: '',
+    caret: 'true',
+    permissions: ['OPERATION.INVENTORY', 'OPERATION.PRODUCTION', 'OPERATION.KARDEX', 'OPERATION.PRODUCT_RECIPE', 'OPERATION.UNIT_OF_MEASURE'],
+    submenu: [
+      {
+        url: 'inventory',
+        title: 'Inventario',
+        permissions: ['OPERATION.INVENTORY'],
+      },
+      {
+        url: 'production',
+        title: 'Producción',
+        permissions: ['OPERATION.PRODUCTION'],
+      },
+      {
+        url: 'kardex',
+        title: 'Kardex',
+        permissions: ['OPERATION.KARDEX'],
+      },
+      {
+        url: 'product-recipe',
+        title: 'Recetas',
+        permissions: ['OPERATION.PRODUCT_RECIPE'],
+      },
+      {
+        url: 'unit-of-measure',
+        title: 'Unidades de medida',
+        permissions: ['OPERATION.UNIT_OF_MEASURE'],
+      },
+    ],
   },
   {
     icon: 'fa fa-file-invoice-dollar',
-    title: 'Reportes',
+    title: 'Finanzas',
     url: '',
     caret: 'true',
-    permissions: ['OPERATION.REPORT', 'OPERATION.EXPENSE_REPORT'],
+    permissions: ['OPERATION.INVOICE_SALE', 'OPERATION.BANK_ACCOUNT', 'OPERATION.EXPENSE', 'OPERATION.INVOICE', 'OPERATION.PAYMENT'],
     submenu: [
       {
-        url: 'purchase-order/report',
-        title: 'Reporte de Ordenes de Compra',
-        permissions: ['OPERATION.REPORT'],
+        url: 'invoice',
+        title: 'Facturas de Compra',
+        permissions: ['OPERATION.INVOICE'],
       },
       {
-        url: 'purchase-order/report-expense',
-        title: 'Reporte de Gastos',
-        permissions: ['OPERATION.EXPENSE_REPORT'],
+        url: 'invoice-sale',
+        title: 'Facturas de Venta',
+        permissions: ['OPERATION.INVOICE_SALE'],
       },
-    ]
+      {
+        icon: 'fa fa-money-bill-alt',
+        title: 'Gastos',
+        url: 'expense',
+        permissions: ['OPERATION.EXPENSE'],
+      },
+      {
+        url: 'payment',
+        title: 'Pagos',
+        permissions: ['OPERATION.PAYMENT'],
+      },
+      {
+        url: 'bank-account',
+        title: 'Cuentas bancarias',
+        permissions: ['OPERATION.BANK_ACCOUNT'],
+      },
+    ],
   },
+  
   {
     icon: 'fas fa-user-shield',
     title: 'Operaciones',
     url: '',
     caret: 'true',
-    permissions: ['DATA.VENDORS', 'DATA.PRODUCT', 'DATA.ROUTE', 'DATA.CORRELATIVE', 'DATA.CATEGORY'],
+    permissions: ['DATA.VENDORS', 'DATA.PRODUCT', 'DATA.ROUTE', 'DATA.DISTRIBUTOR', 'DATA.TRUCK', 'DATA.CORRELATIVE', 'DATA.CATEGORY', 'DATA.CUSTOMER', 'DATA.BANK'],
     submenu: [
       {
         url: 'vendor',
@@ -51,7 +108,7 @@ var pageMenus = [
       {
         url: 'customer',
         title: 'Clientes',
-        permissions: [],
+        permissions: ['DATA.CUSTOMER'],
       },
       {
         url: 'product',
@@ -64,6 +121,16 @@ var pageMenus = [
         permissions: ['DATA.ROUTE'],
       },
       {
+        url: 'distributor',
+        title: 'Distribuidores',
+        permissions: ['DATA.DISTRIBUTOR'],
+      },
+      {
+        url: 'truck',
+        title: 'Camiones',
+        permissions: ['DATA.TRUCK'],
+      },
+      {
         url: 'correlative',
         title: 'Correlativos',
         permissions: ['DATA.CORRELATIVE'],
@@ -73,6 +140,36 @@ var pageMenus = [
         title: 'Categorías',
         permissions: ['DATA.CATEGORY'],
       },
+      {
+        url: 'bank',
+        title: 'Bancos',
+        permissions: ['DATA.BANK'],
+      }
+    ]
+  },
+  
+  {
+    icon: 'fa fa-file-invoice-dollar',
+    title: 'Reportes',
+    url: '',
+    caret: 'true',
+    permissions: ['OPERATION.SALE.PENDING_BILLING_REPORT', 'OPERATION.PURCHASE_ORDER.REPORT', 'OPERATION.PURCHASE_ORDER.EXPENSE_REPORT'],
+    submenu: [
+      {
+        url: 'sale/pending-billing-report',
+        title: 'Reporte de Facturas Pendientes',
+        permissions: ['OPERATION.SALE.PENDING_BILLING_REPORT'],
+      },
+      {
+        url: 'purchase-order/report',
+        title: 'Reporte de Ordenes de Compra',
+        permissions: ['OPERATION.PURCHASE_ORDER.REPORT'],
+      },
+      {
+        url: 'purchase-order/report-expense',
+        title: 'Reporte de Gastos',
+        permissions: ['OPERATION.PURCHASE_ORDER.EXPENSE_REPORT'],
+      }
     ]
   },
   {
@@ -81,25 +178,19 @@ var pageMenus = [
     url: '',
     caret: 'true',
     permissions: [
-      'DATA.STATES',
-      'DATA.COUNTRIES',
-      'DATA.CITIES',
-      'DATA.TRUCKS',
-      'DATA.TRAILERS',
-      'DATA.VENDORS',
-      'DATA.TERMS',
-      "DATA.DEFAULT_USER_TASK"
+      'DATA.TYPES',
+      'DATA.TYPE_GROUP',
     ],
     submenu: [
       {
         url: 'type',
         title: 'Types',
-        permissions: [],
+        permissions: ['DATA.TYPES'],
       },
       {
         url: 'type-group',
         title: 'Type Groups',
-        permissions: [],
+        permissions: ['DATA.TYPE_GROUP'],
       },
     ],
   },

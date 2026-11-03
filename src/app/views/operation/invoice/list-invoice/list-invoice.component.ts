@@ -8,8 +8,8 @@ import { CafeteriaService } from '../../../data/cafeteria/cafeteria.service';
 import { Router } from '@angular/router';
 import { User } from '../../../../../_models/user';
 import { AuthenticationService } from '../../../../../_services/authentication.service';
-import { CreateOrUpdateInvoiceComponent } from '../create-or-update-invoice/create-or-update-invoice.component';
 import { VendorService } from '../../../data/vendor/vendor.service';
+import { RouteService } from '../../../data/route/route.service';
 
 @Component({
   selector: 'app-list-invoice',
@@ -20,20 +20,17 @@ export class ListInvoiceComponent extends AppComponentBase implements OnInit {
   title: string = 'Facturas';
   DataSource: PurchaseOrderInvoiceDto[] = [];
   columns: any[] = [];
-  DxDatasourceInvoiceType: any = {};
   DxDatasourcePaymentType: any = {};
   DxDatasourcePaymentStatus: any = {};
-  DxDatasourceCafeteria: any = {};
   DxDatasourceVendor: any = {};
+  DxDatasourceRoute: any = {};
   filterModel: InvoiceFilterDto = new InvoiceFilterDto();
   currentUser: User;
-
-  @ViewChild("createOrUpdate") createOrUpdate: CreateOrUpdateInvoiceComponent;
-
+  
   constructor(
     private _enumDefinitionsService: EnumDefinitionsService,
     private _invoiceService: InvoiceService,
-    private _cafeteriaService: CafeteriaService,
+    private _routeService: RouteService,
     private _vendorService: VendorService,
     private _router: Router,
     private _authenticationService: AuthenticationService
@@ -44,17 +41,6 @@ export class ListInvoiceComponent extends AppComponentBase implements OnInit {
 
   async ngOnInit() {
     await this.init();
-    this.filterModel.cafeteriaId = this.currentUser.cafeteriaId || 0;
-  }
-
-  async getInvoiceType() {
-    let result = await this._enumDefinitionsService.getInvoiceType();
-    console.log(result);
-    result.unshift({
-      value: 0,
-      text: 'Todos'
-    });
-    this.DxDatasourceInvoiceType = this.getDataSourceDx(result);
   }
 
   async getPaymentType() {
@@ -86,21 +72,20 @@ export class ListInvoiceComponent extends AppComponentBase implements OnInit {
     this.DxDatasourcePaymentStatus = this.getDataSourceDx(result);
   }
 
-  async getCafeteria() {
-    let result = await this._cafeteriaService.getActives();
+  async getRoute() {
+    let result = await this._routeService.getActives();
     result.unshift({
       id: 0,
       name: 'Todos'
     } as any);
-    this.DxDatasourceCafeteria = this.getDataSourceDx(result);
+    this.DxDatasourceRoute = this.getDataSourceDx(result);
   }
 
   async init() {
     this.initializeColumns();
-    await this.getInvoiceType();
     await this.getPaymentType();
     await this.getPaymentStatus();
-    await this.getCafeteria();
+    await this.getRoute();
     await this.getVendor();
     await this.search();
   }
@@ -110,12 +95,18 @@ export class ListInvoiceComponent extends AppComponentBase implements OnInit {
     this.DataSource = result;
   }
 
-  viewPurchaseOrder(data: PurchaseOrderInvoiceDto) {
-    window.open(`/purchase-order/update/${data.purchaseOrderId}`, '_blank');
-  }
-
   viewInvoice(data: PurchaseOrderInvoiceDto) {
     window.open(`/invoice/view/${data.id}`, '_blank');
+  }
+
+  async deleteInvoice(data: PurchaseOrderInvoiceDto) {
+    let confirmResult = await this.confirm('¿Estás seguro de querer eliminar esta factura?', 'Eliminar Factura');
+    if (confirmResult.value) {
+      let disableResponse = await this._invoiceService.delete(data.id);
+      if (disableResponse.success) {
+        await this.search();
+      }
+    }
   }
 
   initializeColumns() {
@@ -129,8 +120,12 @@ export class ListInvoiceComponent extends AppComponentBase implements OnInit {
         allowExporting: true,
       },
       {
-        dataField: 'cafeteria',
-        caption: 'Cafeteria'
+        dataField: 'route',
+        caption: 'Ruta'
+      },
+      {
+        dataField: 'truckName',
+        caption: 'Camión'
       },
       {
         dataField: 'invoiceNumber',
@@ -138,17 +133,8 @@ export class ListInvoiceComponent extends AppComponentBase implements OnInit {
         cellTemplate: 'invoiceNumberTemplate'
       },
       {
-        dataField: 'purchaseOrder',
-        caption: 'Orden de Compra',
-        cellTemplate: 'purchaseOrderTemplate'
-      },
-      {
         dataField: 'paymentTypeName',
         caption: 'Tipo de Pago'
-      },
-      {
-        dataField: 'invoiceTypeName',
-        caption: 'Tipo de Factura'
       },
       {
         dataField: 'paymentStatusName',
@@ -156,7 +142,7 @@ export class ListInvoiceComponent extends AppComponentBase implements OnInit {
         cellTemplate: 'paymentStatusTemplate'
       },
       {
-        dataField: 'vendor',
+        dataField: 'vendorName',
         caption: 'Proveedor'
       },
       {
@@ -180,10 +166,6 @@ export class ListInvoiceComponent extends AppComponentBase implements OnInit {
         cellTemplate: 'amountTemplate'
       }
     ];
-  }
-
-  showAdd() {
-    this.createOrUpdate.showAdd();
   }
 
 }

@@ -12,4 +12,5 @@ export class User {
 	userType: UserTypeEnum;
 	identity: string;
 	cafeteriaId: number;
+	routes: number[];
 }

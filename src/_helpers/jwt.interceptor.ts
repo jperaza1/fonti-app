@@ -25,7 +25,8 @@ export class JwtInterceptor implements HttpInterceptor {
 					Authorization: `Bearer ${currentUser.token}`,
 					"App.TenantId": `${currentUser.tenantId}`,
 					"Accept": "application/json",
-					"Timezone": this.timezoneService.getWindowsTimezone()
+					"Timezone": this.timezoneService.getWindowsTimezone(),
+					"App.Routes": currentUser.routes ? currentUser.routes.join(',') : ''
 				}
 			});
 		} else {
@@ -34,7 +35,8 @@ export class JwtInterceptor implements HttpInterceptor {
 					Authorization: `Bearer 1234567898765432234543`,
 					"App.TenantId": `3`,
 					"Accept": "application/json",
-					"Timezone": this.timezoneService.getWindowsTimezone()
+					"Timezone": this.timezoneService.getWindowsTimezone(),
+					"App.Routes": ''
 				}
 			});
 		}

@@ -2,23 +2,15 @@
   <!-- Filtros -->
   <div class="expense-filters">
     <div class="row row-space-10">
-      <section class="col-md-4 col-xs-12">
+      <section class="col-md-6 col-xs-12">
         <div class="form-group">
-          <label for="cafeteriaId">Cafeteria</label>
-          <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true" [dataSource]="DxDatasourceCafeteria"
-            [(value)]="filterExpenseReportDto.cafeteriaId">
-          </dx-select-box>
-        </div>
-      </section>
-      <section class="col-md-4 col-xs-12">
-        <div class="form-group">
-          <label for="cafeteriaId">Tipo de Agrupación</label>
+          <label for="filterType">Tipo de Agrupación</label>
           <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true" [dataSource]="DxDatasourceFilterType"
             [(value)]="filterExpenseReportDto.filterType">
           </dx-select-box>
         </div>
       </section>
-      <section class="col-md-4 col-xs-12">
+      <section class="col-md-6 col-xs-12">
         <div class="form-group">
           <label for="vendors">Proveedores</label>
           <dx-tag-box [dataSource]="DxDatasourceVendor" [(value)]="filterExpenseReportDto.vendors" displayExpr="name"

@@ -12,7 +12,7 @@
         <i class="fas fa-wallet"></i> Información general
       </div>
       <div class="row row-space-10">
-        <section class="col-md-4 col-xs-12">
+        <section class="col-md-3 col-xs-12">
           <div class="form-group">
             <label>Ruta<i class="text-danger">*</i></label>
             <dx-select-box
@@ -21,11 +21,22 @@
               displayExpr="name"
               valueExpr="id"
               placeholder="Seleccione ruta..."
+              [disabled]="Model.id > 0"
+              (onItemClick)="onRouteItemClick($event.itemData)"
             ></dx-select-box>
             <app-validator-message [error]="errors" field="categoryId"></app-validator-message>
           </div>
         </section>
-        <section class="col-md-4 col-xs-12">
+        <section class="col-md-3 col-xs-12">
+          <div class="form-group">
+            <label class="expense-form__label">Camión</label>
+            <div class="expense-form__truck" [class.expense-form__truck--empty]="!Model.truckName">
+              <i class="fas fa-truck" aria-hidden="true"></i>
+              <span>{{ Model.truckName || 'Se asigna al elegir la ruta' }}</span>
+            </div>
+          </div>
+        </section>
+        <section class="col-md-3 col-xs-12">
           <div class="form-group">
             <label>Categoría<i class="text-danger">*</i></label>
             <dx-select-box
@@ -35,11 +46,12 @@
               valueExpr="id"
               (onItemClick)="onCategoryItemClick($event.itemData)"
               placeholder="Seleccione categoría..."
+              [disabled]="Model.id > 0"
             ></dx-select-box>
             <app-validator-message [error]="errors" field="categoryId"></app-validator-message>
           </div>
         </section>
-        <section class="col-md-4 col-xs-12">
+        <section class="col-md-3 col-xs-12">
           <div class="form-group">
             <label>Subcategoría<i class="text-danger">*</i></label>
             <dx-select-box
@@ -50,6 +62,7 @@
               [disabled]="!Model.categoryId"
               (onItemClick)="onSubCategoryItemClick($event.itemData)"
               placeholder="Seleccione subcategoría..."
+              [disabled]="Model.id > 0"
             ></dx-select-box>
             <app-validator-message [error]="errors" field="subCategoryId"></app-validator-message>
           </div>
@@ -69,6 +82,7 @@
               valueExpr="id"
               [disabled]="Model.id > 0"
               placeholder="Seleccione proveedor..."
+              [disabled]="Model.id > 0"
             ></dx-select-box>
             <app-validator-message [error]="errors" field="vendorId"></app-validator-message>
           </div>
@@ -79,6 +93,7 @@
             <dx-date-box
               [(value)]="Model.date"
               [displayFormat]="DisplayFormatDate"
+              [disabled]="Model.id > 0"
             ></dx-date-box>
             <app-validator-message [error]="errors" field="date"></app-validator-message>
           </div>
@@ -91,6 +106,7 @@
               [format]="CurrencyDxNumber"
               [showSpinButtons]="false"
               placeholder="0.00"
+              [disabled]="Model.id > 0"
             ></dx-number-box>
             <app-validator-message [error]="errors" field="total"></app-validator-message>
           </div>
@@ -101,6 +117,7 @@
             <dx-check-box
               [(value)]="Model.isInvoice"
               text="Registrado con factura"
+              [disabled]="Model.id > 0"
               (onValueChanged)="onIsInvoiceChanged()"
             ></dx-check-box>
           </div>
@@ -108,43 +125,78 @@
         <section class="col-md-12 col-xs-12">
           <div class="form-group">
             <label>Notas</label>
-            <dx-text-area [height]="90" [(value)]="Model.notes" placeholder="Observaciones opcionales..."></dx-text-area>
+            <dx-text-area [height]="90" [(value)]="Model.notes" placeholder="Observaciones opcionales..." [disabled]="Model.id > 0"></dx-text-area>
             <app-validator-message [error]="errors" field="notes"></app-validator-message>
           </div>
         </section>
       </div>
     </div>
 
-    <div class="expense-form__section expense-form__section--detail" *ngIf="Model.isInvoice">
+    <div class="expense-form__section" *ngIf="Model.id > 0 && Model.isInvoice">
+      <div class="form-group">
+        <label class="expense-form__label">Número de factura</label>
+        <a
+          href="javascript:void(0)"
+          class="expense-form__invoice-link"
+          (click)="onInvoiceLinkClick($event)"
+        >{{ formatInvoiceNumber(Model.invoiceNumber) }}</a>
+      </div>
+    </div>
+
+    <div class="expense-form__section expense-form__section--detail" *ngIf="Model.isInvoice && Model.id === 0">
       <div class="expense-form__legend">
         <i class="fas fa-file-invoice"></i> Datos de la factura
       </div>
       <p class="expense-form__hint">Número y fecha según el comprobante fiscal.</p>
       <div class="row row-space-10">
-        <section class="col-md-6 col-xs-12">
+        <section class="col-md-4 col-xs-12">
           <div class="form-group">
             <label class="expense-form__label">Número de factura<i class="text-danger">*</i></label>
             <dx-text-box
               [(value)]="Model.expenseInvoice.invoiceNumber"
               mask="000-000-00-00000000"
+              [disabled]="Model.id > 0"
             ></dx-text-box>
             <app-validator-message [error]="errors" field="invoiceNumber"></app-validator-message>
           </div>
         </section>
-        <section class="col-md-6 col-xs-12">
+        <section class="col-md-4 col-xs-12">
           <div class="form-group">
             <label class="expense-form__label">Fecha de factura<i class="text-danger">*</i></label>
             <dx-date-box
               [(value)]="Model.expenseInvoice.invoiceDate"
               [displayFormat]="DisplayFormatDate"
+              [disabled]="Model.id > 0"
             ></dx-date-box>
             <app-validator-message [error]="errors" field="invoiceDate"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="expense-form__label">Tipo de pago<i class="text-danger">*</i></label>
+            <dx-select-box
+              [(value)]="Model.expenseInvoice.paymentType"
+              [dataSource]="DxDataSourcePaymentType"
+              displayExpr="text"
+              valueExpr="value"
+              [searchEnabled]="true"
+              placeholder="Seleccione tipo de pago..."
+              [disabled]="Model.id > 0"
+            ></dx-select-box>
+            <app-validator-message [error]="errors" field="paymentType"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="custom-control custom-switch">
+            <input type="checkbox" [(ngModel)]="Model.expenseInvoice.isRefund" #isRefund="ngModel"
+                class="custom-control-input" id="isRefund">
+            <label class="custom-control-label" for="isRefund">Reembolso</label>
           </div>
         </section>
       </div>
     </div>
 
-    <div class="expense-form__section expense-form__section--detail" *ngIf="Model.isInvoice">
+    <div class="expense-form__section expense-form__section--detail" *ngIf="Model.isInvoice && Model.id === 0">
       <div class="expense-form__legend">
         <i class="fas fa-calculator"></i> Montos
       </div>
@@ -159,6 +211,7 @@
               [(value)]="Model.expenseInvoice.taxableAmount"
               [format]="CurrencyDxNumber"
               [showSpinButtons]="false"
+              [disabled]="Model.id > 0"
               (onValueChanged)="onInvoiceAmountChanged($event)"
             ></dx-number-box>
           </div>
@@ -170,6 +223,7 @@
               [(value)]="Model.expenseInvoice.exemptAmount"
               [format]="CurrencyDxNumber"
               [showSpinButtons]="false"
+              [disabled]="Model.id > 0"
               (onValueChanged)="onInvoiceAmountChanged($event)"
             ></dx-number-box>
           </div>
@@ -181,6 +235,7 @@
               [(value)]="Model.expenseInvoice.discount"
               [format]="CurrencyDxNumber"
               [showSpinButtons]="false"
+              [disabled]="Model.id > 0"
               (onValueChanged)="onInvoiceAmountChanged($event)"
             ></dx-number-box>
           </div>
@@ -203,6 +258,7 @@
               [(value)]="Model.expenseInvoice.taxAmount"
               [format]="CurrencyDxNumber"
               [showSpinButtons]="false"
+              [disabled]="Model.id > 0"
               (onValueChanged)="onInvoiceTaxAmountChanged($event)"
             ></dx-number-box>
           </div>
@@ -220,7 +276,104 @@
         </section>
       </div>
     </div>
+
+    <section class="expense-form__section expense-form__section--detail expense-form__section--documents" *ngIf="Model.id === 0">
+      <div class="expense-form__legend">
+        <i class="fas fa-paperclip"></i> Archivo de factura <i class="text-danger">*</i>
+      </div>
+      <p class="expense-form__hint">
+        Se envía junto al formulario (multipart). Formatos habituales: PDF, imagen, etc.
+      </p>
+      <div class="expense-form__upload">
+        <div class="expense-form__upload-inner">
+          <dx-file-uploader
+            [(value)]="invoiceUploaderFiles"
+            (onValueChanged)="onInvoiceAttachmentChanged($event)"
+            uploadUrl=""
+            [multiple]="false"
+            accept="*"
+            uploadMode="useButtons"
+            [showFileList]="true"
+            [allowedFileExtensions]="[]"
+          >
+          </dx-file-uploader>
+        </div>
+      </div>
+    </section>
+
+    <div *ngIf="Model.id > 0 && hasDocumentPreview" class="expense-form__section expense-form__section--detail expense-form__section--preview m-t-10">
+      <section class="expense-form__preview">
+        <div class="expense-form__legend">
+          <i class="fas fa-receipt"></i> Factura / comprobante
+        </div>
+        <div
+          class="expense-doc-preview"
+          (click)="openDocumentLightbox()"
+          role="button"
+          tabindex="0"
+          (keydown.enter)="openDocumentLightbox()"
+          (keydown.space)="openDocumentLightbox()"
+        >
+          <div class="expense-doc-preview__frame">
+            <img
+              *ngIf="documentUrl && documentIsImage"
+              [src]="documentUrl"
+              (error)="onDocumentImageError()"
+              alt="Vista previa"
+              class="invoice-doc-preview__img"
+            />
+            <iframe
+              *ngIf="documentUrl && !documentIsImage"
+              [src]="documentUrl"
+              title="Vista previa del documento"
+              class="invoice-doc-preview__doc"
+            ></iframe>
+            <div class="invoice-doc-preview__overlay">
+              <span class="invoice-doc-preview__icon" aria-hidden="true"><i class="fa fa-eye"></i></span>
+              <span class="invoice-doc-preview__hint">Ver en grande</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
   </div>
 </app-modal-with-option-buttons>
 
 <app-create-or-update-vendor #vendorModal (modalSave)="loadVendors()"></app-create-or-update-vendor>
+
+<div
+  class="invoice-lightbox"
+  *ngIf="showImageLightbox"
+  (click)="closeImageLightbox()"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Vista ampliada del documento"
+>
+  <button
+    class="invoice-lightbox__close"
+    (click)="closeImageLightbox(); $event.stopPropagation()"
+    aria-label="Cerrar"
+  >
+    <i class="fa fa-times" aria-hidden="true"></i>
+  </button>
+  <div
+    class="invoice-lightbox__content"
+    [class.invoice-lightbox__content--image]="lightboxIsImage"
+    (click)="$event.stopPropagation()"
+  >
+    <img
+      *ngIf="lightboxUrl && lightboxIsImage"
+      [src]="lightboxUrl"
+      (error)="onLightboxImageError()"
+      alt="Documento"
+      class="invoice-lightbox__img"
+    />
+    <iframe
+      *ngIf="lightboxUrl && !lightboxIsImage"
+      [src]="lightboxUrl"
+      title="Documento en tamaño completo"
+      class="invoice-lightbox__doc"
+    ></iframe>
+  </div>
+</div>

@@ -1,9 +1,6 @@
 export class UserTypeEnum {
-    public static General: number = 1;
-    public static Supervisor: number = 2;
-    public static Warehouse: number = 3;
-    public static Purchasing: number = 4;
-    public static Administrative: number = 5;
-    public static Sales: number = 6;
-    public static SpecialService: number = 7;
+    public static SuperAdmin: number = 1;
+    public static Administrativo: number = 2;
+    public static General: number = 3;
+    public static Vendor: number = 4;
 }

@@ -4,6 +4,7 @@ export class OptionButton {
   btnClass: string;
   btnIcon: string;
   permission: string[];
+  disabled: boolean;
   /**
    *
    */
@@ -13,5 +14,6 @@ export class OptionButton {
     this.btnName = btnName;
     this.btnText = btnText;
     this.permission = permission;
+    this.disabled = false;
   }
 }

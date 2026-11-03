@@ -1,0 +1,47 @@
+<app-modal-with-option-buttons #entityComponent [title]="title" [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)" (onClose)="close()" [size]="'xxxl'">
+  <div class="truck-form">
+    <div class="truck-form__section">
+      <div class="truck-form__legend">
+        <i class="fas fa-truck"></i> Información general
+      </div>
+      <div class="row row-space-10">
+        <section class="col-md-12 col-xs-12">
+          <div class="form-group">
+            <label class="truck-form__label" for="truckName">Descripción<i class="text-danger">*</i></label>
+            <dx-text-box #name id="truckName" [(value)]="Model.name" placeholder="Ej: Camión Norte, Unidad 01...">
+            </dx-text-box>
+            <app-validator-message [error]="errors" field="name"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="truck-form__label" for="truckPlate">Placa<i class="text-danger">*</i></label>
+            <dx-text-box #plate id="truckPlate" [(value)]="Model.plate" placeholder="Ej: PAA-1234">
+            </dx-text-box>
+            <app-validator-message [error]="errors" field="plate"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="truck-form__label" for="truckStatus">Estado<i class="text-danger">*</i></label>
+            <dx-select-box id="truckStatus" displayExpr="text" valueExpr="value" [searchEnabled]="true"
+              [dataSource]="DxDataSourceTruckStatus" [(value)]="Model.truckStatus"
+              placeholder="Seleccione estado...">
+            </dx-select-box>
+            <app-validator-message [error]="errors" field="truckStatus"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label class="truck-form__label" for="route">Ruta<i class="text-danger">*</i></label>
+            <dx-select-box id="route" displayExpr="name" valueExpr="id" [searchEnabled]="true"
+              [dataSource]="DxDataSourceRoutes" [(value)]="Model.routeId" placeholder="Seleccione ruta...">
+            </dx-select-box>
+            <app-validator-message [error]="errors" field="routeId"></app-validator-message>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</app-modal-with-option-buttons>

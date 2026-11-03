@@ -1,0 +1,118 @@
+/* Distributor form - Línea gráfica design-line */
+.route-form {
+  --accent: #0d9488;
+  --accent-dark: #0f766e;
+  --text-muted: #64748b;
+  --card-border: rgba(13, 148, 136, 0.3);
+  --bg-light: #e2e8f0;
+}
+
+.route-form__section {
+  margin-bottom: 1.75rem;
+}
+
+.route-form__section:last-child {
+  margin-bottom: 0;
+}
+
+.route-form__legend {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.route-form__legend i {
+  margin-right: 0.5rem;
+  opacity: 0.9;
+}
+
+.route-form__section--talonario {
+  padding: 1.25rem;
+  background: rgba(13, 148, 136, 0.04);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+}
+
+.route-form__hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: -0.5rem 0 1rem 0;
+}
+
+.route-form__label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.route-form__btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.route-form__btn-add:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.35);
+}
+
+.route-form__btn-add:active {
+  transform: translateY(0);
+}
+
+.route-form__grid-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+}
+
+.route-form__grid-wrapper ::ng-deep .dx-datagrid {
+  border: none;
+}
+
+.route-form__grid-wrapper ::ng-deep .dx-datagrid-headers {
+  background: var(--bg-light);
+}
+
+.route-form__grid-wrapper ::ng-deep .dx-header-row td {
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.route-form__grid-wrapper ::ng-deep .dx-row-alt {
+  background: rgba(226, 232, 240, 0.6);
+}
+
+.route-form__grid-wrapper ::ng-deep .dx-data-row:hover {
+  background: rgba(13, 148, 136, 0.06);
+}
+
+/* Dark mode support */
+:host-context(.dark-theme) .route-form {
+  --text-muted: #94a3b8;
+  --card-border: rgba(45, 212, 191, 0.25);
+}
+
+:host-context(.dark-theme) .route-form__section--talonario {
+  background: rgba(13, 148, 136, 0.08);
+}
+
+:host-context(.dark-theme) .route-form__grid-wrapper ::ng-deep .dx-datagrid-headers {
+  background: #334155;
+}

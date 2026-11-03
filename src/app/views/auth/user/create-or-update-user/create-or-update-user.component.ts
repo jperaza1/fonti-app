@@ -11,7 +11,7 @@ import { RoleDto } from '../../role/dtos/role-dto';
 import { RoleService } from '../../role/role.service';
 import { UserDto } from '../dtos/user-dto';
 import { UserService } from '../user.service';
-import { CafeteriaService } from '../../../data/cafeteria/cafeteria.service';
+import { RouteService } from '../../../data/route/route.service';
 
 @Component({
   selector: 'app-create-or-update-user',
@@ -20,9 +20,7 @@ import { CafeteriaService } from '../../../data/cafeteria/cafeteria.service';
 })
 export class CreateOrUpdateUserComponent extends AppComponentBase implements OnInit {
 
-  ShowDispatcher: boolean = false;
-  ShowDriver: boolean = false;
-  ShowCustomer: boolean = false;
+  ShowRoutes: boolean = false;
   EditModel: boolean = false;
 
   OptionButtons: OptionButton[];
@@ -30,7 +28,7 @@ export class CreateOrUpdateUserComponent extends AppComponentBase implements OnI
   Model: UserDto = new UserDto();
   DxDataSourceCity: any = {};
   DxDataSourceUserType: any = {};
-  DxDataSourceCafeteria: any = {};
+  DxDataSourceRoute: any = {};
 
   SelectedRowKeys: number[] = [];
   Roles: RoleDto[] = [];
@@ -55,7 +53,7 @@ export class CreateOrUpdateUserComponent extends AppComponentBase implements OnI
     private _userService: UserService,
     private _definitionService: EnumDefinitionsService,
     private _roleService: RoleService,
-    private _cafeteriaService: CafeteriaService
+    private _routeService: RouteService
   ) {
     super();
 
@@ -65,7 +63,7 @@ export class CreateOrUpdateUserComponent extends AppComponentBase implements OnI
     await this.getUserTypes();
     await this.getAlerts();
     await this.getRoles();
-    await this.getCafeterias();
+    await this.getRoutes();
   }
 
   init() {
@@ -90,7 +88,10 @@ export class CreateOrUpdateUserComponent extends AppComponentBase implements OnI
     this.setValuesChangeUserType(parseInt(definition.value));
   }
   setValuesChangeUserType(userType: number) {
-    this.ShowCustomer = UserTypeEnum.Supervisor === userType || UserTypeEnum.Warehouse === userType || UserTypeEnum.Sales === userType || UserTypeEnum.SpecialService === userType;
+    this.ShowRoutes = userType === UserTypeEnum.Vendor;
+    if (!this.ShowRoutes) {
+      this.Model.routes = [];
+    }
   }
 
   async getUserTypes() {
@@ -98,9 +99,9 @@ export class CreateOrUpdateUserComponent extends AppComponentBase implements OnI
     this.DxDataSourceUserType = this.getDataSourceDx(userTypes);
   }
 
-  async getCafeterias() {
-    var result = await this._cafeteriaService.getAll();
-    this.DxDataSourceCafeteria = this.getDataSourceDx(result);
+  async getRoutes() {
+    const result = await this._routeService.getActives();
+    this.DxDataSourceRoute = this.getDataSourceDx(result);
   }
 
   setButtonOptions(update?: boolean | null) {
@@ -152,6 +153,9 @@ export class CreateOrUpdateUserComponent extends AppComponentBase implements OnI
 
     this.Model.roleIds = this.SelectedRowKeys;
     this.Model.userAlerts = this.SelectedAlertKeys;
+    if (!this.ShowRoutes) {
+      this.Model.routes = [];
+    }
 
     if (this.isEmptyOrNullNumber(this.Model.id)) {
 

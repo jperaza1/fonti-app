@@ -1,5 +1,4 @@
 export class ExpenseReportFilterDto {
-  cafeteriaId: number;
   startDate: Date;
   endDate: Date;
   filterType: number;

@@ -10,6 +10,6 @@ export class FilterSaleDto {
     this.dateTo = new Date();
     this.routeId = 0;
     this.cafeterias = [];
-    this.saleType = 0;
+    this.saleType = 1;
   }
 }

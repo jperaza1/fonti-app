@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Inject, NgZone, PL
 import { trigger, transition, style, animate } from '@angular/animations';
 import { isPlatformBrowser } from '@angular/common';
 import { ExpenseReportFilterDto } from '../dtos/expense-report-filter.dto';
-import { CafeteriaService } from '../../../data/cafeteria/cafeteria.service';
 import { AppComponentBase } from '../../../../AppComponentBase';
 import { PurchaseOrderService } from '../purchase-order.service';
 import * as am4core from '@amcharts/amcharts4/core';
@@ -36,7 +35,6 @@ export class ReportExpenseComponent extends AppComponentBase implements OnInit, 
 
   title: string = 'Reporte de Gastos';
   filterExpenseReportDto: ExpenseReportFilterDto = new ExpenseReportFilterDto();
-  DxDatasourceCafeteria: any = {};
   DxDatasourceFilterType: any = {};
   DxDatasourceVendor: any = {};
 
@@ -64,7 +62,6 @@ export class ReportExpenseComponent extends AppComponentBase implements OnInit, 
   ];
 
   constructor(
-    private _cafeteriaService: CafeteriaService,
     private _purchaseOrderService: PurchaseOrderService,
     private _vendorService: VendorService,
     @Inject(PLATFORM_ID) private platformId: any,
@@ -74,18 +71,12 @@ export class ReportExpenseComponent extends AppComponentBase implements OnInit, 
   }
 
   async ngOnInit() {
-    await this.getCafeteria();
     await this.getFilterType();
     await this.getVendor();
   }
 
   ngOnDestroy() {
     this.disposeChart();
-  }
-
-  async getCafeteria() {
-    let result = await this._cafeteriaService.getActives();
-    this.DxDatasourceCafeteria = this.getDataSourceDx(result);
   }
 
   async getFilterType() {

@@ -1,0 +1,91 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div>
+    <div class="row row-space-10">
+      <section class="col-md-4 col-xs-12">
+        <div class="form-group">
+          <label class="expense-list__label">Desde</label>
+          <dx-date-box
+            [(max)]="filterModel.dateTo"
+            [(value)]="filterModel.dateFrom"
+            [displayFormat]="DisplayFormatDate"
+          ></dx-date-box>
+        </div>
+      </section>
+      <section class="col-md-4 col-xs-12">
+        <div class="form-group">
+          <label class="expense-list__label">Hasta</label>
+          <dx-date-box
+            [(value)]="filterModel.dateTo"
+            [displayFormat]="DisplayFormatDate"
+            [(min)]="filterModel.dateFrom"
+          ></dx-date-box>
+        </div>
+      </section>
+      <section class="col-md-12 col-xs-12">
+        <button 
+        type="button" class="btn btn-secondary" (click)="search()">
+          <i class="fa fa-search"></i> Buscar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="showAdd()"
+          [appCanAccess]="['OPERATION.DISPATCH-CONTROL.ADD']"
+        >
+          <i class="fa fa-plus"></i> Agregar
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="generateReport()"
+          [appCanAccess]="['OPERATION.DISPATCH-CONTROL.GENERATE-REPORT']"
+        >
+          <i class="fa fa-file-excel"></i> Generar Reporte
+        </button>
+      </section>
+    </div>
+    <div class="row row-space-10">
+      <dx-data-grid
+        id="dispatchControlGrid"
+        [dataSource]="DataSource"
+        [columns]="columns"
+        [remoteOperations]="false"
+        [allowColumnReordering]="true"
+        [rowAlternationEnabled]="true"
+        [showBorders]="true"
+        [columnAutoWidth]="true"
+      >
+        <dxo-paging [pageSize]="10"></dxo-paging>
+        <dxo-pager
+          [showPageSizeSelector]="true"
+          [allowedPageSizes]="[10, 25, 50, 100]"
+        ></dxo-pager>
+        <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true">
+        </dxo-search-panel>
+        <dxo-export
+          [enabled]="true"
+          fileName="Gastos"
+          [allowExportSelectedData]="false"
+        >
+        </dxo-export>
+        <div *dxTemplate="let data of 'statusTemplate'">
+          <span class="label label-{{ data.data.status == 1 ? 'primary' : 'success' }}">{{ data.value }}</span>
+        </div>
+        <div *dxTemplate="let data of 'actionTemplate'">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            (click)="edit(data.data)"
+            title="Editar"
+            [appCanAccess]="['OPERATION.DISPATCH-CONTROL.VIEW']"
+          >
+            <i class="fa fa-edit"></i>
+          </button>
+        </div>
+        <div *dxTemplate="let data of 'dateTemplate'">
+          {{ data.value | date: DisplayFormatDate }}
+        </div>
+      </dx-data-grid>
+    </div>
+  </div>
+</panel>

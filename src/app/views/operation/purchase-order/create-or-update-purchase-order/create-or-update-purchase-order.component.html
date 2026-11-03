@@ -13,16 +13,7 @@
               <div class="row-space-10" style="padding-top: 10px;">
                 <section class="col-md-12 col-xs-12">
                   <div class="row row-space-10">
-                    <section class="col-md-3 col-xs-12">
-                      <div class="form-group">
-                        <label for="name">Cafeteria<i class="text-danger">*</i></label>
-                        <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
-                          [dataSource]="DxDataSourceCafeteria" [(value)]="Model.cafeteriaId" [disabled]="Model.id > 0 || currentUser.cafeteriaId !== null">
-                        </dx-select-box>
-                        <app-validator-message [error]="errors" field="cafeteria"></app-validator-message>
-                      </div>
-                    </section>
-                    <section class="col-md-3 col-xs-12">
+                    <section class="col-md-4 col-xs-12">
                       <div class="form-group">
                         <label for="name">Proveedor<i class="text-danger">*</i></label>
                         <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
@@ -31,7 +22,7 @@
                         <app-validator-message [error]="errors" field="vendor"></app-validator-message>
                       </div>
                     </section>
-                    <section class="col-md-3 col-xs-12">
+                    <section class="col-md-4 col-xs-12">
                       <div class="form-group">
                         <label for="name">Tipo de Factura<i class="text-danger">*</i></label>
                         <dx-select-box displayExpr="name" valueExpr="name" [searchEnabled]="true"
@@ -40,7 +31,7 @@
                         <app-validator-message [error]="errors" field="typeInoice"></app-validator-message>
                       </div>
                     </section>
-                    <section class="col-md-3 col-xs-12">
+                    <section class="col-md-4 col-xs-12">
                       <div class="form-group">
                         <label for="name">Fecha<i class="text-danger">*</i></label>
                         <dx-date-box [(value)]="Model.date" [displayFormat]="DisplayFormatDate" [disabled]="Model.id > 0"></dx-date-box>
@@ -189,7 +180,7 @@
                       <i class="fa fa-times"></i>
                       Cerrar
                     </button>
-                    <button class="option-button btn btn-primary" (click)="save()" [disabled]="Model.details.length === 0 || Model.vendorId === 0 || Model.cafeteriaId === 0 || Model.date === null" *ngIf="Model.orderStatus < 2 || Model.orderStatus === 3">
+                    <button class="option-button btn btn-primary" (click)="save()" [disabled]="Model.details.length === 0 || Model.vendorId === 0 || Model.date === null" *ngIf="Model.orderStatus < 2 || Model.orderStatus === 3">
                       <i class="fa fa-save"></i>
                       Guardar
                     </button>
@@ -246,19 +237,6 @@
               <div class="row-space-10" style="padding-top: 10px;">
                 <section class="col-md-12 col-xs-12">
                   <app-list-logs [Entity]="'PURCHASE_ORDER'" [EntityId]="Model.id"></app-list-logs>
-                </section>
-              </div>
-            </ng-template>
-          </ngb-tab>
-          <ngb-tab *ngIf="Model.id > 0 && (Model.orderStatus >= 3 && Model.orderStatus < 6)">
-            <ng-template ngbTabTitle >
-              <span class="d-sm-none">Facturas</span>
-              <span class="d-sm-block d-none">Facturas</span>
-            </ng-template>
-            <ng-template ngbTabContent>
-              <div class="row-space-10" style="padding-top: 10px;">
-                <section class="col-md-12 col-xs-12">
-                  <app-list-purchase-order-invoices [purchaseOrderId]="Model.id" [orderStatus]="Model.orderStatus" [vendorId]="Model.vendorId"></app-list-purchase-order-invoices>
                 </section>
               </div>
             </ng-template>

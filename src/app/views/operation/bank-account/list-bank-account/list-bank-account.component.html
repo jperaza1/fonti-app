@@ -1,0 +1,21 @@
+<app-basic-table-list
+  [title]="title"
+  [columns]="columns"
+  [dataSource]="DataSource"
+  [appCanAccess]="[]"
+  [permissionAllowCreate]="['OPERATION.BANK_ACCOUNT.CREATE']"
+  [permissionAllowUpdate]="['OPERATION.BANK_ACCOUNT.UPDATE']"
+  [permissionAllowDisable]="['OPERATION.BANK_ACCOUNT.DISABLE']"
+  [permissionAllowEnable]="['OPERATION.BANK_ACCOUNT.ENABLE']"
+  (onRefresh)="getAll()"
+  (onNew)="create()"
+  (onEdit)="update($event)"
+  (onDisable)="disable($event)"
+  (onEnable)="enable($event)"
+>
+</app-basic-table-list>
+
+<app-create-or-update-bank-account
+  #createOrUpdateModal
+  (modalSave)="getAll()"
+></app-create-or-update-bank-account>

@@ -866,3 +866,10 @@ panel .panel.panel-expand {
     border-color: #F7617D !important;
     color: #F7617D !important;
 }
+
+.cod-modal .option-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none !important;
+    pointer-events: none;
+}

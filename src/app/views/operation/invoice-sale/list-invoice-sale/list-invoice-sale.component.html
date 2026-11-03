@@ -1,0 +1,132 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="row row-space-10">
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label for="name">Cliente</label>
+        <dx-tag-box [dataSource]="DxDataSourceCustomer" [(value)]="filterModel.customerId" displayExpr="name"
+          valueExpr="id" [showSelectionControls]="true" [searchEnabled]="true">
+        </dx-tag-box>
+      </div>
+    </section>
+    <section class="col-md-4 col-xs-12">
+      <div class="form-group">
+        <label for="name">Inicio</label>
+        <dx-date-box [(max)]="filterModel.dateTo" [(value)]="filterModel.dateFrom" [displayFormat]="DisplayFormatDate"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-4 col-xs-12">
+      <div class="form-group">
+        <label for="name">Fin</label>
+        <dx-date-box [(value)]="filterModel.dateTo" [displayFormat]="DisplayFormatDate" [(min)]="filterModel.dateFrom"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-4 col-xs-12" style="margin-top: 25px;">
+      <button class="btn btn-primary" (click)="search()"><i class="fa fa-search"></i> Buscar</button>
+      <!-- <button 
+        class="btn btn-primary" 
+        (click)="showAdd()"
+        [appCanAccess]="['OPERATION.INVOICE.CREATE']">
+          <i class="fa fa-plus"></i> 
+        Agregar
+      </button> -->
+    </section>
+  </div>
+  <div class="row row-space-10">
+    <section class="col-md-12 col-xs-12">
+      <dx-data-grid
+      id="dataGrid"
+      [dataSource]="DataSource"
+      [columns]="columns"
+      [remoteOperations]="false"
+      [allowColumnReordering]="true"
+      [rowAlternationEnabled]="true"
+      [showBorders]="true"
+      [columnAutoWidth]="true">
+      <dxo-paging [pageSize]="10"></dxo-paging>
+        <dxo-pager
+          [showPageSizeSelector]="true"
+          [allowedPageSizes]="[10, 25, 50, 100]"
+        ></dxo-pager>
+        <dxo-search-panel
+          [visible]="true"
+          [highlightCaseSensitive]="true"
+        >
+        </dxo-search-panel>
+        <dxo-export [enabled]="true" fileName="Customers" [allowExportSelectedData]="false">
+        </dxo-export>
+        <dxo-header-filter [visible]="true"></dxo-header-filter>
+        <div *dxTemplate="let data of 'actionTemplate'">
+          <button
+            type="button"
+            class="btn btn-primary pull-left btn-sm"
+            (click)="viewInvoice(data.data)"
+            title="Ver"
+            [appCanAccess]="['OPERATION.INVOICE_SALE.VIEW']"
+          >
+            <i class="fa fa-eye"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-success pull-left btn-sm"
+            (click)="payInvoice(data.data)"
+            title="Pagado"
+            *ngIf="data.data.paymentStatus === 1"
+            [appCanAccess]="['OPERATION.INVOICE_SALE.MARK_PAID']"
+          >
+            <i class="fas fa-money-bill"></i>
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-info pull-left btn-sm" 
+            (click)="showInvoiceFile(data.data)"
+            title="Ver Archivo"
+            [appCanAccess]="['OPERATION.INVOICE_SALE.PRINT']"
+          >
+            <i class="fa fa-file"></i>
+          </button>
+        </div>
+        <div *dxTemplate="let data of 'dateTemplate'">
+          {{ data.value | date: DisplayFormatDate }}
+        </div>
+        <div *dxTemplate="let data of 'amountTemplate'">
+          {{ data.value | currency : Currency }}
+        </div>
+        <div *dxTemplate="let data of 'purchaseOrderTemplate'">
+          <a href="javascript:void(0)" (click)="viewPurchaseOrder(data.data)">{{ data.value }}</a>
+        </div>
+        <div *dxTemplate="let data of 'paymentStatusTemplate'">
+          <span *ngIf="data.data.paymentStatus === 1" class="label label-warning">{{ data.data.paymentStatusName }}</span>
+          <span *ngIf="data.data.paymentStatus === 2" class="label label-primary">{{ data.data.paymentStatusName }}</span>
+          <span *ngIf="data.data.paymentStatus === 3" class="label label-success">{{ data.data.paymentStatusName }}</span>
+          <span *ngIf="data.data.paymentStatus === 4" class="label label-danger">{{ data.data.paymentStatusName }}</span>
+        </div>
+        <div *dxTemplate="let data of 'paymentTypeTemplate'">
+          <span *ngIf="data.data.paymentType === 1" class="label label-success">{{ data.data.paymentTypeName }}</span>
+          <span *ngIf="data.data.paymentType === 2" class="label label-primary">{{ data.data.paymentTypeName }}</span>
+        </div>
+        <dxo-summary>
+          <dxi-total-item 
+          column="total" 
+          summaryType="sum"
+          [customizeText]="dxCustomizeCurrency"
+          displayFormat="{0}"></dxi-total-item>
+        <dxi-total-item 
+          column="balance" 
+          summaryType="sum"
+          [customizeText]="dxCustomizeCurrency"
+          displayFormat="{0}"></dxi-total-item>
+          <dxi-total-item 
+          column="subTotal" 
+          summaryType="sum"
+          [customizeText]="dxCustomizeCurrency"
+          displayFormat="{0}"></dxi-total-item>
+          <dxi-total-item 
+          column="taxAmount" 
+          summaryType="sum"
+          [customizeText]="dxCustomizeCurrency"
+          displayFormat="{0}"></dxi-total-item>
+        </dxo-summary>
+      </dx-data-grid>
+    </section>
+  </div>
+</panel>
