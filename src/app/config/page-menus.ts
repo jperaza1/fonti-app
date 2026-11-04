@@ -62,7 +62,7 @@ var pageMenus = [
     title: 'Finanzas',
     url: '',
     caret: 'true',
-    permissions: ['OPERATION.INVOICE_SALE', 'OPERATION.BANK_ACCOUNT', 'OPERATION.EXPENSE', 'OPERATION.INVOICE', 'OPERATION.PAYMENT'],
+    permissions: ['OPERATION.INVOICE_SALE', 'OPERATION.BANK_ACCOUNT', 'OPERATION.EXPENSE', 'OPERATION.INVOICE', 'OPERATION.PAYMENT', 'OPERATION.PAYMENT_SCHEDULE'],
     submenu: [
       {
         url: 'invoice',
@@ -84,6 +84,11 @@ var pageMenus = [
         url: 'payment',
         title: 'Pagos',
         permissions: ['OPERATION.PAYMENT'],
+      },
+      {
+        url: 'payment-schedule',
+        title: 'Programación de pagos',
+        permissions: ['OPERATION.PAYMENT_SCHEDULE'],
       },
       {
         url: 'bank-account',

@@ -46,7 +46,7 @@ Contrato: `api/v2/{Controller}/{Action}`. Los services (`*.service.ts`) concaten
 | `data/product`, `vendor`, `customer`, `truck` | `Product`, `Vendor`, `Customer`, `Truck` |
 | `operation/unit-of-measure`, `operation/product-recipe` | `UnitOfMeasure`, `ProductRecipe` |
 | `operation/inventory`, `operation/kardex`, `operation/production` | `Kardex`, `Production` |
-| `operation/sale`, `expense`, `invoice`, `payment` | `Sale`, `Expense`, `Invoice`, `Payment` |
+| `operation/sale`, `expense`, `invoice`, `payment`, `payment-schedule` | `Sale`, `Expense`, `Invoice`, `Payment`, `PaymentSchedule` |
 | `operation/purchase-order` | `PurchaseOrder`, `PriceApproval` |
 | `auth/user` | Users (`cod.auth`) |
 
@@ -55,6 +55,8 @@ Permisos del menú (`page-menus.ts`) son roles Identity y viven en `AspNetRoles`
 Producción usa el grupo de tipos `PRODUCTION_SHIFT`. Solo puede haber un turno abierto en la planta. **Cerrar turno** (`Production/CloseShift`) conserva el inventario y deja abrir otro. Mientras está abierto, guardar una línea manda `productionShiftId` y la agrega a ese turno. Anular (`CancelShift`) revierte el inventario; un turno cerrado no se anula. El listado muestra fecha, turno y estado, sin la columna de productos. La pérdida se escribe en la fila del producto y solo lista la materia prima de la receta. La cantidad de producción son unidades terminadas. Sin la casilla Por paquete, el consumo es `unidades × cantidad × unidades por paquete ÷ produce`; con la casilla, es `unidades × cantidad`. El kardex abre con la fecha de hoy en inicio y fin.
 
 La orden de compra no pide cafetería ni ruta. Las líneas salen de `Product/GetByVendor` y guardan `productVendorId`. Al pasar a revisión entra el inventario. `PURCHASE_ORDER_PRICE_APPROVAL` en `gen.Configurations` decide si un cambio de costo abre solicitud (`true`) o actualiza el costo al recibir (`false` o clave ausente). La pantalla de esa solicitud es `/purchase-order/price-approval/:token`.
+
+**Programación de pagos** cuelga de Finanzas. El módulo es `operation/payment-schedule`. Rutas: `/payment-schedule`, `/payment-schedule/create` y `/payment-schedule/view/:id`. El servicio llama a `PaymentSchedule/GetAll`, `GetById`, `GetCarryForward`, `Create`, `AddDetails` y `RegisterPayment`. El alta trae los saldos sin pagar. En la programación más reciente se agregan líneas y se guarda el real; **Pagado** lo iguala al monto a pagar (el mayor entre acumulado y proyectado). Permisos en `AspNetRoles`: `OPERATION.PAYMENT_SCHEDULE`, `CREATE`, `VIEW`, `PARTIAL` y `FINISH`. El menú exige el de ver; las acciones no se incluyen unas a otras. La migración es `20261104171141_adding-schedule-payment`.
 
 El tipo de usuario `Vendor` (valor 4) se muestra como Vendedor. Al elegirlo, el formulario pide una o más rutas activas. El login las trae en `userAuth.routes` y `AuthenticationService` las guarda en `currentUser.routes`. La columna es `auth.ApplicationUserProfiles.Routes`, migración `20261027045938_adding-route-userprofile`.
 

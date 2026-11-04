@@ -1,0 +1,39 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="row row-space-10">
+    <section class="col-md-12 col-xs-12 m-b-15">
+      <button class="btn btn-primary" type="button" (click)="create()" [appCanAccess]="['OPERATION.PAYMENT_SCHEDULE.CREATE']">
+        <i class="fa fa-plus"></i>
+        Nueva programación
+      </button>
+    </section>
+    <section class="col-md-12 col-xs-12">
+      <dx-data-grid
+        id="paymentScheduleGrid"
+        [dataSource]="DataSource"
+        [columns]="columns"
+        [remoteOperations]="false"
+        [allowColumnReordering]="true"
+        [rowAlternationEnabled]="true"
+        [showBorders]="true"
+        [columnAutoWidth]="true">
+        <dxo-paging [pageSize]="10"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]"></dxo-pager>
+        <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+        <dxo-export [enabled]="true" fileName="ProgramacionPagos" [allowExportSelectedData]="false"></dxo-export>
+        <dxo-header-filter [visible]="true"></dxo-header-filter>
+
+        <div *dxTemplate="let data of 'actionTemplate'">
+          <button type="button" class="btn btn-primary btn-sm" (click)="view(data.data)" title="Ver" [appCanAccess]="['OPERATION.PAYMENT_SCHEDULE.VIEW']">
+            <i class="fa fa-eye"></i>
+          </button>
+        </div>
+        <div *dxTemplate="let data of 'dateTemplate'">
+          {{ data.value | date: DisplayFormatDate }}
+        </div>
+        <div *dxTemplate="let data of 'amountTemplate'">
+          {{ data.value | currency : Currency }}
+        </div>
+      </dx-data-grid>
+    </section>
+  </div>
+</panel>

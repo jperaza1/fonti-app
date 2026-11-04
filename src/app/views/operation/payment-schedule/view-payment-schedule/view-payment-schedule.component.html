@@ -1,0 +1,168 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="row row-space-10">
+
+    <section class="col-md-12 col-xs-12">
+      <ngb-tabset type="pills">
+        <ngb-tab>
+          <ng-template ngbTabTitle>
+            <span class="d-sm-none">Programación de pago</span>
+            <span class="d-sm-block d-none">Programación de pago</span>
+          </ng-template>
+          <ng-template ngbTabContent>
+            <div class="row-space-10" style="padding-top: 10px;">
+              <section class="col-md-3 col-xs-12">
+                <div class="form-group">
+                  <label>Fecha</label>
+                  <p>{{ model.date | date: DisplayFormatDate }}</p>
+                </div>
+              </section>
+              <section class="col-md-6 col-xs-12">
+                <div class="form-group">
+                  <label>Descripción</label>
+                  <p>{{ model.descripcion }}</p>
+                </div>
+              </section>
+              <section class="col-md-12" *ngIf="model.canAddDetails">
+                <div class="alert alert-info">
+                  Esta es la programación más reciente. Puede agregar líneas y guardar el real hasta que se cree otra. El real puede ser un pago parcial: lo que no se cubra queda pendiente y pasa al acumulado de la siguiente programación.
+                </div>
+                <button type="button" class="btn btn-default m-b-10" (click)="addLine()" [appCanAccess]="['OPERATION.PAYMENT_SCHEDULE.CREATE']">
+                  <i class="fa fa-plus"></i>
+                  Agregar proveedor
+                </button>
+                <app-validator-message [error]="errors" field="details"></app-validator-message>
+                <app-validator-message [error]="errors" field="vendor"></app-validator-message>
+                <app-validator-message [error]="errors" field="projectedAmount"></app-validator-message>
+                <div class="table-responsive m-b-10" *ngIf="newLines.length > 0">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Proveedor</th>
+                        <th>Descripción</th>
+                        <th class="text-right">Proyectado</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let line of newLines; let i = index">
+                        <td style="min-width: 220px;">
+                          <dx-text-box [(value)]="line.vendor"></dx-text-box>
+                        </td>
+                        <td style="min-width: 220px;">
+                          <dx-text-box [(value)]="line.descripcion"></dx-text-box>
+                        </td>
+                        <td style="min-width: 160px;">
+                          <dx-number-box [(value)]="line.projectedAmount" [min]="0" [format]="CurrencyDxNumber"></dx-number-box>
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-danger btn-sm" (click)="removeNewLine(i)">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <button type="button" class="btn btn-primary" [disabled]="savingLines" (click)="saveLines()" [appCanAccess]="['OPERATION.PAYMENT_SCHEDULE.CREATE']">
+                    <i class="fa fa-save"></i>
+                    Guardar líneas
+                  </button>
+                </div>
+              </section>
+              <section class="col-md-12" *ngIf="!model.canAddDetails">
+                <div class="alert alert-info">
+                  Esta programación ya no es la más reciente. No se pueden agregar líneas ni modificar el real.
+                </div>
+              </section>
+              <section class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>Proveedor</th>
+                        <th>Descripción</th>
+                        <th class="text-right">Acumulado</th>
+                        <th class="text-right">Proyectado</th>
+                        <th class="text-right">Real</th>
+                        <th class="text-right">Pendiente</th>
+                        <th>Estado</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let line of model.details">
+                        <td>{{ line.vendor }}</td>
+                        <td>{{ line.descripcion }}</td>
+                        <td class="text-right">{{ line.accumulatedAmount | currency : Currency }}</td>
+                        <td class="text-right">{{ line.projectedAmount | currency : Currency }}</td>
+                        <td style="min-width: 160px;">
+                          <dx-number-box
+                            [(value)]="line.realAmount"
+                            [min]="0"
+                            [max]="due(line)"
+                            [format]="CurrencyDxNumber"
+                            [readOnly]="!canEditReal">
+                          </dx-number-box>
+                        </td>
+                        <td class="text-right">{{ pending(line) | currency : Currency }}</td>
+                        <td><span [ngClass]="statusClass(line)">{{ previewStatusName(line) }}</span></td>
+                        <td style="white-space: nowrap;">
+                          <ng-container *ngIf="model.canAddDetails">
+                            <button
+                              type="button"
+                              class="btn btn-primary btn-sm"
+                              [appCanAccess]="['OPERATION.PAYMENT_SCHEDULE.PARTIAL']"
+                              [disabled]="savingDetailId === line.id"
+                              (click)="register(line)">
+                              <i class="fa fa-save"></i>
+                              Guardar
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-success btn-sm m-l-5"
+                              [appCanAccess]="['OPERATION.PAYMENT_SCHEDULE.FINISH']"
+                              [disabled]="savingDetailId === line.id || pending(line) <= 0"
+                              (click)="markPaid(line)">
+                              Pagado
+                            </button>
+                          </ng-container>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <th>Total</th>
+                        <th></th>
+                        <th class="text-right">{{ model.accumulatedAmount | currency : Currency }}</th>
+                        <th class="text-right">{{ model.projectedAmount | currency : Currency }}</th>
+                        <th class="text-right">{{ model.realAmount | currency : Currency }}</th>
+                        <th class="text-right">{{ model.pendingAmount | currency : Currency }}</th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </section>
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab *ngIf="model.id > 0">
+          <ng-template ngbTabTitle>
+            <span class="d-sm-none">Documentos</span>
+            <span class="d-sm-block d-none">Documentos</span>
+          </ng-template>
+          <ng-template ngbTabContent>
+            <div class="row-space-10" style="padding-top: 10px;">
+              <section class="col-md-12 col-xs-12">
+                <app-documentation-control Entity="PAYMENT_SCHEDULE" [EntityId]="model.id"></app-documentation-control>
+              </section>
+            </div>
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+    </section>
+    <section class="col-md-12">
+      <a class="btn btn-default" href="/payment-schedule">Volver</a>
+    </section>
+  </div>
+</panel>

@@ -2,7 +2,7 @@
 
 El backend .NET está en otro repo. Ruta y cómo se conecta: **[BACKEND.md](BACKEND.md)**.
 
-Producción admite un solo turno abierto. El listado muestra fecha, turno y estado, sin la columna de productos. El detalle de turnos, kardex y recetas está en `BACKEND.md`.
+Producción admite un solo turno abierto. El listado muestra fecha, turno y estado, sin la columna de productos. Finanzas incluye programación de pagos a proveedores (`/payment-schedule`). El detalle de turnos, kardex, recetas y programación de pagos está en `BACKEND.md`.
 
 Línea gráfica: **[docs/design-line.md](docs/design-line.md)**.
 

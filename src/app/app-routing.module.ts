@@ -206,6 +206,13 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'payment-schedule',
+    loadChildren: () =>
+      import('./views/operation/payment-schedule/payment-schedule.module').then((m) => m.PaymentScheduleModule),
+    data: { title: 'Programación de pagos' },
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'bank-account',
     loadChildren: () =>
       import('./views/operation/bank-account/bank-account.module').then((m) => m.BankAccountModule),

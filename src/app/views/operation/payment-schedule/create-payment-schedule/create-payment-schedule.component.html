@@ -1,0 +1,85 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="row row-space-10">
+    <section class="col-md-12" *ngIf="previousLabel">
+      <div class="alert alert-info">{{ previousLabel }}</div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Fecha<i class="text-danger">*</i></label>
+        <dx-date-box [(value)]="model.date" [displayFormat]="DisplayFormatDate"></dx-date-box>
+        <app-validator-message [error]="errors" field="date"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label>Descripción<i class="text-danger">*</i></label>
+        <dx-text-box [(value)]="model.descripcion" placeholder="Semana de pago"></dx-text-box>
+        <app-validator-message [error]="errors" field="descripcion"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-12">
+      <p class="text-muted">
+        Antes de guardar puede agregar proveedores. En la programación más reciente también se pueden agregar líneas después de guardarla, hasta que se cree otra.
+      </p>
+      <button type="button" class="btn btn-default m-b-10" (click)="addLine()" [appCanAccess]="['OPERATION.PAYMENT_SCHEDULE.CREATE']">
+        <i class="fa fa-plus"></i>
+        Agregar proveedor
+      </button>
+      <app-validator-message [error]="errors" field="details"></app-validator-message>
+      <app-validator-message [error]="errors" field="vendor"></app-validator-message>
+      <app-validator-message [error]="errors" field="projectedAmount"></app-validator-message>
+    </section>
+    <section class="col-md-12">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Proveedor</th>
+              <th>Descripción</th>
+              <th class="text-right">Acumulado</th>
+              <th class="text-right">Proyectado</th>
+              <th class="text-right">A pagar</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let line of model.details; let i = index">
+              <td style="min-width: 260px;">
+                <dx-text-box [(value)]="line.vendor" [readOnly]="line.fromPreviousSchedule"></dx-text-box>
+              </td>
+              <td style="min-width: 220px;">
+                <dx-text-box [(value)]="line.descripcion"></dx-text-box>
+              </td>
+              <td class="text-right" style="min-width: 140px;">{{ line.accumulatedAmount | currency : Currency }}</td>
+              <td style="min-width: 160px;">
+                <dx-number-box [(value)]="line.projectedAmount" [min]="0" [format]="CurrencyDxNumber"></dx-number-box>
+              </td>
+              <td class="text-right">{{ due(line) | currency : Currency }}</td>
+              <td>Pendiente</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  *ngIf="!line.fromPreviousSchedule"
+                  (click)="removeLine(i)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="model.details.length === 0">
+              <td colspan="7" class="text-center text-muted">No hay líneas. Agregue un proveedor o cree la primera programación.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="col-md-12">
+      <button type="button" class="btn btn-primary" [disabled]="saving" (click)="save()" [appCanAccess]="['OPERATION.PAYMENT_SCHEDULE.CREATE']">
+        <i class="fa fa-save"></i>
+        Guardar
+      </button>
+      <a class="btn btn-default m-l-5" href="/payment-schedule">Cancelar</a>
+    </section>
+  </div>
+</panel>
