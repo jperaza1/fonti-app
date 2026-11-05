@@ -33,6 +33,7 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
   DxDataSourceSaleType: any = {};
   DxDataSourceCustomer: any = {};
   currentUser: User;
+  canEditFields = true;
 
   @ViewChild("entityComponent") entityComponent: ModalWithOptionButtonsComponent;
   @Output() modalSave = new EventEmitter<any>();
@@ -83,27 +84,32 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
   }
 
   setButtonOptions(update?: boolean | null) {
-    let permission: string[] = [];
-    // if (update != null && update === true)
-    //   permission.push("TYPES.UPDATE");
-    // else
-    //   permission.push("TYPES.CREATE");
-    this.OptionButtons = [
-      new OptionButton("close", "Close", "btn btn-danger pull-right", "fa fa-times"),
-      new OptionButton("save", "Save", "btn btn-success pull-right", "fa fa-save", permission)
+    const buttons = [
+      new OptionButton("close", "Close", "btn btn-danger pull-right", "fa fa-times")
     ];
+    if (!update || this.canEditFields) {
+      const permission = update
+        ? ['OPERATION.SALE.UPDATE']
+        : ['OPERATION.SALE.CREATE'];
+      buttons.push(new OptionButton("save", "Save", "btn btn-success pull-right", "fa fa-save", permission));
+    }
+    this.OptionButtons = buttons;
   }
 
   async showUpdate(data: SaleDto) {
-    this.title = "Editar Venta";
     await this.initializeView();
-    this.setButtonOptions(true);
     this.Model = await this._saleService.getById(data.id);
+    this.canEditFields = this._authenticationService.IsInRole('OPERATION.SALE.UPDATE') && !this.Model.saleInvoiceId;
+    this.title = this.canEditFields ? "Editar Venta" : "Venta";
+    this.setButtonOptions(true);
+    if (this.canEditFields)
+      await this.mergeRouteProducts();
     this.entityComponent.show();
   }
 
   async showAdd() {
     this.title = "Registrar Venta";
+    this.canEditFields = true;
     await this.initializeView();
     this.setButtonOptions();
     this.Model = new SaleDto();
@@ -148,6 +154,36 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
 
   close() {
     this.entityComponent.close();
+  }
+
+  async mergeRouteProducts() {
+    const existing = this.Model.saleDetails || [];
+    const products = await this._routeService.getProductRoutePrices(this.Model.routeId);
+    const merged: SaleDetailModel[] = [];
+
+    for (const product of products) {
+      const line = existing.find(detail => detail.productId === product.productId);
+      if (line) {
+        merged.push(line);
+        continue;
+      }
+
+      const detail = new SaleDetailModel();
+      detail.productId = product.productId;
+      detail.product = product.productName;
+      detail.price = product.price;
+      detail.quantity = 0;
+      detail.total = 0;
+      merged.push(detail);
+    }
+
+    for (const line of existing) {
+      if (!merged.some(detail => detail.productId === line.productId))
+        merged.push(line);
+    }
+
+    this.Model.saleDetails = merged;
+    this.Model.amount = this.roundTo(merged.reduce((total, detail) => total + (detail.total || 0), 0), 3);
   }
 
   async onRouteItemClick(itemData: RouteDto) {

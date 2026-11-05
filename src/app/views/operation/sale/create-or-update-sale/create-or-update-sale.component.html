@@ -11,7 +11,7 @@
           <div class="form-group">
             <label for="name">Ruta<i class="text-danger">*</i></label>
             <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
-              [dataSource]="DxDataSourceRoute" [(value)]="Model.routeId" (onItemClick)="onRouteItemClick($event.itemData)" [disabled]="Model.id > 0">
+              [dataSource]="DxDataSourceRoute" [(value)]="Model.routeId" (onItemClick)="onRouteItemClick($event.itemData)" [disabled]="Model.id > 0 && !canEditFields">
             </dx-select-box>
             <app-validator-message [error]="errors" field="cafeteria"></app-validator-message>
           </div>
@@ -20,7 +20,7 @@
           <div class="form-group">
             <label for="name">Tipo de Venta<i class="text-danger">*</i></label>
             <dx-select-box displayExpr="text" valueExpr="value" [searchEnabled]="true"
-              [dataSource]="DxDataSourceSaleType" [(value)]="Model.saleType" [disabled]="Model.id > 0">
+              [dataSource]="DxDataSourceSaleType" [(value)]="Model.saleType" [disabled]="Model.id > 0 && !canEditFields">
             </dx-select-box>
             <app-validator-message [error]="errors" field="saleType"></app-validator-message>
           </div>
@@ -29,7 +29,7 @@
           <div class="form-group">
             <label for="name">Cliente<i class="text-danger">*</i></label>
             <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
-              [dataSource]="DxDataSourceCustomer" [(value)]="Model.customerId" [disabled]="Model.id > 0">
+              [dataSource]="DxDataSourceCustomer" [(value)]="Model.customerId" [disabled]="Model.id > 0 && !canEditFields">
             </dx-select-box>
             <app-validator-message [error]="errors" field="customerId"></app-validator-message>
           </div>
@@ -37,7 +37,7 @@
         <section class="col-md-6 col-xs-12">
           <div class="form-group">
             <label for="name">Fecha de Venta<i class="text-danger">*</i></label>
-            <dx-date-box [(value)]="Model.saleDate" [displayFormat]="DisplayFormatDate" [disabled]="Model.id > 0"></dx-date-box>
+            <dx-date-box [(value)]="Model.saleDate" [displayFormat]="DisplayFormatDate" [disabled]="Model.id > 0 && !canEditFields"></dx-date-box>
             <app-validator-message [error]="errors" field="saleDate"></app-validator-message>
           </div>
         </section>
@@ -69,13 +69,13 @@
             {{data.value | currency : Currency}}
           </div>
           <div *dxTemplate="let data of 'quantityTemplate'">
-            <dx-number-box #quantity [(value)]="data.data.quantity" [showSpinButtons]="true" [format]="NumberDxNumber" (onValueChanged)="onQuantityChange($event, data.data)" [disabled]="Model.id > 0"></dx-number-box>
+            <dx-number-box #quantity [(value)]="data.data.quantity" [showSpinButtons]="true" [format]="NumberDxNumber" (onValueChanged)="onQuantityChange($event, data.data)" [disabled]="Model.id > 0 && !canEditFields"></dx-number-box>
           </div>
           <div *dxTemplate="let data of 'amountTemplate'">
             {{data.value | currency : Currency}}
           </div>
           <div *dxTemplate="let data of 'actionTemplate'">
-            <button type="button" class="btn btn-danger btn-sm" (click)="removeDetail(data.data)" *ngIf="Model.id === 0">
+            <button type="button" class="btn btn-danger btn-sm" (click)="removeDetail(data.data)" *ngIf="!(Model.id > 0) || canEditFields">
               <i class="fas fa-trash"></i>
             </button>
           </div>
