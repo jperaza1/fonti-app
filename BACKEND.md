@@ -56,7 +56,19 @@ Producción usa el grupo de tipos `PRODUCTION_SHIFT`. Solo puede haber un turno 
 
 La orden de compra no pide cafetería ni ruta. Las líneas salen de `Product/GetByVendor` y guardan `productVendorId`. Al pasar a revisión entra el inventario. `PURCHASE_ORDER_PRICE_APPROVAL` en `gen.Configurations` decide si un cambio de costo abre solicitud (`true`) o actualiza el costo al recibir (`false` o clave ausente). La pantalla de esa solicitud es `/purchase-order/price-approval/:token`.
 
-En Ventas, el lápiz usa `OPERATION.SALE.VIEW` y abre la venta. Si ya existe, ruta, tipo, cliente, fecha y cantidades se habilitan solo con `OPERATION.SALE.UPDATE`; Guardar usa ese mismo permiso. Una venta con factura se puede ver y no se edita. El API es `PUT Sale/Update?id=`.
+En Ventas, el lápiz usa `OPERATION.SALE.VIEW` y abre la venta. Si ya existe, ruta, tipo, cliente, fecha y cantidades se habilitan solo con `OPERATION.SALE.UPDATE`; Guardar usa ese mismo permiso. Una venta con factura se puede ver y no se edita. El API es `PUT Sale/Update?id=`. Al abrir una venta se ven las líneas guardadas. Precio 0 se muestra como **Regalía**. El campo Vendedor está bloqueado: al elegir la ruta se copia `vendor` y se manda en el alta y en la edición. El listado muestra esa columna. `Sale/GetAll` filtra por ruta cuando `routeId` es mayor a 0.
+
+En Rutas (`data/route`), el formulario y el listado tienen **Vendedor**. No es obligatorio. `Route/GetAllActive` y `Route/GetAvalible` lo devuelven.
+
+**Reportes** de ventas, además de facturas pendientes:
+
+| Menú | Ruta | Permiso | `report` |
+|------|------|---------|----------|
+| Ranking de vendedores | `sale/vendor-report` | `OPERATION.SALE.VENDOR_REPORT` | `vendor` |
+| Productos vendidos | `sale/product-report` | `OPERATION.SALE.PRODUCT_REPORT` | `product` |
+| Contado y crédito | `sale/payment-type-report` | `OPERATION.SALE.PAYMENT_TYPE_REPORT` | `payment` |
+
+El servicio hace `POST Sale/GetChartReport` con `dateFrom`, `dateTo` y `report`. En productos, un clic pide `report: product-price` y `product` con el nombre, y abre la cantidad de botes por precio. Precio 0 se lee Regalía. Los códigos están en `AspNetRoles` y no quedan asignados a un rol. El control de salida copia el vendedor de la ruta al mismo recuadro de solo lectura del camión. En el retorno, los botes faltantes pueden ser 0.
 
 **Programación de pagos** cuelga de Finanzas. El módulo es `operation/payment-schedule`. Rutas: `/payment-schedule`, `/payment-schedule/create` y `/payment-schedule/view/:id`. El servicio llama a `PaymentSchedule/GetAll`, `GetById`, `GetCarryForward`, `Create`, `AddDetails` y `RegisterPayment`. El alta trae los saldos sin pagar. En la programación más reciente se agregan líneas y se guarda el real; **Pagado** lo iguala al monto a pagar (el mayor entre acumulado y proyectado). Permisos en `AspNetRoles`: `OPERATION.PAYMENT_SCHEDULE`, `CREATE`, `VIEW`, `PARTIAL` y `FINISH`. El menú exige el de ver; las acciones no se incluyen unas a otras. La migración es `20261104171141_adding-schedule-payment`.
 

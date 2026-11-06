@@ -36,6 +36,11 @@ export class ListRouteComponent extends AppComponentBase implements OnInit {
         allowEditing: false,
       },
       {
+        dataField: 'vendor',
+        caption: 'Vendedor',
+        allowEditing: false,
+      },
+      {
         dataField: 'deliversRegalia',
         caption: 'Regalía',
         allowEditing: false,

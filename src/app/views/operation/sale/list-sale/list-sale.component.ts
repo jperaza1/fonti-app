@@ -65,6 +65,10 @@ export class ListSaleComponent extends AppComponentBase implements OnInit {
         caption: "Ruta",
       },
       {
+        dataField: "vendor",
+        caption: "Vendedor",
+      },
+      {
         dataField: "customerName",
         caption: "Cliente",
       },

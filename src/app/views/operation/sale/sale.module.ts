@@ -5,11 +5,12 @@ import { CreateOrUpdateSaleComponent } from './create-or-update-sale/create-or-u
 import { SaleRoutingModule } from './sale-routing.module';
 import { SharedModule } from '../../shared/shared.module';
 import { PendingBillingReportComponent } from './pending-billing-report/pending-billing-report.component';
+import { SaleChartReportComponent } from './sale-chart-report/sale-chart-report.component';
 
 
 
 @NgModule({
-  declarations: [ListSaleComponent, CreateOrUpdateSaleComponent, PendingBillingReportComponent],
+  declarations: [ListSaleComponent, CreateOrUpdateSaleComponent, PendingBillingReportComponent, SaleChartReportComponent],
   imports: [
     CommonModule,
     SharedModule,

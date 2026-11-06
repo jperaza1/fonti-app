@@ -16,6 +16,12 @@
             <app-validator-message [error]="errors" field="cafeteria"></app-validator-message>
           </div>
         </section>
+        <section class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label for="vendor">Vendedor</label>
+            <dx-text-box #vendor [(value)]="Model.vendor" [disabled]="true"></dx-text-box>
+          </div>
+        </section>
         <section class="col-md-4 col-xs-12" >
           <div class="form-group">
             <label for="name">Tipo de Venta<i class="text-danger">*</i></label>
@@ -61,12 +67,13 @@
       <div class="route-form__grid-wrapper">
         <dx-data-grid [dataSource]="Model.saleDetails" [showBorders]="true" [columnAutoWidth]="true" #dataGrid>
           <dxi-column dataField="product" caption="Producto"></dxi-column>
-          <dxi-column dataField="price" caption="Precio" cellTemplate="amountTemplate"></dxi-column>
+          <dxi-column dataField="price" caption="Precio" cellTemplate="priceTemplate"></dxi-column>
           <dxi-column dataField="quantity" caption="Cantidad" cellTemplate="quantityTemplate"></dxi-column>
           <dxi-column dataField="total" caption="Total" cellTemplate="amountTemplate"></dxi-column>
           <dxi-column dataField="action" caption="Acciones" cellTemplate="actionTemplate"></dxi-column>
-          <div *dxTemplate="let data of 'amountTemplate'">
-            {{data.value | currency : Currency}}
+          <div *dxTemplate="let data of 'priceTemplate'">
+            <span *ngIf="data.value === 0">Regalía</span>
+            <span *ngIf="data.value !== 0">{{data.value | currency : Currency}}</span>
           </div>
           <div *dxTemplate="let data of 'quantityTemplate'">
             <dx-number-box #quantity [(value)]="data.data.quantity" [showSpinButtons]="true" [format]="NumberDxNumber" (onValueChanged)="onQuantityChange($event, data.data)" [disabled]="Model.id > 0 && !canEditFields"></dx-number-box>

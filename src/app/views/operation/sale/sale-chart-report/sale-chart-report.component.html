@@ -1,0 +1,108 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="row row-space-10">
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Desde</label>
+        <dx-date-box [(max)]="filter.dateTo" [(value)]="filter.dateFrom" [displayFormat]="DisplayFormatDate"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Hasta</label>
+        <dx-date-box [(value)]="filter.dateTo" [displayFormat]="DisplayFormatDate" [(min)]="filter.dateFrom"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12" style="margin-top: 25px;">
+      <button type="button" class="btn btn-primary" (click)="search()" [disabled]="loading">
+        <i class="fa fa-search"></i> Buscar
+      </button>
+    </section>
+  </div>
+
+  <div class="sale-chart-pending" *ngIf="kind === 'payment' && pendingPoint">
+    <span>Pendiente de cobro</span>
+    <strong>{{ pendingPoint.amount | currency: Currency }}</strong>
+    <small>Crédito sin factura, más el saldo de las facturas del período.</small>
+  </div>
+
+  <p class="sale-chart-hint" *ngIf="kind === 'product'">Haz clic en un producto para ver cuántos botes se vendieron en cada precio.</p>
+
+  <div class="sale-chart-grid" *ngIf="kind === 'product'">
+    <section>
+      <h4>Venta</h4>
+      <div #ventaChart class="sale-chart" *ngIf="ventaPoints.length"></div>
+      <p class="sale-chart-empty" *ngIf="!loading && !ventaPoints.length">No hay productos vendidos en el período.</p>
+    </section>
+    <section>
+      <h4>Regalía</h4>
+      <div #regaliaChart class="sale-chart" *ngIf="regaliaPoints.length"></div>
+      <p class="sale-chart-empty" *ngIf="!loading && !regaliaPoints.length">No hay regalía en el período.</p>
+    </section>
+  </div>
+
+  <div #pieChart class="sale-chart" *ngIf="kind === 'payment' && tipoPoints.length"></div>
+  <div #barChart class="sale-chart" *ngIf="kind !== 'product' && kind !== 'payment' && barPoints.length"></div>
+  <p class="sale-chart-empty" *ngIf="!loading && kind !== 'product' && !tablePoints.length">No hay ventas en el período.</p>
+
+  <table class="sale-chart-table" *ngIf="tablePoints.length">
+    <thead>
+      <tr>
+        <th>{{ kind === 'product' ? 'Producto' : 'Nombre' }}</th>
+        <th class="num">{{ kind === 'product' ? 'Unidades' : 'Ventas' }}</th>
+        <th class="num">Monto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let point of tablePoints" (click)="openPrice(point.label)" [class.sale-chart-row]="kind === 'product'">
+        <td>{{ point.label }}</td>
+        <td class="num">{{ point.quantity | number }}</td>
+        <td class="num">{{ point.amount | currency: Currency }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="sale-chart-table" *ngIf="regaliaPoints.length">
+    <thead>
+      <tr>
+        <th>Regalía</th>
+        <th class="num">Unidades</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let point of regaliaPoints" (click)="openPrice(point.label)" class="sale-chart-row">
+        <td>{{ point.label }}</td>
+        <td class="num">{{ point.quantity | number }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sale-chart-modal" *ngIf="priceProduct" (click)="closePrice()">
+    <div class="sale-chart-modal__card" (click)="$event.stopPropagation()">
+      <div class="sale-chart-modal__head">
+        <h3>{{ priceProduct }} por precio</h3>
+        <button type="button" class="btn btn-xs btn-danger" (click)="closePrice()">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+      <p class="sale-chart-empty" *ngIf="priceLoading">Cargando...</p>
+      <div #priceChart class="sale-chart" *ngIf="pricePoints.length"></div>
+      <p class="sale-chart-empty" *ngIf="!priceLoading && !pricePoints.length">Ese producto no tiene ventas en el período.</p>
+      <table class="sale-chart-table" *ngIf="pricePoints.length">
+        <thead>
+          <tr>
+            <th>Precio</th>
+            <th class="num">Unidades</th>
+            <th class="num">Monto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let point of pricePoints">
+            <td>{{ priceLabel(point.label) }}</td>
+            <td class="num">{{ point.quantity | number }}</td>
+            <td class="num">{{ point.amount | currency: Currency }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</panel>

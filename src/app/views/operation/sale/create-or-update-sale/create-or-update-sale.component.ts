@@ -102,8 +102,6 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
     this.canEditFields = this._authenticationService.IsInRole('OPERATION.SALE.UPDATE') && !this.Model.saleInvoiceId;
     this.title = this.canEditFields ? "Editar Venta" : "Venta";
     this.setButtonOptions(true);
-    if (this.canEditFields)
-      await this.mergeRouteProducts();
     this.entityComponent.show();
   }
 
@@ -156,37 +154,8 @@ export class CreateOrUpdateSaleComponent extends AppComponentBase implements OnI
     this.entityComponent.close();
   }
 
-  async mergeRouteProducts() {
-    const existing = this.Model.saleDetails || [];
-    const products = await this._routeService.getProductRoutePrices(this.Model.routeId);
-    const merged: SaleDetailModel[] = [];
-
-    for (const product of products) {
-      const line = existing.find(detail => detail.productId === product.productId);
-      if (line) {
-        merged.push(line);
-        continue;
-      }
-
-      const detail = new SaleDetailModel();
-      detail.productId = product.productId;
-      detail.product = product.productName;
-      detail.price = product.price;
-      detail.quantity = 0;
-      detail.total = 0;
-      merged.push(detail);
-    }
-
-    for (const line of existing) {
-      if (!merged.some(detail => detail.productId === line.productId))
-        merged.push(line);
-    }
-
-    this.Model.saleDetails = merged;
-    this.Model.amount = this.roundTo(merged.reduce((total, detail) => total + (detail.total || 0), 0), 3);
-  }
-
   async onRouteItemClick(itemData: RouteDto) {
+    this.Model.vendor = itemData?.vendor || '';
     this.Model.saleDetails = [];
     var products = await this._routeService.getProductRoutePrices(itemData.id);
     console.log(products);

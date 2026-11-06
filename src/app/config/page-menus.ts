@@ -158,12 +158,34 @@ var pageMenus = [
     title: 'Reportes',
     url: '',
     caret: 'true',
-    permissions: ['OPERATION.SALE.PENDING_BILLING_REPORT', 'OPERATION.PURCHASE_ORDER.REPORT', 'OPERATION.PURCHASE_ORDER.EXPENSE_REPORT'],
+    permissions: [
+      'OPERATION.SALE.PENDING_BILLING_REPORT',
+      'OPERATION.SALE.VENDOR_REPORT',
+      'OPERATION.SALE.PRODUCT_REPORT',
+      'OPERATION.SALE.PAYMENT_TYPE_REPORT',
+      'OPERATION.PURCHASE_ORDER.REPORT',
+      'OPERATION.PURCHASE_ORDER.EXPENSE_REPORT'
+    ],
     submenu: [
       {
         url: 'sale/pending-billing-report',
         title: 'Reporte de Facturas Pendientes',
         permissions: ['OPERATION.SALE.PENDING_BILLING_REPORT'],
+      },
+      {
+        url: 'sale/vendor-report',
+        title: 'Ranking de vendedores',
+        permissions: ['OPERATION.SALE.VENDOR_REPORT'],
+      },
+      {
+        url: 'sale/product-report',
+        title: 'Productos vendidos',
+        permissions: ['OPERATION.SALE.PRODUCT_REPORT'],
+      },
+      {
+        url: 'sale/payment-type-report',
+        title: 'Contado y crédito',
+        permissions: ['OPERATION.SALE.PAYMENT_TYPE_REPORT'],
       },
       {
         url: 'purchase-order/report',

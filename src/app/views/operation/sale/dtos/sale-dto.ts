@@ -5,6 +5,7 @@ export class SaleDto {
  customerName: string;
  routeId: number;
  route: string;
+ vendor: string;
  saleType: number;
  saleTypeName: string;
  saleDate: Date;
@@ -19,6 +20,7 @@ export class SaleDto {
     this.saleType = 0; 
     this.amount = 0;
     this.saleDetails = [];
+    this.vendor = '';
     this.saleDate = new Date(); 
   }
   

@@ -112,6 +112,7 @@ export class CreateOrUpdateDispatchControlComponent extends AppComponentBase imp
   onRouteItemClick(route: RouteDto) {
     this.model.truckId = route.truckId;
     this.model.truck = route.truck;
+    this.model.vendor = route.vendor || '';
   }
 
   async save() {

@@ -5,6 +5,7 @@ import { SaleDto } from "./dtos/sale-dto";
 import { RequestResult } from "../../../../_models/RequestResult";
 import { FilterSaleDto } from "./dtos/filter-sale-dto";
 import { GetSalesByMonthDto } from "./dtos/sale-by-month-dto";
+import { SaleChartFilterDto, SaleChartPointDto } from "./dtos/sale-chart-point-dto";
 import { GeneratePendingBillingDto } from "./dtos/generate-pending-billing-dto";
 
 @Injectable({
@@ -44,6 +45,10 @@ export class SaleService {
 
     enable(id: number): Promise<RequestResult> {
       return this.http.delete<RequestResult>(`${this._config.config.data}Sale/Enable?id=${id}`).toPromise();
+    }
+
+    getChartReport(filter: SaleChartFilterDto): Promise<SaleChartPointDto[]> {
+      return this.http.post<SaleChartPointDto[]>(`${this._config.config.data}Sale/GetChartReport`, filter).toPromise();
     }
 
     getPendingBillingReport(filterModel: FilterSaleDto): Promise<SaleDto[]> {

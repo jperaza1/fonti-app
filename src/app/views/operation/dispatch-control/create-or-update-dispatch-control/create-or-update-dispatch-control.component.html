@@ -20,7 +20,7 @@
         </div>
         <div class="col-md-3 col-xs-12 dispatch-form__field">
           <label class="dispatch-form__label">Vendedor</label>
-          <dx-text-box #seller [(value)]="model.vendor" [disabled]="id > 0 && !update"></dx-text-box>
+          <span class="dispatch-form__truck">{{ model.vendor }}</span>
         </div>
       </div>
     </section>
