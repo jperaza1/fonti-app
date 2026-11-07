@@ -4,6 +4,7 @@ export class RouteDto {
   vendor: string;
   order: number;
   deliversRegalia: boolean;
+  givesCredit: boolean;
   isActive: boolean;
   truckId: number;
   truck: string;
@@ -14,6 +15,7 @@ export class RouteDto {
     this.order = 0;
     this.vendor = '';
     this.deliversRegalia = false;
+    this.givesCredit = false;
   }
 }
 

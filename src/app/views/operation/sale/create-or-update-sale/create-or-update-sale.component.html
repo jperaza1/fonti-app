@@ -96,5 +96,22 @@
         </dx-data-grid>
       </div>
     </div>
+
+    <div class="route-form__section route-form__section--talonario" *ngIf="Model.id > 0">
+      <div class="route-form__legend">
+        <i class="fas fa-truck"></i> Según control de salida
+      </div>
+      <p class="route-form__hint">Botellones y demás productos vendidos: salida más recargas, menos el retorno.</p>
+      <p class="route-form__hint" *ngIf="!Model.hasDispatchControl">No hay control de salida para esta ruta en la fecha de la venta.</p>
+      <div class="route-form__grid-wrapper" *ngIf="Model.hasDispatchControl">
+        <dx-data-grid [dataSource]="Model.dispatchSummary" [showBorders]="true" [columnAutoWidth]="true">
+          <dxi-column dataField="product" caption="Producto"></dxi-column>
+          <dxi-column dataField="quantity" caption="Vendidos" [format]="NumberDxNumber"></dxi-column>
+          <dxo-summary>
+            <dxi-total-item column="quantity" summaryType="sum" displayFormat="{0}"></dxi-total-item>
+          </dxo-summary>
+        </dx-data-grid>
+      </div>
+    </div>
   </div>
 </app-modal-with-option-buttons>

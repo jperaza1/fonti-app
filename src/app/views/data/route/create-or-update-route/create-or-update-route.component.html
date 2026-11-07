@@ -31,13 +31,27 @@
           </div>
         </section>
       </div>
-      <div class="route-form__switch">
-        <div class="custom-control custom-switch">
-          <input type="checkbox" class="custom-control-input" id="deliversRegalia"
-            [(ngModel)]="Model.deliversRegalia" name="deliversRegalia">
-          <label class="custom-control-label" for="deliversRegalia">Entrega regalía</label>
-        </div>
-        <p class="route-form__hint route-form__hint--switch">Si está activo, el precio de un producto puede ser 0.</p>
+      <div class="row row-space-10">
+        <section class="col-md-6 col-xs-12">
+          <div class="route-form__switch">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="deliversRegalia"
+                [(ngModel)]="Model.deliversRegalia" name="deliversRegalia">
+              <label class="custom-control-label" for="deliversRegalia">Entrega regalía</label>
+            </div>
+            <p class="route-form__hint route-form__hint--switch">Si está activo, el precio de un producto puede ser 0.</p>
+          </div>
+        </section>
+        <section class="col-md-6 col-xs-12">
+          <div class="route-form__switch">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="givesCredit"
+                [(ngModel)]="Model.givesCredit" name="givesCredit">
+              <label class="custom-control-label" for="givesCredit">Da crédito</label>
+            </div>
+            <p class="route-form__hint route-form__hint--switch">Si está activo, la ruta puede vender a crédito.</p>
+          </div>
+        </section>
       </div>
     </div>
 

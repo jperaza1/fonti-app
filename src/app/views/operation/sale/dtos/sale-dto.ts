@@ -14,12 +14,16 @@ export class SaleDto {
  saleInvoiceId: number;
  invoiceNumber: string;
  saleDetails: SaleDetailModel[];
+ hasDispatchControl: boolean;
+ dispatchSummary: SaleDispatchProductModel[];
 
   constructor() {
     this.id = 0;
     this.saleType = 0; 
     this.amount = 0;
     this.saleDetails = [];
+    this.dispatchSummary = [];
+    this.hasDispatchControl = false;
     this.vendor = '';
     this.saleDate = new Date(); 
   }
@@ -40,4 +44,9 @@ export class SaleDetailModel {
     this.quantity = 0;
     this.total = 0;
   }
+}
+
+export class SaleDispatchProductModel {
+  product: string;
+  quantity: number;
 }

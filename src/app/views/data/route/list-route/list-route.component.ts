@@ -49,6 +49,14 @@ export class ListRouteComponent extends AppComponentBase implements OnInit {
         calculateCellValue: (row) => row.deliversRegalia ? 'Sí' : 'No',
       },
       {
+        dataField: 'givesCredit',
+        caption: 'Crédito',
+        allowEditing: false,
+        width: '120',
+        alignment: 'center',
+        calculateCellValue: (row) => row.givesCredit ? 'Sí' : 'No',
+      },
+      {
         dataField: 'isActive',
         caption: 'Status',
         allowEditing: false,
