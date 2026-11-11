@@ -1,0 +1,30 @@
+.route-qty-empty {
+  margin: 24px 0;
+  color: #6b7280;
+}
+
+.route-qty-weeks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0 16px;
+}
+
+.route-qty-week {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.route-qty-week span {
+  color: #374151;
+  white-space: nowrap;
+}
+
+.route-qty-week strong {
+  margin-right: 4px;
+}

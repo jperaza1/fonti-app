@@ -1,0 +1,48 @@
+<panel title="Cantidades por ruta" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="row row-space-10">
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Desde</label>
+        <dx-date-box [(max)]="filter.dateTo" [(value)]="filter.dateFrom" [displayFormat]="DisplayFormatDate"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Hasta</label>
+        <dx-date-box [(value)]="filter.dateTo" [displayFormat]="DisplayFormatDate" [(min)]="filter.dateFrom"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12" style="margin-top: 25px;">
+      <button type="button" class="btn btn-primary" (click)="search()" [disabled]="loading">
+        <i class="fa fa-search"></i> Buscar
+      </button>
+    </section>
+  </div>
+
+  <div class="route-qty-weeks" *ngIf="!loading && weeks.length">
+    <div class="route-qty-week" *ngFor="let week of weeks">
+      <span *ngFor="let day of week.days">
+        <strong>{{ day.name }}</strong>
+        {{ day.date | date: DisplayFormatDate }}
+      </span>
+    </div>
+  </div>
+
+  <p class="route-qty-empty" *ngIf="loading">Cargando...</p>
+  <p class="route-qty-empty" *ngIf="!loading && !gridRows.length">No hay ventas en el período.</p>
+
+  <dx-data-grid
+    *ngIf="!loading && gridRows.length"
+    [dataSource]="gridRows"
+    [columns]="columns"
+    [summary]="summary"
+    [height]="'calc(100vh - 340px)'"
+    [showBorders]="true"
+    [columnAutoWidth]="true"
+    [rowAlternationEnabled]="true"
+    [customizeExportData]="customizeExportData">
+    <dxo-paging [pageSize]="50"></dxo-paging>
+    <dxo-pager [visible]="true" [showInfo]="true" [showPageSizeSelector]="true" [allowedPageSizes]="[25, 50, 100]"></dxo-pager>
+    <dxo-export [enabled]="true" fileName="CantidadesPorRuta"></dxo-export>
+  </dx-data-grid>
+</panel>

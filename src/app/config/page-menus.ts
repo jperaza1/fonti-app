@@ -9,7 +9,7 @@ var pageMenus = [
     icon: 'fa fa-shopping-cart',
     title: 'Ventas',
     url: 'sale',
-    permissions: ['OPERATION.SALE'],
+    permissions: ['OPERATION.SALE', 'OPERATION.SALE.CONSOLIDATE'],
   },
   {
     icon: 'fa fa-truck',
@@ -163,6 +163,7 @@ var pageMenus = [
       'OPERATION.SALE.VENDOR_REPORT',
       'OPERATION.SALE.PRODUCT_REPORT',
       'OPERATION.SALE.PAYMENT_TYPE_REPORT',
+      'OPERATION.SALE.ROUTE_QUANTITY_REPORT',
       'OPERATION.PURCHASE_ORDER.REPORT',
       'OPERATION.PURCHASE_ORDER.EXPENSE_REPORT'
     ],
@@ -186,6 +187,11 @@ var pageMenus = [
         url: 'sale/payment-type-report',
         title: 'Contado y crédito',
         permissions: ['OPERATION.SALE.PAYMENT_TYPE_REPORT'],
+      },
+      {
+        url: 'sale/route-quantity-report',
+        title: 'Cantidades por ruta',
+        permissions: ['OPERATION.SALE.ROUTE_QUANTITY_REPORT'],
       },
       {
         url: 'purchase-order/report',

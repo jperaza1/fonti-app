@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ConfigService } from '../../../../_services/ConfigService';
 import { RequestResult } from '../../../../_models/RequestResult';
 import { ExpenseDto } from '../expense/dtos/expense-dto';
-import { DispatchControlDto, GenerateFileDispatchControlResponseDto } from './dtos/dispatch-control.dto';
+import { DispatchControlDto, DispatchTransferDto, DispatchTransferSettingDto, GenerateFileDispatchControlResponseDto } from './dtos/dispatch-control.dto';
 import { DispatchControlFilterDto } from './dtos/dispatch-control-filter.dto';
 
 @Injectable({ providedIn: 'root' })
@@ -21,6 +21,12 @@ export class DispatchControlService {
       .toPromise();
   }
 
+  getTransferSetting(): Promise<DispatchTransferSettingDto> {
+    return this.http
+      .get<DispatchTransferSettingDto>(`${this._config.config.data}DispatchControl/GetTransferSetting`)
+      .toPromise();
+  }
+
   getById(id: number): Promise<DispatchControlDto> {
     return this.http
       .get<DispatchControlDto>(`${this._config.config.data}DispatchControl/GetById?id=${id}`)
@@ -30,6 +36,18 @@ export class DispatchControlService {
   create(model: DispatchControlDto): Promise<RequestResult> {
     return this.http
       .post<RequestResult>(`${this._config.config.data}DispatchControl/Create`, model)
+      .toPromise();
+  }
+
+  transfer(model: DispatchTransferDto): Promise<RequestResult> {
+    return this.http
+      .post<RequestResult>(`${this._config.config.data}DispatchControl/Transfer`, model)
+      .toPromise();
+  }
+
+  cancelTransfer(id: number): Promise<RequestResult> {
+    return this.http
+      .post<RequestResult>(`${this._config.config.data}DispatchControl/CancelTransfer?id=${id}`, {})
       .toPromise();
   }
 

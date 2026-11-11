@@ -4,6 +4,7 @@ import { PaymentDto } from "../../payment/dtos/payment.dto";
 
 export class PurchaseOrderInvoiceDto {
   id: number;
+  purchaseOrderId: number;
   invoiceNumber: string;
   description: string;
   invoiceDate: Date;

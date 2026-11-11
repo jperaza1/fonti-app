@@ -25,6 +25,13 @@ export class CreateOrUpdateDispatchControlComponent extends AppComponentBase imp
   DxDataSourceRoute: any = {};
 
   products: ProductDto[] = [];
+  routes: RouteDto[] = [];
+  transferRoutes: RouteDto[] = [];
+  transferRouteId: number;
+  transferProductId: number;
+  transferQuantity: number = 0;
+  transferring = false;
+  allowsTransfer = false;
   errors: any;
 
   update: boolean = false;
@@ -52,6 +59,9 @@ export class CreateOrUpdateDispatchControlComponent extends AppComponentBase imp
     await this.getRoutes();
     await this.getProducts();
 
+    this.pickBottleProduct();
+    await this.loadTransferSetting();
+
     if(!this.id){
       this.model = new DispatchControlDto();
       this.model.dispatchControlDate = new Date();
@@ -74,11 +84,14 @@ export class CreateOrUpdateDispatchControlComponent extends AppComponentBase imp
     } else {
       this.model = await this._dispatchControlService.getById(this.id);
     }
+
+    this.refreshTransferRoutes();
   }
 
   async getRoutes() {
     let result = await this._routeService.getAvalible();
-    this.DxDataSourceRoute = this.getDataSourceDx(result);
+    this.routes = result || [];
+    this.DxDataSourceRoute = this.getDataSourceDx(this.routes);
   }
 
   async getProducts() {
@@ -113,6 +126,166 @@ export class CreateOrUpdateDispatchControlComponent extends AppComponentBase imp
     this.model.truckId = route.truckId;
     this.model.truck = route.truck;
     this.model.vendor = route.vendor || '';
+    this.refreshTransferRoutes();
+  }
+
+  isTransfer(detail: DispatchControlDetailDto): boolean {
+    return detail.dispatchControlType === 4 || detail.dispatchControlType === 5;
+  }
+
+  availableOf(productId: number): number {
+    let total = 0;
+    for (const detail of this.model.dispatchControlDetails || []) {
+      const sign = this.movementSign(detail.dispatchControlType);
+      for (const line of detail.productMovements || []) {
+        if (line.productId === productId) {
+          total += sign * (Number(line.quantity) || 0);
+        }
+      }
+    }
+    return total;
+  }
+
+  async transfer() {
+    if (this.transferring) {
+      return;
+    }
+    const quantity = Number(this.transferQuantity) || 0;
+    const available = this.availableOf(this.transferProductId);
+    if (!this.transferRouteId) {
+      this.error('Control de Salida', 'Elige la ruta que recibe.');
+      return;
+    }
+    if (!this.transferProductId) {
+      this.error('Control de Salida', 'Elige un producto.');
+      return;
+    }
+    if (quantity <= 0) {
+      this.error('Control de Salida', 'La cantidad tiene que ser mayor a 0.');
+      return;
+    }
+    if (quantity > available) {
+      this.error('Control de Salida', 'No hay suficiente en la ruta. Disponible: ' + available + '.');
+      return;
+    }
+
+    const question = await this.customConfirm(
+      '¿Pasar esta cantidad a la otra ruta?',
+      'Se registra en los dos controles y no vuelve a planta'
+    );
+    if (!question.value) {
+      return;
+    }
+
+    this.transferring = true;
+    try {
+      const result = await this._dispatchControlService.transfer({
+        fromDispatchControlId: this.id,
+        toRouteId: this.transferRouteId,
+        productId: this.transferProductId,
+        quantity
+      });
+      await this.afterTransfer(result);
+    } finally {
+      this.transferring = false;
+    }
+  }
+
+  async cancelTransfer(detail: DispatchControlDetailDto) {
+    if (this.transferring || !detail.dispatchTransferId) {
+      return;
+    }
+
+    const question = await this.customConfirm(
+      '¿Anular este traspaso?',
+      'Se quita de las dos rutas'
+    );
+    if (!question.value) {
+      return;
+    }
+
+    this.transferring = true;
+    try {
+      const result = await this._dispatchControlService.cancelTransfer(detail.dispatchTransferId);
+      await this.afterTransfer(result);
+    } finally {
+      this.transferring = false;
+    }
+  }
+
+  private async afterTransfer(result: { success: boolean; title: string; messageResponse: string; errors: any }) {
+    if (result.success) {
+      this.success(result.title, result.messageResponse);
+      this.transferQuantity = 0;
+      this.model = await this._dispatchControlService.getById(this.id);
+      this.refreshTransferRoutes();
+      return;
+    }
+
+    this.error(result.title, this.failureText(result));
+    this.errors = result.errors;
+  }
+
+  private async loadTransferSetting() {
+    try {
+      const setting = await this._dispatchControlService.getTransferSetting();
+      const value = setting && (setting.enabled || setting['Enabled']);
+      this.allowsTransfer = value === true || String(value).toLowerCase() === 'true';
+    } catch {
+      this.allowsTransfer = false;
+    }
+  }
+
+  private refreshTransferRoutes() {
+    const routeId = this.model ? this.model.routeId : 0;
+    this.transferRoutes = this.routes.filter((route) => route.id !== routeId);
+    if (this.transferRouteId === routeId) {
+      this.transferRouteId = null;
+    }
+  }
+
+  private pickBottleProduct() {
+    const bottle = this.products.find((product) => this.fold(product.name).includes('botellon'));
+    this.transferProductId = bottle ? bottle.id : (this.products[0] ? this.products[0].id : null);
+  }
+
+  private movementSign(type: number): number {
+    if (type === 1 || type === 2 || type === 5) {
+      return 1;
+    }
+    if (type === 3 || type === 4) {
+      return -1;
+    }
+    return 0;
+  }
+
+  private fold(value: string): string {
+    return (value || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+  }
+
+  private failureText(result: { messageResponse: string; errors: any }): string {
+    const errors = result && result.errors;
+    if (errors && typeof errors === 'object') {
+      const lines: string[] = [];
+      Object.keys(errors).forEach((key) => {
+        const value = errors[key];
+        if (Array.isArray(value)) {
+          value.forEach((item) => lines.push(String(item)));
+        } else if (value) {
+          lines.push(String(value));
+        }
+      });
+      if (lines.length) {
+        return lines.join(' ');
+      }
+    }
+    if (result && result.messageResponse && result.messageResponse !== 'CANCELED') {
+      return result.messageResponse;
+    }
+    return 'No se pudo guardar el traspaso.';
   }
 
   async save() {

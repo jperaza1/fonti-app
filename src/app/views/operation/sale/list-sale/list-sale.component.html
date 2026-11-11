@@ -75,6 +75,14 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
+          <button
+            type="button"
+            class="sale-list__btn sale-list__btn--secondary"
+            (click)="consolidate()"
+            [appCanAccess]="['OPERATION.SALE.CONSOLIDATE']"
+          >
+            <i class="fa fa-layer-group"></i> Sacar botes
+          </button>
         </section>
       </div>
     </div>
@@ -163,3 +171,4 @@
 </panel>
 
 <app-create-or-update-sale #createOrUpdateModal (modalSave)="getAll()"></app-create-or-update-sale>
+<app-consolidate-sale #consolidateSale (modalSave)="getAll()"></app-consolidate-sale>

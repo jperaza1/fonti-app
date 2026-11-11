@@ -1,0 +1,120 @@
+<app-modal-with-option-buttons
+  #entityComponent
+  [title]="title"
+  [optionButtons]="OptionButtons"
+  (onOptionButton)="optionButtonClicked($event)"
+  [size]="'xxxl'">
+  <div class="row row-space-10">
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Ruta<i class="text-danger">*</i></label>
+        <dx-select-box
+          displayExpr="name"
+          valueExpr="id"
+          [searchEnabled]="true"
+          [dataSource]="DxDataSourceRoute"
+          [(value)]="routeId">
+        </dx-select-box>
+        <app-validator-message [error]="errors" field="route"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Desde</label>
+        <dx-date-box [(value)]="dateFrom" [displayFormat]="DisplayFormatDate" [(max)]="dateTo"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Hasta</label>
+        <dx-date-box [(value)]="dateTo" [displayFormat]="DisplayFormatDate" [(min)]="dateFrom"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <button type="button" class="btn btn-primary btn-block" (click)="search()">Buscar ventas</button>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label>Cliente de la factura<i class="text-danger">*</i></label>
+        <dx-select-box
+          displayExpr="name"
+          valueExpr="id"
+          [searchEnabled]="true"
+          [dataSource]="DxDataSourceCustomer"
+          [(value)]="customerId">
+        </dx-select-box>
+        <app-validator-message [error]="errors" field="customerId"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Fecha<i class="text-danger">*</i></label>
+        <dx-date-box [(value)]="saleDate" [displayFormat]="DisplayFormatDate"></dx-date-box>
+        <app-validator-message [error]="errors" field="saleDate"></app-validator-message>
+      </div>
+    </section>
+  </div>
+
+  <h6 class="m-t-10">Ventas al contado sin factura</h6>
+  <app-validator-message [error]="errors" field="saleIds"></app-validator-message>
+  <div class="table-responsive" style="max-height: 180px">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Fecha</th>
+          <th>Cliente</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sale of sales">
+          <td><input type="checkbox" [checked]="selected[sale.id]" (change)="toggle(sale)" /></td>
+          <td>{{ sale.saleDate | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ sale.customerName }}</td>
+          <td>{{ sale.amount | currency: Currency }}</td>
+        </tr>
+        <tr *ngIf="!sales.length">
+          <td colspan="4">No hay ventas al contado sin factura en ese rango.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h6 class="m-t-10">Botes a sacar (precio mayor a 0). La regalía no se toca.</h6>
+  <app-validator-message [error]="errors" field="lines"></app-validator-message>
+  <div class="table-responsive">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Precio</th>
+          <th>Disponible</th>
+          <th>Cantidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let line of lines">
+          <td>{{ line.product }}</td>
+          <td>{{ line.price | currency: Currency }}</td>
+          <td>{{ line.available }}</td>
+          <td style="width: 140px">
+            <dx-number-box
+              [(value)]="line.quantity"
+              [min]="0"
+              [max]="line.available"
+              [showSpinButtons]="true"
+              format="#0">
+            </dx-number-box>
+          </td>
+        </tr>
+        <tr *ngIf="!lines.length">
+          <td colspan="4">Marca ventas para ver los productos.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</app-modal-with-option-buttons>

@@ -4,6 +4,7 @@ import { AuthGuard } from "../../../../_helpers/auth.guard";
 import { ListSaleComponent } from "./list-sale/list-sale.component";
 import { PendingBillingReportComponent } from "./pending-billing-report/pending-billing-report.component";
 import { SaleChartReportComponent } from "./sale-chart-report/sale-chart-report.component";
+import { SaleRouteQuantityReportComponent } from "./sale-route-quantity-report/sale-route-quantity-report.component";
 
 const routes: Routes = [
   { path: '', component: ListSaleComponent, canActivate: [AuthGuard], pathMatch: 'full' },
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'vendor-report', component: SaleChartReportComponent, canActivate: [AuthGuard], data: { kind: 'vendor', title: 'Ranking de vendedores' } },
   { path: 'product-report', component: SaleChartReportComponent, canActivate: [AuthGuard], data: { kind: 'product', title: 'Productos vendidos' } },
   { path: 'payment-type-report', component: SaleChartReportComponent, canActivate: [AuthGuard], data: { kind: 'payment', title: 'Contado y crédito' } },
+  { path: 'route-quantity-report', component: SaleRouteQuantityReportComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

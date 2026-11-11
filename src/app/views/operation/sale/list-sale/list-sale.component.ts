@@ -4,6 +4,7 @@ import { SaleService } from '../sale.service';
 import { SaleDto } from '../dtos/sale-dto';
 import { RequestResult } from '../../../../../_models/RequestResult';
 import { CreateOrUpdateSaleComponent } from '../create-or-update-sale/create-or-update-sale.component';
+import { ConsolidateSaleComponent } from '../consolidate-sale/consolidate-sale.component';
 import { User } from '../../../../../_models/user';
 import { TypeService } from '../../../data/type/type.service';
 import { CafeteriaService } from '../../../data/cafeteria/cafeteria.service';
@@ -28,6 +29,7 @@ export class ListSaleComponent extends AppComponentBase implements OnInit {
   DxDataSourceSaleType: any = {};
 
   @ViewChild("createOrUpdateModal") createOrUpdateModal: CreateOrUpdateSaleComponent;
+  @ViewChild("consolidateSale") consolidateSale: ConsolidateSaleComponent;
 
   constructor(
     private _saleService: SaleService,
@@ -103,6 +105,10 @@ export class ListSaleComponent extends AppComponentBase implements OnInit {
 
   create() {
     this.createOrUpdateModal.showAdd();
+  }
+
+  consolidate() {
+    this.consolidateSale.show(this.filterModel);
   }
 
   update(data: SaleDto) {

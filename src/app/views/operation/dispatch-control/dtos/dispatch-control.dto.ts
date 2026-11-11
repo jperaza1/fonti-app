@@ -25,6 +25,9 @@ export class DispatchControlDetailDto {
   bottleQuantity: number;
   crateQuantity: number;
   missingBottleQuantity: number;
+  dispatchTransferId: number;
+  counterpartRouteId: number;
+  counterpartRoute: string;
   productMovements: ProductMovementDto[];
 
   constructor() {
@@ -37,6 +40,17 @@ export class ProductMovementDto {
   dispatchControlDetailId: number;
   productId: number;
   product: string;
+  quantity: number;
+}
+
+export class DispatchTransferSettingDto {
+  enabled: boolean;
+}
+
+export class DispatchTransferDto {
+  fromDispatchControlId: number;
+  toRouteId: number;
+  productId: number;
   quantity: number;
 }
 

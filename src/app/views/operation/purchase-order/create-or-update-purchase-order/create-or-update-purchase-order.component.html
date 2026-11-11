@@ -241,6 +241,19 @@
               </div>
             </ng-template>
           </ngb-tab>
+          <ngb-tab *ngIf="Model.id > 0 && (Model.orderStatus >= 3 && Model.orderStatus < 6)">
+            <ng-template ngbTabTitle >
+              <span class="d-sm-none">Facturas</span>
+              <span class="d-sm-block d-none">Facturas</span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <div class="row-space-10" style="padding-top: 10px;">
+                <section class="col-md-12 col-xs-12">
+                  <app-list-purchase-order-invoices [purchaseOrderId]="Model.id" [orderStatus]="Model.orderStatus" [vendorId]="Model.vendorId" [typeInoice]="Model.typeInoice"></app-list-purchase-order-invoices>
+                </section>
+              </div>
+            </ng-template>
+          </ngb-tab>
         </ngb-tabset>
 
         

@@ -111,14 +111,16 @@ export class CreateOrUpdatePoInvoicesComponent extends AppComponentBase implemen
     }
   }
 
-  async showAdd(purchaseOrderId: number, orderStatus: number, vendorId: number) {
+  async showAdd(purchaseOrderId: number, orderStatus: number, vendorId: number, typeInoice: string) {
     this.vendorId = vendorId;
     this.title = "Agregar Factura";
     this.orderStatus = orderStatus;
     await this.initializeView();
     this.Model = new PurchaseOrderInvoiceDto();
     this.setButtonOptions();
-    //this.Model.purchaseOrderId = purchaseOrderId;
+    this.Model.purchaseOrderId = purchaseOrderId;
+    this.Model.vendorId = vendorId;
+    this.Model.paymentType = typeInoice === "Credito" ? PaymentType.Credit : PaymentType.Cash;
     await this.searchVendor(vendorId);
     // Limpiar documentos al agregar nueva factura
     this.DocumentsDataSource = [];

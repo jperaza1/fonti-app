@@ -15,6 +15,7 @@ export class ListPurchaseOrderInvoicesComponent extends AppComponentBase impleme
   @Input() purchaseOrderId: number;
   @Input() orderStatus: number;
   @Input() vendorId: number;
+  @Input() typeInoice: string;
   columns: any[] = [];
   DataSource: PurchaseOrderInvoiceDto[] = [];
 
@@ -73,11 +74,21 @@ export class ListPurchaseOrderInvoicesComponent extends AppComponentBase impleme
   }
 
   addInvoice() {
-    this.createOrUpdateModal.showAdd(this.purchaseOrderId, this.orderStatus, this.vendorId);
+    this.createOrUpdateModal.showAdd(this.purchaseOrderId, this.orderStatus, this.vendorId, this.typeInoice);
   }
 
   update(data: PurchaseOrderInvoiceDto) {
     this.createOrUpdateModal.showUpdate(data.id, this.orderStatus, this.vendorId);
+  }
+
+  async deleteInvoice(data: PurchaseOrderInvoiceDto) {
+    let confirmResult = await this.confirm();
+    if (confirmResult.value) {
+      let disableResponse = await this._invoiceService.delete(data.id);
+      if (disableResponse.success) {
+        await this.getAll();
+      }
+    }
   }
 
   formatInvoiceNumber(value: string | number): string {

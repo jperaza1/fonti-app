@@ -53,6 +53,14 @@
         > 
           <i class="fa fa-file-pdf"></i>
         </button>
+        <button
+          type="button"
+          class="btn btn-danger pull-left btn-sm"
+          (click)="deleteInvoice(data.data)"
+          [appCanAccess]="['OPERATION.INVOICE.DELETE']"
+        >
+          <i class="fa fa-trash"></i>
+        </button>
       </div>
       <div *dxTemplate="let data of 'invoiceNumberTemplate'" >
         {{ formatInvoiceNumber(data.value) }}

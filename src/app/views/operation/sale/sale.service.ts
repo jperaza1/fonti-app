@@ -6,6 +6,7 @@ import { RequestResult } from "../../../../_models/RequestResult";
 import { FilterSaleDto } from "./dtos/filter-sale-dto";
 import { GetSalesByMonthDto } from "./dtos/sale-by-month-dto";
 import { SaleChartFilterDto, SaleChartPointDto } from "./dtos/sale-chart-point-dto";
+import { SaleRouteQuantityFilterDto, SaleRouteQuantityReportDto } from "./dtos/sale-route-quantity-dto";
 import { GeneratePendingBillingDto } from "./dtos/generate-pending-billing-dto";
 
 @Injectable({
@@ -51,11 +52,23 @@ export class SaleService {
       return this.http.post<SaleChartPointDto[]>(`${this._config.config.data}Sale/GetChartReport`, filter).toPromise();
     }
 
+    getRouteQuantityReport(filter: SaleRouteQuantityFilterDto): Promise<SaleRouteQuantityReportDto> {
+      return this.http.post<SaleRouteQuantityReportDto>(`${this._config.config.data}Sale/GetRouteQuantityReport`, filter).toPromise();
+    }
+
     getPendingBillingReport(filterModel: FilterSaleDto): Promise<SaleDto[]> {
       return this.http.post<SaleDto[]>(`${this._config.config.data}Sale/GetPendingBillingReport`, filterModel).toPromise();
     }
 
     generatePendingBilling(model: GeneratePendingBillingDto): Promise<RequestResult> {
       return this.http.post<RequestResult>(`${this._config.config.data}Sale/GeneratePendingBilling`, model).toPromise();
+    }
+
+    getConsolidateAvailability(model): Promise<any[]> {
+      return this.http.post<any[]>(`${this._config.config.data}Sale/GetConsolidateAvailability`, model).toPromise();
+    }
+
+    consolidate(model): Promise<RequestResult> {
+      return this.http.post<RequestResult>(`${this._config.config.data}Sale/Consolidate`, model).toPromise();
     }
 }
