@@ -301,6 +301,12 @@ export class CreateOrUpdateDispatchControlComponent extends AppComponentBase imp
       this.model.id = this.id;
     }
 
+    for (const detail of this.model.dispatchControlDetails || []) {
+      if (detail.dispatchControlType === 3) {
+        detail.crateQuantity = Number(detail.crateQuantity) || 0;
+      }
+    }
+
     const result = this.id > 0
       ? await this._dispatchControlService.update(this.model, this.id)
       : await this._dispatchControlService.create(this.model);

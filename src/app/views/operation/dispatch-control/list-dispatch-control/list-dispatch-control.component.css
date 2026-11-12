@@ -1,0 +1,24 @@
+.dispatch-line-totals {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dispatch-line-totals th,
+.dispatch-line-totals td {
+  padding: 2px 8px;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.dispatch-line-totals th {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.dispatch-line-totals .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

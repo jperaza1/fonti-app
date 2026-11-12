@@ -1,3 +1,15 @@
+export class DispatchControlListDto {
+  items: DispatchControlDto[];
+}
+
+export class DispatchProductTotalDto {
+  productId: number;
+  product: string;
+  dispatched: number;
+  returned: number;
+  sold: number | null;
+}
+
 export class DispatchControlDto {
   id: number;
   routeId: number;
@@ -11,6 +23,7 @@ export class DispatchControlDto {
   statusName: string;
   truckId: number;
   truck: string;
+  productTotals: DispatchProductTotalDto[];
 
   constructor() {
     this.dispatchControlDetails = [];

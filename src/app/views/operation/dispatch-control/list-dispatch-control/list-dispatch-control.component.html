@@ -3,6 +3,18 @@
     <div class="row row-space-10">
       <section class="col-md-4 col-xs-12">
         <div class="form-group">
+          <label class="expense-list__label">Ruta</label>
+          <dx-select-box
+            displayExpr="name"
+            valueExpr="id"
+            [searchEnabled]="true"
+            [dataSource]="DxDataSourceRoute"
+            [(value)]="filterModel.routeId"
+          ></dx-select-box>
+        </div>
+      </section>
+      <section class="col-md-4 col-xs-12">
+        <div class="form-group">
           <label class="expense-list__label">Desde</label>
           <dx-date-box
             [(max)]="filterModel.dateTo"
@@ -84,6 +96,26 @@
         </div>
         <div *dxTemplate="let data of 'dateTemplate'">
           {{ data.value | date: DisplayFormatDate }}
+        </div>
+        <div *dxTemplate="let data of 'productsTemplate'">
+          <table class="dispatch-line-totals" *ngIf="data.data.productTotals?.length">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th class="num">Despachado</th>
+                <th class="num">Retornado</th>
+                <th class="num" *ngIf="showsSold(data.data)">Vendido</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let total of data.data.productTotals">
+                <td>{{ total.product }}</td>
+                <td class="num">{{ total.dispatched }}</td>
+                <td class="num">{{ total.returned }}</td>
+                <td class="num" *ngIf="showsSold(data.data)">{{ total.sold }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </dx-data-grid>
     </div>
