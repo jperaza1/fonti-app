@@ -26,4 +26,5 @@ export class ProductRoutePricesDto {
   productName: string;
   price: number;
   creditPrice: number;
+  showCreditPrice = false;
 }

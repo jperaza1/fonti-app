@@ -63,6 +63,7 @@ export class CreateOrUpdateRouteComponent extends AppComponentBase implements On
     await this.initializeView();
     this.setButtonOptions(true);
     this.Model = await this._routeService.getById(data.id);
+    this.markSavedCreditPrices();
     this.entityComponent.show();
   }
 
@@ -94,13 +95,22 @@ export class CreateOrUpdateRouteComponent extends AppComponentBase implements On
       this.error('Error', this.priceError(this.detail.price));
       return;
     }
-    if (this.Model.givesCredit && this.detail.creditPrice != null && this.detail.creditPrice <= 0) {
-      this.error('Error', 'El precio de crédito tiene que ser mayor a 0');
+    if (!this.Model.givesCredit) {
+      this.detail.showCreditPrice = false;
+    }
+    if (this.detail.showCreditPrice && !(this.detail.price > 0)) {
+      this.error('Error', 'El precio que se muestra al crédito tiene que ser mayor a 0');
       return;
     }
-    if (!this.Model.givesCredit || this.detail.creditPrice == null || this.detail.creditPrice <= 0) {
-      this.detail.creditPrice = null;
+    if (this.detail.showCreditPrice) {
+      this.Model.productRoutePrices
+        .filter(item => item.productId === this.detail.productId)
+        .forEach(item => {
+          item.showCreditPrice = false;
+          item.creditPrice = null;
+        });
     }
+    this.applyCreditPrice(this.detail);
     this.Model.productRoutePrices.push(this.detail);
     this.detail = new ProductRoutePricesDto();
   }
@@ -142,12 +152,18 @@ export class CreateOrUpdateRouteComponent extends AppComponentBase implements On
       return;
     }
     const invalidCredit = this.Model.productRoutePrices.find(
-      item => item.creditPrice != null && item.creditPrice <= 0
+      item => this.Model.givesCredit && item.showCreditPrice && !(item.price > 0)
     );
     if (invalidCredit) {
-      this.error('Error', 'El precio de crédito tiene que ser mayor a 0');
+      this.error('Error', 'El precio que se muestra al crédito tiene que ser mayor a 0');
       return;
     }
+    this.Model.productRoutePrices.forEach(item => {
+      if (!this.Model.givesCredit) {
+        item.showCreditPrice = false;
+      }
+      this.applyCreditPrice(item);
+    });
 
     if (this.isEmptyOrNullNumber(this.Model.id)) {
       const createResponse = await this._routeService.create(this.Model);
@@ -163,6 +179,31 @@ export class CreateOrUpdateRouteComponent extends AppComponentBase implements On
 
   close() {
     this.entityComponent.close();
+  }
+
+  onShowCreditPrice(detail: ProductRoutePricesDto) {
+    if (detail.showCreditPrice) {
+      this.Model.productRoutePrices
+        .filter(item => item !== detail && item.productId === detail.productId)
+        .forEach(item => {
+          item.showCreditPrice = false;
+          item.creditPrice = null;
+        });
+    }
+    this.applyCreditPrice(detail);
+    this.Model.productRoutePrices = [...this.Model.productRoutePrices];
+  }
+
+  markSavedCreditPrices() {
+    (this.Model.productRoutePrices || []).forEach(item => {
+      if (item.showCreditPrice == null) {
+        item.showCreditPrice = item.creditPrice != null && item.creditPrice > 0;
+      }
+    });
+  }
+
+  applyCreditPrice(detail: ProductRoutePricesDto) {
+    detail.creditPrice = detail.showCreditPrice && detail.price > 0 ? detail.price : null;
   }
 
   onItemClickProduct(item: ProductDto) {
