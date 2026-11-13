@@ -29,11 +29,6 @@
               <dx-select-box #paymentMethod [(value)]="Model.paymentMethod" [dataSource]="DxDataSourcePaymentMethod" displayExpr="text" valueExpr="value" [searchEnabled]="true"></dx-select-box>
               <app-validator-message [error]="errors" field="paymentMethod"></app-validator-message>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 col-12 po-invoice-form__field" *ngIf="Model.paymentType === 2">
-              <label class="po-invoice-form__label">Categoría <i class="text-danger">*</i></label>
-              <dx-select-box #category [(value)]="Model.categoryId" [dataSource]="DxDataSourceCategoryType" displayExpr="name" valueExpr="id" [searchEnabled]="true"></dx-select-box>
-              <app-validator-message [error]="errors" field="category"></app-validator-message>
-            </div>
             <div class="col-12 po-invoice-form__field">
               <label class="po-invoice-form__label">Descripción</label>
               <dx-text-area [height]="100" #description [(value)]="Model.description" [disabled]="orderStatus !== 3"></dx-text-area>
@@ -75,7 +70,36 @@
         </section>
       </div>
 
-      <!-- Columna derecha: Documentos (solo cuando Model.id > 0) -->
+      <!-- Alta: el archivo se envía en el mismo POST AddInvoice -->
+      <div class="col-lg-6 col-md-12 col-12" *ngIf="isNewInvoice && orderStatus === 3">
+        <section class="po-invoice-form__card po-invoice-form__card--documents po-invoice-form__card--animate">
+          <h3 class="po-invoice-form__card-title">Factura <i class="text-danger">*</i></h3>
+          <p class="po-invoice-form__upload-hint m-b-10">
+            Adjunte el comprobante antes de guardar; se envía junto con los datos.
+          </p>
+          <div class="po-invoice-form__upload">
+            <div class="po-invoice-form__upload-inner">
+              <label class="po-invoice-form__upload-label">
+                <i class="fa fa-cloud-upload-alt"></i>
+                Subir documento
+              </label>
+              <dx-file-uploader
+                (onValueChanged)="onFileChanged($event)"
+                uploadUrl=""
+                [multiple]="false"
+                accept="*"
+                [(value)]="DocumentFiles"
+                uploadMode="useButtons"
+                [showFileList]="true"
+                [allowedFileExtensions]="[]">
+              </dx-file-uploader>
+              <app-validator-message [error]="errors" field="invoiceFile"></app-validator-message>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Factura ya creada: carga o vista previa del adjunto -->
       <div class="col-lg-6 col-md-12 col-12" *ngIf="Model.id > 0">
         <section class="po-invoice-form__card po-invoice-form__card--documents po-invoice-form__card--animate">
           <h3 class="po-invoice-form__card-title">Factura</h3>

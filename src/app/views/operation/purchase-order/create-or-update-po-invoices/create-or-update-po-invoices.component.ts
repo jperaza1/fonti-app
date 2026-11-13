@@ -9,7 +9,6 @@ import { PurchaseOrderInvoiceDto } from '../../invoice/dtos/purchase-order-invoi
 import { PurchaseOrderService } from '../purchase-order.service';
 import { InvoiceService } from '../../invoice/invoice.service';
 import { PaymentType } from '../../../../../_enums/payment-type.enum';
-import { TypeService } from '../../../data/type/type.service';
 import { VendorService } from '../../../data/vendor/vendor.service';
 import { VendorDto } from '../../../data/vendor/dtos/vendor-dto';
 import { DocumentationService } from '../../../../../_services/documentation.service';
@@ -17,7 +16,6 @@ import { AuthenticationService } from '../../../../../_services/authentication.s
 import { ConfigService } from '../../../../../_services/ConfigService';
 import { DocumentationDto } from '../../../shared/models/documentation-dto';
 import { LocalDocumentationDto } from '../../../shared/models/local-documentation-dto';
-import { TypeDto } from '../../../data/type/dtos/type-dto';
 
 @Component({
   selector: 'app-create-or-update-po-invoices',
@@ -31,7 +29,6 @@ export class CreateOrUpdatePoInvoicesComponent extends AppComponentBase implemen
   title: string = "Agregar Factura";
   orderStatus: number;
   DxDataSourceInvoiceType: any = {};
-  DxDataSourceCategoryType: any = {};
   DxDataSourcePaymentMethod: any = {};
 
   vendorId: number;
@@ -39,6 +36,7 @@ export class CreateOrUpdatePoInvoicesComponent extends AppComponentBase implemen
   // Documentos
   DocumentsDataSource: DocumentationDto[] = [];
   DocumentFiles: any[] = [];
+  invoiceAttachmentFile: File | null = null;
   TenantId: number;
   User: string;
   EntityName: string = "INVOICE";
@@ -53,7 +51,6 @@ export class CreateOrUpdatePoInvoicesComponent extends AppComponentBase implemen
   constructor(
     private _enumService: EnumDefinitionsService,
     private _invoiceService: InvoiceService,
-    private _typeService: TypeService,
     private _vendorService: VendorService,
     private _documentationService: DocumentationService,
     private _authenticationService: AuthenticationService,
@@ -71,7 +68,6 @@ export class CreateOrUpdatePoInvoicesComponent extends AppComponentBase implemen
   async initializeView() {
     this.errors = {};
     await this.getInvoiceType();
-    await this.getCategoryType();
     await this.getPaymentMethod();
   }
 
@@ -83,13 +79,6 @@ export class CreateOrUpdatePoInvoicesComponent extends AppComponentBase implemen
   async getPaymentMethod() {
     const response = await this._enumService.getPaymentMethod();
     this.DxDataSourcePaymentMethod = this.getDataSourceDx(response);
-  }
-
-  async getCategoryType() {
-    let response = await this._typeService.getAciteTypesByGroupCode("EXPENSE_INVOICE_CATEGORY");
-    response = response.filter(x => x.name != "Contado");
-    console.log(response);
-    this.DxDataSourceCategoryType = this.getDataSourceDx(response);
   }
 
   setButtonOptions(update?: boolean | null) {
@@ -125,6 +114,7 @@ export class CreateOrUpdatePoInvoicesComponent extends AppComponentBase implemen
     // Limpiar documentos al agregar nueva factura
     this.DocumentsDataSource = [];
     this.DocumentFiles = [];
+    this.invoiceAttachmentFile = null;
     this.entityComponent.show();
   }
 
@@ -166,8 +156,67 @@ export class CreateOrUpdatePoInvoicesComponent extends AppComponentBase implemen
     }
   }
 
+  get isNewInvoice(): boolean {
+    return !this.Model?.id || this.Model.id <= 0;
+  }
+
+  private appendFormField(
+    fd: FormData,
+    key: string,
+    value: string | number | boolean | null | undefined
+  ) {
+    if (value === null || value === undefined) {
+      return;
+    }
+    if (typeof value === 'string' && value === '') {
+      return;
+    }
+    fd.append(key, String(value));
+  }
+
+  private appendFormDate(fd: FormData, key: string, d: Date | null | undefined) {
+    if (!d) {
+      return;
+    }
+    const dt = new Date(d);
+    if (isNaN(dt.getTime())) {
+      return;
+    }
+    fd.append(key, dt.toISOString());
+  }
+
+  private buildAddInvoiceFormData(): FormData {
+    const fd = new FormData();
+    const m = this.Model;
+    fd.append('PurchaseOrderId', String(m.purchaseOrderId));
+    fd.append('HasInvoice', m.hasInvoice ? 'true' : 'false');
+    if (m.vendorId != null) {
+      fd.append('VendorId', String(m.vendorId));
+    }
+    this.appendFormField(fd, 'InvoiceNumber', m.invoiceNumber);
+    this.appendFormField(fd, 'Description', m.description);
+    this.appendFormDate(fd, 'InvoiceDate', m.invoiceDate);
+    this.appendFormField(fd, 'TaxableAmount', m.taxableAmount);
+    this.appendFormField(fd, 'ExemptAmount', m.exemptAmount);
+    this.appendFormField(fd, 'Discount', m.discount ?? 0);
+    this.appendFormField(fd, 'SubTotal', m.subTotal);
+    this.appendFormField(fd, 'TaxAmount', m.taxAmount);
+    this.appendFormField(fd, 'Total', m.total);
+    fd.append('PaymentType', String(m.paymentType));
+    if (m.paymentMethod != null) {
+      fd.append('PaymentMethod', String(m.paymentMethod));
+    }
+    return fd;
+  }
+
   async save() {
-    var response = await this._invoiceService.addInvoice(this.Model);
+    if (!this.invoiceAttachmentFile) {
+      this.error('Validación', 'Debe adjuntar el archivo de la factura.');
+      return;
+    }
+    const fd = this.buildAddInvoiceFormData();
+    fd.append('invoiceFile', this.invoiceAttachmentFile, this.invoiceAttachmentFile.name);
+    const response = await this._invoiceService.addInvoiceFromForm(fd);
     this.validResponse(response);
   }
 
@@ -214,7 +263,10 @@ export class CreateOrUpdatePoInvoicesComponent extends AppComponentBase implemen
         `${this._configService.config.document}Attachment/Upload?attachmentType=INVOICE&tenantId=${this.TenantId}&key=${this.Model.id}&entity=${this.EntityName}&user=${this.User}`;
       uploadUrl = uploadUrl.replace(/[?&]$/, "");
       file.component.option("uploadUrl", uploadUrl);
+      return;
     }
+    const files = file?.value as File[];
+    this.invoiceAttachmentFile = files?.length ? files[0] : null;
   }
 
   async onFileUploaded(e: any) {

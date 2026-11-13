@@ -49,7 +49,7 @@
                 [(ngModel)]="Model.givesCredit" name="givesCredit">
               <label class="custom-control-label" for="givesCredit">Da crédito</label>
             </div>
-            <p class="route-form__hint route-form__hint--switch">Si está activo, la ruta puede vender a crédito.</p>
+            <p class="route-form__hint route-form__hint--switch">Si está activo, la ruta puede vender a crédito. El precio de crédito se pone en el talonario.</p>
           </div>
         </section>
       </div>
@@ -61,9 +61,10 @@
         <i class="fas fa-receipt"></i> Talonario
       </div>
       <p class="route-form__hint">Agregue los productos y precios asociados a esta ruta.</p>
+      <p class="route-form__hint" *ngIf="Model.givesCredit">El precio de crédito es el del producto fiado, por ejemplo el botellón. Si lo dejas vacío al editar, se conserva el que ya está guardado.</p>
 
       <div class="row row-space-10">
-        <section class="col-md-5 col-xs-12">
+        <section class="col-md-4 col-xs-12">
           <div class="form-group">
             <label class="route-form__label">Producto</label>
             <dx-select-box displayExpr="name" valueExpr="id" [searchEnabled]="true"
@@ -72,13 +73,22 @@
             </dx-select-box>
           </div>
         </section>
-        <section class="col-md-5 col-xs-12">
+        <section class="col-md-3 col-xs-12">
           <div class="form-group">
             <label class="route-form__label">Precio</label>
             <dx-number-box #price [showSpinButtons]="false" [format]="CurrencyDxNumber"
               [(value)]="detail.price" [min]="Model.deliversRegalia ? 0 : 0.01" placeholder="0.00">
             </dx-number-box>
             <app-validator-message [error]="errors" field="price"></app-validator-message>
+          </div>
+        </section>
+        <section class="col-md-3 col-xs-12" *ngIf="Model.givesCredit">
+          <div class="form-group">
+            <label class="route-form__label">Precio crédito</label>
+            <dx-number-box [showSpinButtons]="false" [format]="CurrencyDxNumber"
+              [(value)]="detail.creditPrice" [min]="0.01" placeholder="0.00">
+            </dx-number-box>
+            <app-validator-message [error]="errors" field="creditPrice"></app-validator-message>
           </div>
         </section>
         <section class="col-md-2 col-xs-12" style="margin-top: 22px;">
@@ -94,9 +104,15 @@
         <dx-data-grid [dataSource]="Model.productRoutePrices" [showBorders]="true" [columnAutoWidth]="true">
           <dxi-column dataField="productName" caption="Producto"></dxi-column>
           <dxi-column dataField="price" caption="Precio" cellTemplate="amountTemplate"></dxi-column>
+          <dxi-column dataField="creditPrice" caption="Precio crédito" [visible]="Model.givesCredit" cellTemplate="creditTemplate"></dxi-column>
           <dxi-column dataField="action" caption="Acciones" cellTemplate="actionTemplate"></dxi-column>
           <div *dxTemplate="let data of 'amountTemplate'">
             {{data.value | currency : Currency}}
+          </div>
+          <div *dxTemplate="let data of 'creditTemplate'">
+            <dx-number-box [showSpinButtons]="false" [format]="CurrencyDxNumber"
+              [(value)]="data.data.creditPrice" [min]="0.01" placeholder="0.00">
+            </dx-number-box>
           </div>
           <div *dxTemplate="let data of 'actionTemplate'">
             <button type="button" class="btn btn-danger btn-sm" (click)="removeDetail(data.data)">

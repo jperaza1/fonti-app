@@ -94,6 +94,13 @@ export class CreateOrUpdateRouteComponent extends AppComponentBase implements On
       this.error('Error', this.priceError(this.detail.price));
       return;
     }
+    if (this.Model.givesCredit && this.detail.creditPrice != null && this.detail.creditPrice <= 0) {
+      this.error('Error', 'El precio de crédito tiene que ser mayor a 0');
+      return;
+    }
+    if (!this.Model.givesCredit || this.detail.creditPrice == null || this.detail.creditPrice <= 0) {
+      this.detail.creditPrice = null;
+    }
     this.Model.productRoutePrices.push(this.detail);
     this.detail = new ProductRoutePricesDto();
   }
@@ -132,6 +139,13 @@ export class CreateOrUpdateRouteComponent extends AppComponentBase implements On
       this.error('Error', this.Model.deliversRegalia
         ? 'El precio no puede ser negativo'
         : 'Esta ruta no entrega regalía. Los precios deben ser mayores a 0');
+      return;
+    }
+    const invalidCredit = this.Model.productRoutePrices.find(
+      item => item.creditPrice != null && item.creditPrice <= 0
+    );
+    if (invalidCredit) {
+      this.error('Error', 'El precio de crédito tiene que ser mayor a 0');
       return;
     }
 

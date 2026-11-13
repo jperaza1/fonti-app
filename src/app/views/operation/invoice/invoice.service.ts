@@ -27,6 +27,10 @@ export class InvoiceService {
       return this.http.post<RequestResult>(`${this._config.config.data}Invoice/AddInvoice`, model).toPromise();
     }
 
+    addInvoiceFromForm(formData: FormData): Promise<RequestResult> {
+      return this.http.post<RequestResult>(`${this._config.config.data}Invoice/AddInvoice`, formData).toPromise();
+    }
+
     updateInvoiceFile(id: number, status: boolean): Promise<RequestResult> {
       return this.http.post<RequestResult>(`${this._config.config.data}Invoice/UpdateInvoiceFile?id=${id}`, status, {
         headers: { 'Content-Type': 'application/json' }

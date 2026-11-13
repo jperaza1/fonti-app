@@ -135,7 +135,9 @@ export class CreateOrUpdateExpenseComponent extends AppComponentBase implements 
     if (!firstDate || !secondDate) {
       return false;
     }
-    return firstDate.getTime() === secondDate.getTime();
+    return firstDate.getFullYear() === secondDate.getFullYear()
+      && firstDate.getMonth() === secondDate.getMonth()
+      && firstDate.getDate() === secondDate.getDate();
   }
 
   onInvoiceAttachmentChanged(e: any) {
@@ -170,10 +172,8 @@ export class CreateOrUpdateExpenseComponent extends AppComponentBase implements 
 
   onIsInvoiceChanged() {
     if (this.Model.isInvoice) {
-      const inv = this.ensureExpenseInvoice();
-      if (!inv.invoiceDate) {
-        inv.invoiceDate = this.Model.date ? new Date(this.Model.date as any) : new Date();
-      }
+      this.ensureExpenseInvoice();
+      this.syncInvoiceDateFromExpenseDate();
       this.onInvoiceAmountChanged();
     } else {
       this.Model.expenseInvoice = new ExpenseInvoiceDto();
@@ -375,6 +375,7 @@ export class CreateOrUpdateExpenseComponent extends AppComponentBase implements 
 
     if (this.Model.isInvoice) {
       const inv = this.ensureExpenseInvoice();
+      this.syncInvoiceDateFromExpenseDate();
       this.onInvoiceAmountChanged();
       if (this.isEmptyOrNullString((inv.invoiceNumber || '').trim())) {
         this.error('Validación', 'El número de factura es requerido');

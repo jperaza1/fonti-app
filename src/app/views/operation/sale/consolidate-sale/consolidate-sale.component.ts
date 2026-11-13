@@ -18,7 +18,7 @@ export class ConsolidateSaleComponent extends AppComponentBase {
   @ViewChild('entityComponent') entityComponent: ModalWithOptionButtonsComponent;
   @Output() modalSave = new EventEmitter<any>();
 
-  title = 'Sacar botes para facturar';
+  title = 'Facturar al Contado';
   OptionButtons: OptionButton[] = [];
   errors: any = {};
   routeId: number = null;

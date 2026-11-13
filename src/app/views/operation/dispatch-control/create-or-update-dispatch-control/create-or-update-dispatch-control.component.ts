@@ -266,7 +266,7 @@ export class CreateOrUpdateDispatchControlComponent extends AppComponentBase imp
       .toLowerCase();
   }
 
-  private failureText(result: { messageResponse: string; errors: any }): string {
+  private failureText(result: { messageResponse: string; errors: any }, empty = 'No se pudo guardar el traspaso.'): string {
     const errors = result && result.errors;
     if (errors && typeof errors === 'object') {
       const lines: string[] = [];
@@ -285,7 +285,7 @@ export class CreateOrUpdateDispatchControlComponent extends AppComponentBase imp
     if (result && result.messageResponse && result.messageResponse !== 'CANCELED') {
       return result.messageResponse;
     }
-    return 'No se pudo guardar el traspaso.';
+    return empty;
   }
 
   async save() {
@@ -315,7 +315,7 @@ export class CreateOrUpdateDispatchControlComponent extends AppComponentBase imp
       this.success(result.title, result.messageResponse);
       this.goBack();
     } else {
-      this.error(result.title, result.messageResponse);
+      this.error(result.title, this.failureText(result, 'No se pudo guardar el control de salida.'));
       this.errors = result.errors;
     }
   }

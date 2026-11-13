@@ -94,6 +94,7 @@
               [(value)]="Model.date"
               [displayFormat]="DisplayFormatDate"
               [disabled]="Model.id > 0"
+              (onValueChanged)="onExpenseDateChanged($event)"
             ></dx-date-box>
             <app-validator-message [error]="errors" field="date"></app-validator-message>
           </div>
@@ -167,6 +168,7 @@
               [(value)]="Model.expenseInvoice.invoiceDate"
               [displayFormat]="DisplayFormatDate"
               [disabled]="Model.id > 0"
+              (onValueChanged)="onInvoiceDateChanged($event)"
             ></dx-date-box>
             <app-validator-message [error]="errors" field="invoiceDate"></app-validator-message>
           </div>
