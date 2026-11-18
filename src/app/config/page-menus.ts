@@ -28,12 +28,17 @@ var pageMenus = [
     title: 'Inventario',
     url: '',
     caret: 'true',
-    permissions: ['OPERATION.INVENTORY', 'OPERATION.PRODUCTION', 'OPERATION.KARDEX', 'OPERATION.PRODUCT_RECIPE', 'OPERATION.UNIT_OF_MEASURE'],
+    permissions: ['OPERATION.INVENTORY', 'OPERATION.PRODUCTION', 'OPERATION.KARDEX', 'OPERATION.PRODUCT_RECIPE', 'OPERATION.UNIT_OF_MEASURE', 'OPERATION.WAREHOUSE_TRANSFER'],
     submenu: [
       {
         url: 'inventory',
         title: 'Inventario',
         permissions: ['OPERATION.INVENTORY'],
+      },
+      {
+        url: 'warehouse-transfer',
+        title: 'Transferencias',
+        permissions: ['OPERATION.WAREHOUSE_TRANSFER'],
       },
       {
         url: 'production',
@@ -43,7 +48,7 @@ var pageMenus = [
       {
         url: 'kardex',
         title: 'Kardex',
-        permissions: ['OPERATION.KARDEX'],
+        permissions: [],
       },
       {
         url: 'product-recipe',

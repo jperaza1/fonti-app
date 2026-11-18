@@ -6,6 +6,8 @@ export class ProductStockDto {
   unitOfMeasure: string;
   cost: number;
   quantity: number;
+  warehouseId: number;
+  warehouse: string;
   isActive: boolean;
 }
 
@@ -13,6 +15,8 @@ export class KardexDto {
   id: number;
   productId: number;
   product: string;
+  warehouseId: number;
+  warehouse: string;
   unitOfMeasure: string;
   movementDate: Date;
   movementType: number;
@@ -28,11 +32,13 @@ export class KardexDto {
 
 export class KardexFilterDto {
   productId: number;
+  warehouseId: number;
   dateFrom: Date;
   dateTo: Date;
 }
 
 export class KardexEntryDto {
+  warehouseId: number;
   productId: number;
   quantity: number;
   movementDate: Date;

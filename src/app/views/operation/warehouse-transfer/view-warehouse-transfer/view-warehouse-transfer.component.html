@@ -1,0 +1,53 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="row row-space-10">
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Origen</label>
+        <dx-text-box [value]="model.fromWarehouse" [readOnly]="true"></dx-text-box>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Destino</label>
+        <dx-text-box [value]="model.toWarehouse" [readOnly]="true"></dx-text-box>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Fecha</label>
+        <dx-date-box [value]="model.date" [readOnly]="true" [displayFormat]="DisplayFormatDate"></dx-date-box>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Estado</label>
+        <dx-text-box [value]="model.statusName" [readOnly]="true"></dx-text-box>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label>Nota</label>
+        <dx-text-box [value]="model.note" [readOnly]="true"></dx-text-box>
+      </div>
+    </section>
+    <section class="col-md-6 col-xs-12" *ngIf="model.reason">
+      <div class="form-group">
+        <label>Motivo de rechazo</label>
+        <dx-text-box [value]="model.reason" [readOnly]="true"></dx-text-box>
+      </div>
+    </section>
+  </div>
+
+  <dx-data-grid [dataSource]="model.details" [showBorders]="true" [columnAutoWidth]="true">
+    <dxi-column dataField="product" caption="Producto"></dxi-column>
+    <dxi-column dataField="quantity" caption="Cantidad" format="#,##0.######"></dxi-column>
+  </dx-data-grid>
+
+  <div class="m-t-15">
+    <button type="button" class="btn btn-default" (click)="back()">Regresar</button>
+    <button type="button" class="btn btn-success m-l-5" *ngIf="model.status === 1"
+      (click)="accept()" [appCanAccess]="['OPERATION.WAREHOUSE_TRANSFER.ACCEPT']">Aceptar</button>
+    <button type="button" class="btn btn-danger m-l-5" *ngIf="model.status === 1"
+      (click)="reject()" [appCanAccess]="['OPERATION.WAREHOUSE_TRANSFER.REJECT']">Rechazar</button>
+  </div>
+</panel>

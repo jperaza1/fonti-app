@@ -1,0 +1,36 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="m-b-10">
+    <button type="button" class="btn btn-primary" (click)="create()" [appCanAccess]="['OPERATION.WAREHOUSE_TRANSFER.CREATE']">
+      <i class="fa fa-plus"></i> Nueva transferencia
+    </button>
+    <button type="button" class="btn btn-warning pull-right" (click)="getAll()">
+      <i class="fas fa-sync-alt"></i>
+    </button>
+  </div>
+  <dx-data-grid [dataSource]="transfers" [showBorders]="true" [columnAutoWidth]="true" [rowAlternationEnabled]="true">
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]"></dxo-pager>
+    <dxo-search-panel [visible]="true"></dxo-search-panel>
+    <dxo-export [enabled]="true" fileName="Transferencias"></dxo-export>
+    <dxi-column caption="" [width]="180" cellTemplate="actions" alignment="center"></dxi-column>
+    <dxi-column dataField="date" caption="Fecha" dataType="date" [format]="DisplayFormatDate"></dxi-column>
+    <dxi-column dataField="fromWarehouse" caption="Origen"></dxi-column>
+    <dxi-column dataField="toWarehouse" caption="Destino"></dxi-column>
+    <dxi-column dataField="statusName" caption="Estado"></dxi-column>
+    <dxi-column dataField="sentUser" caption="Envió"></dxi-column>
+    <dxi-column dataField="note" caption="Nota"></dxi-column>
+    <div *dxTemplate="let row of 'actions'">
+      <button type="button" class="btn btn-primary btn-sm" (click)="view(row.data)" title="Ver">
+        <i class="fa fa-eye"></i>
+      </button>
+      <button type="button" class="btn btn-success btn-sm m-l-5" *ngIf="row.data.status === 1"
+        (click)="accept(row.data)" title="Aceptar" [appCanAccess]="['OPERATION.WAREHOUSE_TRANSFER.ACCEPT']">
+        <i class="fa fa-check"></i>
+      </button>
+      <button type="button" class="btn btn-danger btn-sm m-l-5" *ngIf="row.data.status === 1"
+        (click)="reject(row.data)" title="Rechazar" [appCanAccess]="['OPERATION.WAREHOUSE_TRANSFER.REJECT']">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+  </dx-data-grid>
+</panel>

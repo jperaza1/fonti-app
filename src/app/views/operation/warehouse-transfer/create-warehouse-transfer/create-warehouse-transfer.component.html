@@ -1,0 +1,93 @@
+<panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
+  <div class="row row-space-10">
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Origen<i class="text-danger">*</i></label>
+        <dx-select-box
+          [(value)]="model.fromWarehouseId"
+          [dataSource]="warehouses"
+          displayExpr="name"
+          valueExpr="id"
+          [searchEnabled]="true">
+        </dx-select-box>
+        <app-validator-message [error]="errors" field="fromWarehouseId"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Destino<i class="text-danger">*</i></label>
+        <dx-select-box
+          [(value)]="model.toWarehouseId"
+          [dataSource]="warehouses"
+          displayExpr="name"
+          valueExpr="id"
+          [searchEnabled]="true"
+          (onValueChanged)="loadProducts()">
+        </dx-select-box>
+        <app-validator-message [error]="errors" field="toWarehouseId"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Fecha<i class="text-danger">*</i></label>
+        <dx-date-box [(value)]="model.date" [displayFormat]="DisplayFormatDate"></dx-date-box>
+        <app-validator-message [error]="errors" field="date"></app-validator-message>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Nota</label>
+        <dx-text-box [(value)]="model.note"></dx-text-box>
+      </div>
+    </section>
+  </div>
+
+  <div class="row row-space-10">
+    <section class="col-md-6 col-xs-12">
+      <div class="form-group">
+        <label>Producto</label>
+        <dx-select-box
+          [(value)]="line.productId"
+          [dataSource]="products"
+          displayExpr="name"
+          valueExpr="id"
+          [searchEnabled]="true">
+        </dx-select-box>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>Cantidad</label>
+        <dx-number-box [(value)]="line.quantity" [min]="0" format="#,##0.######"></dx-number-box>
+      </div>
+    </section>
+    <section class="col-md-3 col-xs-12">
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <div>
+          <button type="button" class="btn btn-primary" (click)="addLine()">
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+  <app-validator-message [error]="errors" field="details"></app-validator-message>
+  <app-validator-message [error]="errors" field="productId"></app-validator-message>
+
+  <dx-data-grid [dataSource]="model.details" [showBorders]="true" [columnAutoWidth]="true">
+    <dxi-column caption="" [width]="80" cellTemplate="remove" alignment="center"></dxi-column>
+    <dxi-column dataField="product" caption="Producto"></dxi-column>
+    <dxi-column dataField="quantity" caption="Cantidad" format="#,##0.######"></dxi-column>
+    <div *dxTemplate="let row of 'remove'">
+      <button type="button" class="btn btn-danger btn-sm" (click)="removeLine(row.data)">
+        <i class="fa fa-trash"></i>
+      </button>
+    </div>
+  </dx-data-grid>
+
+  <div class="m-t-15">
+    <button type="button" class="btn btn-default" (click)="back()">Regresar</button>
+    <button type="button" class="btn btn-success m-l-5" (click)="save()" [disabled]="saving">Guardar</button>
+  </div>
+</panel>

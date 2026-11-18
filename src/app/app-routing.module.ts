@@ -255,6 +255,13 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'warehouse-transfer',
+    loadChildren: () =>
+      import('./views/operation/warehouse-transfer/warehouse-transfer.module').then((m) => m.WarehouseTransferModule),
+    data: { title: 'Transferencias' },
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'production',
     loadChildren: () =>
       import('./views/operation/production/production.module').then((m) => m.ProductionModule),

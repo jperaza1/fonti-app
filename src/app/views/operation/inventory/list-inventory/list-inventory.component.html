@@ -1,8 +1,22 @@
 <panel [title]="title" footerClass="p-b-0 p-t-20 b-t-0">
-  <div class="m-b-10">
-    <button type="button" class="btn btn-warning pull-right" (click)="getAll()">
-      <i class="fas fa-sync-alt"></i>
-    </button>
+  <div class="row row-space-10">
+    <section class="col-md-4 col-xs-12">
+      <div class="form-group">
+        <label>Bodega</label>
+        <dx-select-box
+          [(value)]="warehouseId"
+          [dataSource]="warehouses"
+          displayExpr="name"
+          valueExpr="id"
+          (onValueChanged)="getAll()">
+        </dx-select-box>
+      </div>
+    </section>
+    <section class="col-md-8 col-xs-12">
+      <button type="button" class="btn btn-warning pull-right" (click)="getAll()">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+    </section>
   </div>
   <dx-data-grid [dataSource]="products" [showBorders]="true" [columnAutoWidth]="true" [rowAlternationEnabled]="true">
     <dxo-paging [pageSize]="10"></dxo-paging>

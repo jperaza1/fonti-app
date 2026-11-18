@@ -11,9 +11,10 @@ export class KardexService {
     private _config: ConfigService
   ) {}
 
-  getStock(): Promise<ProductStockDto[]> {
+  getStock(warehouseId?: number): Promise<ProductStockDto[]> {
+    const warehouse = warehouseId > 0 ? `?warehouseId=${warehouseId}` : '';
     return this.http
-      .get<ProductStockDto[]>(`${this._config.config.data}Kardex/GetStock`)
+      .get<ProductStockDto[]>(`${this._config.config.data}Kardex/GetStock${warehouse}`)
       .toPromise();
   }
 

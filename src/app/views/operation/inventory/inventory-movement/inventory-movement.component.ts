@@ -14,6 +14,7 @@ import { ModalWithOptionButtonsComponent } from '../../../shared/components/moda
 export class InventoryMovementComponent extends AppComponentBase implements OnInit {
   Model: KardexEntryDto = new KardexEntryDto();
   productName: string = '';
+  warehouseName: string = '';
   isExit: boolean = false;
   title: string = 'Entrada';
   OptionButtons: OptionButton[];
@@ -28,10 +29,11 @@ export class InventoryMovementComponent extends AppComponentBase implements OnIn
 
   ngOnInit(): void {}
 
-  show(product: ProductStockDto, isExit: boolean) {
+  show(product: ProductStockDto, isExit: boolean, warehouseId: number, warehouseName: string) {
     this.errors = {};
     this.isExit = isExit;
     this.productName = product.product;
+    this.warehouseName = warehouseName;
     const qualityExit = isExit && product.productType === 3;
     this.title = qualityExit
       ? 'Salida por mala calidad de ' + product.product
@@ -43,6 +45,7 @@ export class InventoryMovementComponent extends AppComponentBase implements OnIn
       new OptionButton('save', 'Save', 'btn btn-success pull-right', 'fa fa-save', []),
     ];
     this.Model = new KardexEntryDto();
+    this.Model.warehouseId = warehouseId;
     this.Model.productId = product.productId;
     this.Model.quantity = 1;
     const today = new Date();
