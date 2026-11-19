@@ -32,47 +32,7 @@ export class ListProductionComponent extends AppComponentBase implements OnInit 
     this.productions = await this._productionService.getAll(this.filterModel);
   }
 
-  openCreate() {
-    this.createModal.show();
-  }
-
   openShift(row: ProductionDto) {
     this.createModal.show(row);
-  }
-
-  async cancel(row: ProductionDto) {
-    const confirmed = await this.confirm(
-      'Anular turno',
-      '¿Anular este turno? Se revierten todas las líneas de producción.'
-    );
-    if (!confirmed.value) {
-      return;
-    }
-
-    const response = await this._productionService.cancelShift(row.id);
-    if (response.success) {
-      this.success(response.title, response.messageResponse);
-      this.search();
-    } else {
-      this.error(response.title, response.messageResponse);
-    }
-  }
-
-  async closeShift(row: ProductionDto) {
-    const confirmed = await this.confirm(
-      'Cerrar turno',
-      '¿Cerrar este turno? No se podrán agregar más líneas y se podrá abrir otro turno.'
-    );
-    if (!confirmed.value) {
-      return;
-    }
-
-    const response = await this._productionService.closeShift(row.id);
-    if (response.success) {
-      this.success(response.title, response.messageResponse);
-      this.search();
-    } else {
-      this.error(response.title, response.messageResponse);
-    }
   }
 }

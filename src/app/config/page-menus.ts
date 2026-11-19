@@ -48,7 +48,7 @@ var pageMenus = [
       {
         url: 'kardex',
         title: 'Kardex',
-        permissions: [],
+        permissions: ['OPERATION.KARDEX'],
       },
       {
         url: 'product-recipe',

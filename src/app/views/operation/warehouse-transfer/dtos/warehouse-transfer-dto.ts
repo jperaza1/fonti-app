@@ -12,6 +12,11 @@ export class WarehouseTransferDetailDto {
   quantity: number;
 }
 
+export class WarehouseTransferFilterDto {
+  dateFrom: Date;
+  dateTo: Date;
+}
+
 export class WarehouseTransferDto {
   id: number;
   date: Date;

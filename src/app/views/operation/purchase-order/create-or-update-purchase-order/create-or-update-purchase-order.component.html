@@ -157,6 +157,24 @@
                           >
                           <i class="fas fa-trash-alt"></i>
                         </button>
+                        <button
+                          type="button"
+                          (click)="addTax(data.data)"
+                          class="btn btn-success pull-left btn-sm"
+                          title="Agregar Impuesto"
+                          *ngIf="data.data.taxPercentage === 0"
+                          [appCanAccess]="['OPERATION.PURCHASE_ORDER.ADD_TAX']">
+                          <i class="fas fa-percent"></i>
+                        </button>
+                        <button
+                          type="button"
+                          (click)="removeTax(data.data)"
+                          class="btn btn-danger pull-left btn-sm"
+                          title="Remover Impuesto"
+                          *ngIf="data.data.taxPercentage > 0"
+                          [appCanAccess]="['OPERATION.PURCHASE_ORDER.REMOVE_TAX']">
+                          <i class="fas fa-percent"></i>
+                        </button>
                       </div>
                       <dxo-summary>
                         <dxi-total-item 

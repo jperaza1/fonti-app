@@ -130,6 +130,16 @@ export class CreateOrUpdatePurchaseOrderComponent extends AppComponentBase imple
     this.DxDataSourceProduct = this.getDataSourceDx(products);
   }
 
+  addTax(data: PurchaseOrderDetailDto) {
+    data.taxPercentage = 0.15;
+    this.recalculateDataGrid();
+  }
+
+  removeTax(data: PurchaseOrderDetailDto) {
+    data.taxPercentage = 0;
+    this.recalculateDataGrid();
+  }
+
   addProducts() {
     for(let product of this.ModelProducts) {
       const existProduct = this.Products.find(x => x.id === product);

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppComponentBase } from '../../../../AppComponentBase';
-import { WarehouseTransferDto } from '../dtos/warehouse-transfer-dto';
+import { WarehouseTransferDto, WarehouseTransferFilterDto } from '../dtos/warehouse-transfer-dto';
 import { WarehouseTransferService } from '../warehouse-transfer.service';
-import { RequestResult } from '../../../../../_models/RequestResult';
 
 @Component({
   selector: 'app-list-warehouse-transfer',
@@ -11,60 +10,25 @@ import { RequestResult } from '../../../../../_models/RequestResult';
 export class ListWarehouseTransferComponent extends AppComponentBase implements OnInit {
   title: string = 'Transferencias';
   transfers: WarehouseTransferDto[] = [];
+  filterModel: WarehouseTransferFilterDto = new WarehouseTransferFilterDto();
 
   constructor(private _transferService: WarehouseTransferService) {
     super();
   }
 
   ngOnInit() {
-    this.getAll();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    this.filterModel.dateFrom = new Date(today);
+    this.filterModel.dateTo = new Date(today);
+    this.search();
   }
 
-  async getAll() {
-    this.transfers = await this._transferService.getAll();
-  }
-
-  create() {
-    window.open('/warehouse-transfer/create', '_blank');
+  async search() {
+    this.transfers = await this._transferService.getAll(this.filterModel);
   }
 
   view(row: WarehouseTransferDto) {
     window.open(`/warehouse-transfer/view/${row.id}`, '_blank');
-  }
-
-  async accept(row: WarehouseTransferDto) {
-    const confirm = await this.confirm(
-      'Aceptar transferencia',
-      'Se carga el stock en ' + row.toWarehouse + '.',
-      true,
-      'Aceptar',
-      'Cancelar'
-    );
-    if (!confirm.value) {
-      return;
-    }
-    const response = await this._transferService.accept(row.id);
-    this.afterAction(response);
-  }
-
-  async reject(row: WarehouseTransferDto) {
-    const confirm = await this.confirmWithInput(
-      'Rechazar transferencia',
-      'La cantidad vuelve a ' + row.fromWarehouse + '.'
-    );
-    if (confirm.dismiss) {
-      return;
-    }
-    const response = await this._transferService.reject(row.id, confirm.value);
-    this.afterAction(response);
-  }
-
-  afterAction(response: RequestResult) {
-    if (response.success) {
-      this.success(response.title, response.messageResponse);
-      this.getAll();
-    } else {
-      this.error(response.title, response.messageResponse);
-    }
   }
 }

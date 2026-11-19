@@ -45,9 +45,5 @@
 
   <div class="m-t-15">
     <button type="button" class="btn btn-default" (click)="back()">Regresar</button>
-    <button type="button" class="btn btn-success m-l-5" *ngIf="model.status === 1"
-      (click)="accept()" [appCanAccess]="['OPERATION.WAREHOUSE_TRANSFER.ACCEPT']">Aceptar</button>
-    <button type="button" class="btn btn-danger m-l-5" *ngIf="model.status === 1"
-      (click)="reject()" [appCanAccess]="['OPERATION.WAREHOUSE_TRANSFER.REJECT']">Rechazar</button>
   </div>
 </panel>

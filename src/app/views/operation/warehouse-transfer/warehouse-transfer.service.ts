@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConfigService } from '../../../../_services/ConfigService';
 import { RequestResult } from '../../../../_models/RequestResult';
-import { WarehouseTransferDto } from './dtos/warehouse-transfer-dto';
+import { WarehouseTransferDto, WarehouseTransferFilterDto } from './dtos/warehouse-transfer-dto';
 
 @Injectable({ providedIn: 'root' })
 export class WarehouseTransferService {
@@ -11,10 +11,24 @@ export class WarehouseTransferService {
     private _config: ConfigService
   ) {}
 
-  getAll(): Promise<WarehouseTransferDto[]> {
+  getAll(filter: WarehouseTransferFilterDto): Promise<WarehouseTransferDto[]> {
+    let params = new HttpParams();
+    if (filter && filter.dateFrom) {
+      params = params.set('dateFrom', this.formatDate(filter.dateFrom));
+    }
+    if (filter && filter.dateTo) {
+      params = params.set('dateTo', this.formatDate(filter.dateTo));
+    }
     return this.http
-      .get<WarehouseTransferDto[]>(`${this._config.config.data}WarehouseTransfer/GetAll`)
+      .get<WarehouseTransferDto[]>(`${this._config.config.data}WarehouseTransfer/GetAll`, { params })
       .toPromise();
+  }
+
+  private formatDate(date: Date) {
+    const value = new Date(date);
+    const month = value.getMonth() + 1;
+    const day = value.getDate();
+    return value.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
   }
 
   getById(id: number): Promise<WarehouseTransferDto> {

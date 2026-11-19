@@ -19,9 +19,6 @@
           <button type="button" class="btn btn-primary" (click)="search()">
             <i class="fa fa-search"></i> Buscar
           </button>
-          <button type="button" class="btn btn-success m-l-5" (click)="openCreate()" [appCanAccess]="['OPERATION.PRODUCTION.CREATE']">
-            <i class="fa fa-plus"></i> Abrir turno
-          </button>
         </div>
       </div>
     </section>
@@ -35,19 +32,13 @@
     <dxi-column dataField="productionDate" caption="Fecha" dataType="date" [format]="DisplayFormatDate"></dxi-column>
     <dxi-column dataField="shift" caption="Turno"></dxi-column>
     <dxi-column dataField="status" caption="Estado"></dxi-column>
-    <dxi-column caption="" [width]="150" cellTemplate="actions" alignment="center"></dxi-column>
+    <dxi-column caption="" [width]="70" cellTemplate="actions" alignment="center"></dxi-column>
     <div *dxTemplate="let row of 'actions'">
-      <button type="button" class="btn btn-primary btn-sm" (click)="openShift(row.data)" title="Abrir">
-        <i class="fa fa-folder-open"></i>
-      </button>
-      <button type="button" class="btn btn-warning btn-sm m-l-5" *ngIf="row.data.isActive && !row.data.isClosed" (click)="closeShift(row.data)" title="Cerrar turno" [appCanAccess]="['OPERATION.PRODUCTION.CLOSE']">
-        <i class="fa fa-lock"></i>
-      </button>
-      <button type="button" class="btn btn-danger btn-sm m-l-5" *ngIf="row.data.isActive && !row.data.isClosed" (click)="cancel(row.data)" title="Anular turno" [appCanAccess]="['OPERATION.PRODUCTION.CANCEL']">
-        <i class="fa fa-ban"></i>
+      <button type="button" class="btn btn-primary btn-sm" (click)="openShift(row.data)" title="Ver">
+        <i class="fa fa-eye"></i>
       </button>
     </div>
   </dx-data-grid>
 </panel>
 
-<app-create-production #createModal (modalSave)="search()"></app-create-production>
+<app-create-production #createModal></app-create-production>
